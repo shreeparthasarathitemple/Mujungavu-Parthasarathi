@@ -6,7 +6,7 @@ import { Star } from 'lucide-react';
 const reviewsData = [
   {
     id: 1,
-    name: "Shyam Sundar",
+    name: "Shyam",
     rating: 5,
     text: "A very peaceful and ancient temple. The pond is beautiful and the atmosphere is very divine. Must visit place for peace of mind.",
     time: "2 months ago"
