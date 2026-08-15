@@ -1,0 +1,24 @@
+.gallery-page {
+  padding: 100px 0 4rem; /* 100px top padding for navbar */
+  min-height: 100vh;
+  background-color: var(--bg-light);
+}
+
+.gallery-page .section-title {
+  text-align: center;
+  font-family: var(--font-heading);
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.gallery-page .gallery-subtitle {
+  text-align: center;
+  color: var(--primary-color);
+  font-size: 1.1rem;
+  margin-bottom: 3rem;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+

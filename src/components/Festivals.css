@@ -1,0 +1,57 @@
+.festivals-section {
+  background-color: var(--primary-color);
+  background-image: radial-gradient(circle at 10% 20%, rgba(204, 85, 0, 0.05) 0%, transparent 40%);
+}
+
+.festivals-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  margin-top: 2rem;
+}
+
+.festival-card {
+  background: white;
+  border-left: 5px solid var(--saffron);
+  padding: 3rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.festival-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  transform: translate(30%, -30%);
+}
+
+.festival-date {
+  color: var(--saffron);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.festival-name {
+  font-size: 1.8rem;
+  color: var(--bg-dark);
+  margin-bottom: 1rem;
+}
+
+.festival-card p {
+  color: #555;
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .festivals-grid {
+    grid-template-columns: 1fr;
+  }
+}

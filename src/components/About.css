@@ -1,0 +1,147 @@
+.about-section {
+  background-color: var(--primary-color);
+  padding: 8rem 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.text-link-btn {
+  background: none;
+  border: none;
+  color: var(--saffron-dark);
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.text-link-btn:hover {
+  color: var(--saffron);
+  transform: translateX(5px);
+}
+
+.about-text {
+  padding-right: 2rem;
+}
+
+.highlight-text {
+  font-size: 1.25rem;
+  color: var(--saffron-dark);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  line-height: 1.8;
+}
+
+.about-text p {
+  margin-bottom: 1.2rem;
+  color: var(--dark-text);
+}
+
+.info-cards {
+  display: flex;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.info-card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  flex: 1;
+  border-bottom: 3px solid var(--saffron);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  display: block; /* Ensure a tag takes full space */
+}
+
+.map-link-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+.info-icon {
+  color: var(--saffron);
+  width: 32px;
+  height: 32px;
+  margin-bottom: 1rem;
+}
+
+.info-card h4 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--bg-dark);
+}
+
+.info-card p {
+  font-size: 0.9rem;
+  margin-bottom: 0;
+  color: #666;
+}
+
+.timing-list p {
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--dark-text);
+}
+.timing-list p:last-child {
+  margin-bottom: 0;
+}
+
+.about-image-wrapper {
+  position: relative;
+}
+
+.about-image-placeholder {
+  position: relative;
+  z-index: 2;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.about-img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  transition: transform 0.5s ease;
+}
+
+.about-img:hover {
+  transform: scale(1.05);
+}
+
+.image-border {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 100%;
+  height: 100%;
+  border: 3px solid var(--gold);
+  border-radius: 12px;
+  z-index: 1;
+}
+
+@media (max-width: 992px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
+  .about-text {
+    padding-right: 0;
+  }
+  .image-border {
+    display: none;
+  }
+}
