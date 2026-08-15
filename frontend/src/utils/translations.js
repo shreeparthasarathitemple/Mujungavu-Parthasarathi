@@ -62,8 +62,8 @@ export const translations = {
       kn: "ಈ ಪವಿತ್ರ ಸರೋವರದ ನೀರು ಚರ್ಮರೋಗಗಳನ್ನು ನಿವಾರಿಸುವ ಅದ್ಭುತ ಶಕ್ತಿಯನ್ನು ಹೊಂದಿದೆ ಎಂಬುದು ಭಕ್ತರ ನಂಬಿಕೆ. "
     },
     p2_strong: {
-      en: "Tula Sankramana",
-      kn: "ತುಲಾ ಸಂಕ್ರಮಣದಂತಹ"
+      en: "Tirthasnana",
+      kn: "ತೀರ್ಥಸ್ನಾನ"
     },
     p2_2: {
       en: ", thousands gather to take a holy dip, circumambulate the tank, and offer a sacred mixture of rice and horse gram.",
@@ -82,7 +82,7 @@ export const translations = {
     annaprasanaDesc: { en: "The auspicious first rice-feeding ritual for infants.", kn: "ಶಿಶುಗಳಿಗೆ ಮೊದಲ ಬಾರಿ ಅನ್ನ ತಿನ್ನಿಸುವ ಪವಿತ್ರ ಕಾರ್ಯ." },
     vivaha: { en: "Vivaha", kn: "ವಿವಾಹ" },
     vivahaDesc: { en: "Traditional Hindu weddings conducted with divine blessings.", kn: "ಭಗವಂತನ ಸನ್ನಿಧಿಯಲ್ಲಿ ನಡೆಯುವ ಸಾಂಪ್ರದಾಯಿಕ ವಿವಾಹ ಸಮಾರಂಭಗಳು." },
-    tula: { en: "Tula Sankramana", kn: "ತುಲಾ ಸಂಕ್ರಮಣ" },
+    tula: { en: "Tirthasnanaa", kn: "ತೀರ್ಥಸ್ನಾನ" },
     tulaDesc: { en: "Special rituals and holy dips in the sacred lake.", kn: "ಪವಿತ್ರ ಸರೋವರದಲ್ಲಿ ವಿಶೇಷ ಪೂಜೆ ಮತ್ತು ಪುಣ್ಯಸ್ನಾನ." }
   },
   festivals: {

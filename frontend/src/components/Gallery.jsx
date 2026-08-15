@@ -16,6 +16,16 @@ function Gallery({ onNavigate }) {
     '/gallery/gallery6.jpg'
   ];
 
+  // Replace these with your Google Drive direct links.
+  // IMPORTANT: To make Google Drive video links play directly in the browser, 
+  // you must change your sharing link from: https://drive.google.com/file/d/YOUR_FILE_ID/view
+  // to: https://drive.google.com/uc?export=download&id=YOUR_FILE_ID
+  const reelLinks = [
+    'https://drive.google.com/file/d/1ercbp7ZGVNzZM1j0xzod5VUuF4VkPLyQ/preview', // Paste your 1st Google Drive direct link here
+    'https://drive.google.com/file/d/1ercbp7ZGVNzZM1j0xzod5VUuF4VkPLyQ/preview', // Paste your 2nd Google Drive direct link here
+    'https://drive.google.com/file/d/1ercbp7ZGVNzZM1j0xzod5VUuF4VkPLyQ/preview'  // Paste your 3rd Google Drive direct link here
+  ];
+
   const handlePlay = (e) => {
     const videos = document.querySelectorAll('.reel-video');
     videos.forEach((vid) => {
@@ -96,7 +106,7 @@ function Gallery({ onNavigate }) {
         </div>
 
         <div className="reels-grid" style={{ marginTop: '5rem' }}>
-          {[1, 2, 3].map((num, index) => (
+          {reelLinks.map((src, index) => (
             <div key={index} className="animate-on-scroll" style={{ transitionDelay: `${0.2 + (index * 0.1)}s`, width: '100%', display: 'flex', justifyContent: 'center' }}>
               <div 
                 className={`reel-item ${playingState[index] ? 'playing' : ''}`}
@@ -108,7 +118,7 @@ function Gallery({ onNavigate }) {
                   </div>
                 </div>
                 <video 
-                  src={`/reel/reel1${num}.mp4`}
+                  src={src}
                   muted
                   loop
                   playsInline

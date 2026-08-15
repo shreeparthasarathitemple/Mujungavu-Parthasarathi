@@ -37,7 +37,25 @@ const InstagramIcon = () => (
   </svg>
 );
 
-function Footer() {
+
+const LockIcon = () => (
+  <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="14" 
+    height="14" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+  </svg>
+);
+
+function Footer({ onAdminClick }) {
   const { t } = useLanguage();
 
   return (
@@ -91,7 +109,16 @@ function Footer() {
         </div>
       </div>
       
-      <div className="footer-bottom">
+      <div className="footer-bottom" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+        <button 
+          onClick={onAdminClick}
+          title="Admin Login"
+          style={{ background: 'transparent', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer', display: 'flex', alignItems: 'center', padding: '0', transition: 'color 0.3s' }}
+          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--gold, #FFA500)'}
+          onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+        </button>
         <p>&copy; {new Date().getFullYear()} {t('footer', 'copyright')}</p>
       </div>
     </footer>
@@ -99,3 +126,4 @@ function Footer() {
 }
 
 export default Footer;
+
