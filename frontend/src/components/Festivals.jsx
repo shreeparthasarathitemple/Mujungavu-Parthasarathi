@@ -17,6 +17,23 @@ function Festivals() {
       .catch(err => console.error(err));
   }, []);
 
+  useEffect(() => {
+    if (festivals.length > 0) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      const elements = document.querySelectorAll('#festivals .animate-on-scroll');
+      elements.forEach(el => observer.observe(el));
+
+      return () => observer.disconnect();
+    }
+  }, [festivals]);
+
   return (
     <section className="section festivals-section" id="festivals">
       <div className="container">
