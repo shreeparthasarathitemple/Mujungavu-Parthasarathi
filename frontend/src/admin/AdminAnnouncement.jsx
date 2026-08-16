@@ -7,7 +7,8 @@ function AdminAnnouncement() {
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [imageUrl, setImageUrl] = useState('');
+  const [imageFile, setImageFile] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -36,14 +37,34 @@ function AdminAnnouncement() {
     e.preventDefault();
     if (!title || !content) return;
 
-    let finalImageUrl = imageUrl;
-    // Auto-convert Google Drive sharing links to direct image links
-    if (finalImageUrl.includes('drive.google.com/file/d/')) {
-      const match = finalImageUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) {
-        finalImageUrl = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    let finalImageUrl = '';
+
+    if (imageFile) {
+      setUploadingImage(true);
+      const formData = new FormData();
+      formData.append('image', imageFile);
+
+      try {
+        const uploadRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload`, {
+          method: 'POST',
+          credentials: 'include',
+          body: formData
+        });
+        const uploadData = await uploadRes.json();
+        if (uploadRes.ok) {
+          finalImageUrl = uploadData.imageUrl;
+        } else {
+          setError(uploadData.message || 'Image upload failed');
+          setUploadingImage(false);
+          return;
+        }
+      } catch (err) {
+        setError('Server error during image upload');
+        setUploadingImage(false);
+        return;
       }
     }
+
 
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements`, {
@@ -58,12 +79,15 @@ function AdminAnnouncement() {
         setAnnouncements([data, ...announcements]);
         setTitle('');
         setContent('');
-        setImageUrl('');
+        setImageFile(null);
+        document.getElementById('announcementImage').value = '';
       } else {
         setError(data.message || 'Failed to create announcement');
       }
     } catch (err) {
       setError('Server error during creation');
+    } finally {
+      setUploadingImage(false);
     }
   };
 
@@ -128,12 +152,12 @@ function AdminAnnouncement() {
             />
           </div>
           <div className="form-group">
-            <label>Image URL (Optional)</label>
-            <input 
-              type="text" 
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-              placeholder="e.g. https://example.com/image.jpg"
+            <label>Image Upload (Optional)</label>
+            <input
+              type="file"
+              id="announcementImage"
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files[0])}
             />
           </div>
           <div className="form-group">
@@ -146,7 +170,9 @@ function AdminAnnouncement() {
               rows={4}
             />
           </div>
-          <button type="submit" className="hero-btn admin-btn">Post Announcement</button>
+          <button type="submit" className="hero-btn admin-btn" disabled={uploadingImage}>
+            {uploadingImage ? 'Uploading...' : 'Post Announcement'}
+          </button>
         </form>
       </div>
 

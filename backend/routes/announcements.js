@@ -23,6 +23,9 @@ router.get('/all', auth, async (req, res) => {
   }
 });
 
+const Subscription = require('../models/Subscription');
+const webpush = require('web-push');
+
 // Create announcement (Protected)
 router.post('/', auth, async (req, res) => {
   try {
@@ -33,6 +36,28 @@ router.post('/', auth, async (req, res) => {
       isActive: req.body.isActive !== undefined ? req.body.isActive : true
     });
     await newAnnouncement.save();
+
+    // Send Push Notifications
+    try {
+      const payload = JSON.stringify({
+        title: 'New Temple Announcement!',
+        body: newAnnouncement.title,
+        url: '/'
+      });
+      
+      const subscriptions = await Subscription.find();
+      const pushPromises = subscriptions.map(sub => 
+        webpush.sendNotification(sub, payload).catch(err => {
+          if (err.statusCode === 410 || err.statusCode === 404) {
+            return Subscription.findByIdAndDelete(sub._id);
+          }
+        })
+      );
+      await Promise.all(pushPromises);
+    } catch (pushErr) {
+      console.error('Push notification error:', pushErr);
+    }
+
     res.status(201).json(newAnnouncement);
   } catch (err) {
     res.status(500).json({ message: 'Server Error' });

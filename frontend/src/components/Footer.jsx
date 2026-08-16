@@ -1,6 +1,7 @@
 import React from 'react';
 import './Footer.css';
 import { useLanguage } from '../context/LanguageContext';
+import { Bell } from 'lucide-react';
 
 const MapPinIcon = () => (
   <svg 
@@ -55,7 +56,7 @@ const LockIcon = () => (
   </svg>
 );
 
-function Footer({ onAdminClick }) {
+function Footer({ onAdminClick, onSubscribe, pushSubscribed, subscribing }) {
   const { t } = useLanguage();
 
   return (
@@ -83,6 +84,17 @@ function Footer({ onAdminClick }) {
             >
               <InstagramIcon />
             </a>
+            {!pushSubscribed && (
+              <button 
+                onClick={onSubscribe}
+                disabled={subscribing}
+                title="Subscribe to Notifications"
+                className="social-icon"
+                style={{ border: 'none', cursor: 'pointer' }}
+              >
+                <Bell size={24} />
+              </button>
+            )}
           </div>
         </div>
         

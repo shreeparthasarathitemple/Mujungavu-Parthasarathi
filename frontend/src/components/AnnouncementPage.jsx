@@ -8,7 +8,6 @@ function AnnouncementPage({ announcement, onBack }) {
   return (
     <div className="announcement-page-container">
       <div className="announcement-page-header glass-panel">
-        <button onClick={onBack} className="back-btn" aria-label="Back to Home" title="Back to Home"><Home size={24} /></button>
         <div className="announcement-title-section">
           <div className="announcement-icon-badge">
             <Megaphone size={32} />

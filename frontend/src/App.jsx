@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Menu, X, Globe, ChevronUp, Home } from 'lucide-react'
+import { Menu, X, Globe, ChevronUp, Home, Bell } from 'lucide-react'
 import Hero from './components/Hero'
 import About from './components/About'
 import Lake from './components/Lake'
@@ -15,6 +15,7 @@ import AnnouncementPage from './components/AnnouncementPage'
 import { useLanguage } from './context/LanguageContext'
 import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
+import { urlBase64ToUint8Array } from './utils/push'
 
 function App() {
   const [scrolled, setScrolled] = useState(false)
@@ -27,6 +28,8 @@ function App() {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   // Check auth check will happen in AdminDashboard, so we can initialize from true/false here safely or use checking state
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false)
+  const [pushSubscribed, setPushSubscribed] = useState(false)
+  const [subscribing, setSubscribing] = useState(false)
   const { language, toggleLanguage, t } = useLanguage()
 
   useEffect(() => {
@@ -42,8 +45,57 @@ function App() {
     };
     window.addEventListener('hashchange', handleHash);
     handleHash();
+
+    // Register Service Worker for Push Notifications
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        reg.pushManager.getSubscription().then(sub => {
+          if (sub) setPushSubscribed(true);
+        });
+      }).catch(err => console.error('Service Worker Registration Error:', err));
+    }
+
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
+
+  const handleSubscribe = async () => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+      alert('Push notifications are not supported by your browser.');
+      return;
+    }
+    
+    setSubscribing(true);
+    try {
+      const permission = await Notification.requestPermission();
+      if (permission !== 'granted') {
+        alert('Permission denied');
+        setSubscribing(false);
+        return;
+      }
+      
+      const reg = await navigator.serviceWorker.ready;
+      const pubKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
+      if (!pubKey) throw new Error("VAPID public key not found");
+
+      const subscription = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(pubKey)
+      });
+
+      await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(subscription)
+      });
+
+      setPushSubscribed(true);
+      alert('Successfully subscribed to notifications!');
+    } catch (err) {
+      console.error(err);
+      alert('Failed to subscribe: ' + err.message);
+    }
+    setSubscribing(false);
+  };
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -210,7 +262,7 @@ function App() {
         </main>
       )}
 
-      {currentPage !== 'admin' && <Footer onAdminClick={() => setShowLoginPopup(true)} />}
+      {currentPage !== 'admin' && <Footer onAdminClick={() => setShowLoginPopup(true)} onSubscribe={handleSubscribe} pushSubscribed={pushSubscribed} subscribing={subscribing} />}
 
       
       

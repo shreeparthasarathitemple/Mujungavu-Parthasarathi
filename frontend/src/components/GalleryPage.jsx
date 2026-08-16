@@ -30,15 +30,6 @@ function GalleryPage({ onNavigate }) {
   return (
     <div className="gallery-page">
       <div className="container">
-        <div className="text-center mb-4 animate-on-scroll">
-          <button className="back-btn" onClick={() => {
-            window.location.hash = 'gallery';
-            onNavigate('home');
-          }} aria-label="Back to Home" title="Back to Home">
-            <Home size={24} />
-          </button>
-        </div>
-
         <h1 className="section-title">{t('gallery', 'title')}</h1>
         <p className="gallery-subtitle">{t('gallery', 'subtitle')}</p>
 

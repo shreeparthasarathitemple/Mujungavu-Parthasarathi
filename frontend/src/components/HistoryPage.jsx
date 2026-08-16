@@ -4,21 +4,12 @@ import { useLanguage } from '../context/LanguageContext';
 
 import { Home } from 'lucide-react';
 
-function HistoryPage({ onNavigate }) {
+function HistoryPage({ onBack }) {
   const { t, language } = useLanguage();
 
   return (
     <section className="section history-page-section">
       <div className="container">
-        <div className="text-center mb-4 animate-on-scroll">
-          <button className="back-btn" onClick={() => {
-            window.location.hash = 'about';
-            onNavigate('home');
-          }} aria-label="Back to Home" title="Back to Home">
-            <Home size={24} />
-          </button>
-        </div>
-        
         <h1 className="history-title animate-on-scroll text-center">
           {t('about', 'fullHistoryTitle')}
         </h1>

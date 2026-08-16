@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 function AdminFestivals() {
   const [festivals, setFestivals] = useState([]);
-  const [formData, setFormData] = useState({ titleEn: '', titleKn: '', descEn: '', descKn: '', imageUrl: '' });
+  const [formData, setFormData] = useState({ titleEn: '', titleKn: '', descEn: '', descKn: '' });
+  const [imageFile, setImageFile] = useState(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   const fetchFestivals = async () => {
     try {
@@ -20,13 +22,31 @@ function AdminFestivals() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let finalImageUrl = formData.imageUrl;
+    let finalImageUrl = '';
     
-    // Auto-convert Google Drive sharing links to direct image links
-    if (finalImageUrl.includes('drive.google.com/file/d/')) {
-      const match = finalImageUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
-      if (match && match[1]) {
-        finalImageUrl = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+    if (imageFile) {
+      setUploadingImage(true);
+      const fd = new FormData();
+      fd.append('image', imageFile);
+
+      try {
+        const uploadRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/upload`, {
+          method: 'POST',
+          credentials: 'include',
+          body: fd
+        });
+        const uploadData = await uploadRes.json();
+        if (uploadRes.ok) {
+          finalImageUrl = uploadData.imageUrl;
+        } else {
+          console.error(uploadData.message || 'Image upload failed');
+          setUploadingImage(false);
+          return;
+        }
+      } catch (err) {
+        console.error('Server error during image upload');
+        setUploadingImage(false);
+        return;
       }
     }
 
@@ -40,11 +60,15 @@ function AdminFestivals() {
         body: JSON.stringify({ ...formData, imageUrl: finalImageUrl })
       });
       if (res.ok) {
-        setFormData({ titleEn: '', titleKn: '', descEn: '', descKn: '', imageUrl: '' });
+        setFormData({ titleEn: '', titleKn: '', descEn: '', descKn: '' });
+        setImageFile(null);
+        document.getElementById('festivalImage').value = '';
         fetchFestivals();
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setUploadingImage(false);
     }
   };
 
@@ -82,10 +106,17 @@ function AdminFestivals() {
           <textarea value={formData.descKn} onChange={e => setFormData({...formData, descKn: e.target.value})} required />
         </div>
         <div className="form-group">
-          <label>Image URL (Google Drive link works too!)</label>
-          <input type="text" value={formData.imageUrl} onChange={e => setFormData({...formData, imageUrl: e.target.value})} />
+          <label>Image Upload</label>
+          <input 
+            type="file" 
+            id="festivalImage"
+            accept="image/*"
+            onChange={e => setImageFile(e.target.files[0])} 
+          />
         </div>
-        <button type="submit" className="hero-btn admin-btn" style={{marginTop: '1rem'}}>Add Festival</button>
+        <button type="submit" className="hero-btn admin-btn" style={{marginTop: '1rem'}} disabled={uploadingImage}>
+          {uploadingImage ? 'Uploading...' : 'Add Festival'}
+        </button>
       </form>
 
       <h3 style={{marginTop: '3rem'}}>Current Festivals</h3>
