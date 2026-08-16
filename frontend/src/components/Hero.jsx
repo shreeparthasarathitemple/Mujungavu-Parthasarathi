@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Hero.css';
 import { useLanguage } from '../context/LanguageContext';
-import TypewriterText from './TypewriterText';
 import { ChevronDown } from 'lucide-react';
 
 function Hero() {
@@ -35,16 +34,16 @@ function Hero() {
       <div className="hero-overlay"></div>
       <div className={`hero-content ${language === 'en' ? 'font-devanagari' : ''}`}>
         <img src="/logo.png" alt="Temple Logo" className="hero-logo animate-on-scroll" />
-        <h1 className="hero-title animate-on-scroll">
-          <TypewriterText text={t('hero', 'title')} speed={80} />
+        <h1 className="hero-title reveal-text" style={{ animationDelay: '0.2s' }}>
+          {t('hero', 'title')}
         </h1>
-        <h2 className="hero-subtitle animate-on-scroll" style={{ transitionDelay: '0.2s' }}>
-          <TypewriterText text={t('hero', 'subtitle')} speed={80} delay={2200} />
+        <h2 className="hero-subtitle reveal-text" style={{ animationDelay: '0.6s' }}>
+          {t('hero', 'subtitle')}
         </h2>
-        <p className="hero-tagline animate-on-scroll" style={{ transitionDelay: '0.4s' }}>
-          <TypewriterText text={t('hero', 'tagline')} speed={60} delay={3200} />
+        <p className="hero-tagline reveal-text" style={{ animationDelay: '1.0s' }}>
+          {t('hero', 'tagline')}
         </p>
-        <a href="#about" className="scroll-indicator animate-on-scroll" style={{ transitionDelay: '0.6s' }}>
+        <a href="#about" className="scroll-indicator reveal-text" style={{ animationDelay: '1.4s' }}>
           <span className="scroll-text">{t('hero')}</span>
           <div className="scroll-chevron">
             <ChevronDown size={32} />

@@ -16,6 +16,7 @@ import { useLanguage } from './context/LanguageContext'
 import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
 import { urlBase64ToUint8Array } from './utils/push'
+import { Helmet } from 'react-helmet-async'
 
 function App() {
   const [scrolled, setScrolled] = useState(false)
@@ -97,13 +98,52 @@ function App() {
     setSubscribing(false);
   };
 
+  // Analytics Tracking
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setFadeOut(true)
-      setTimeout(() => setLoading(false), 800)
-    }, 1500)
-    return () => clearTimeout(timer)
-  }, [])
+    if (currentPage && currentPage !== 'admin') {
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/analytics/track`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: currentPage })
+      }).catch(err => console.error('Failed to track page view', err));
+    }
+  }, [currentPage]);
+
+  // Preloading & Loading Screen Logic
+  useEffect(() => {
+    const preloadAssets = async () => {
+      const desktopVideo = "https://aingapwqyhtvjygwtiat.supabase.co/storage/v1/object/sign/videos/hero-lap.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZDI3ODZmMS1iNmU5LTRlZGYtOWIzNy0zOWJjM2Q0YmU4MDQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlb3MvaGVyby1sYXAubXA0Iiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4Njg5Mjk0MCwiZXhwIjoyMTAyMjUyOTQwfQ.Tcw1fdflPVB-S7QPppbrymOuhhbEXKaIubBON8P01Og";
+      
+      const preloadVideo = new Promise((resolve) => {
+        const req = new XMLHttpRequest();
+        req.open('GET', desktopVideo, true);
+        req.responseType = 'blob';
+        req.onload = function() {
+           if (this.status === 200) { resolve(true); } else { resolve(false); }
+        }
+        req.onerror = function() { resolve(false); }
+        req.send();
+      });
+
+      const preloadImg = new Promise((resolve) => {
+        const img = new Image();
+        img.src = '/logo.png';
+        img.onload = resolve;
+        img.onerror = resolve;
+      });
+
+      // Wait for either the assets to load, or a maximum of 3 seconds to avoid indefinite loading
+      await Promise.race([
+        Promise.all([preloadVideo, preloadImg]),
+        new Promise(resolve => setTimeout(resolve, 3000))
+      ]);
+      
+      setFadeOut(true);
+      setTimeout(() => setLoading(false), 800);
+    };
+
+    preloadAssets();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -150,8 +190,30 @@ function App() {
     window.scrollTo(0, 0);
   }, [currentPage])
 
+  const getSEOMetadata = () => {
+    const baseTitle = "Shree Parthasarathi Mujungavu";
+    const description = "Discover the divine presence at Shree Parthasarathi Temple, Mujungavu. Join us for poojas, festivals, and spiritual guidance.";
+    let title = baseTitle;
+    
+    if (currentPage === 'history') title = `History | ${baseTitle}`;
+    if (currentPage === 'gallery_page') title = `Gallery | ${baseTitle}`;
+    if (currentPage === 'announcement_page' && activeAnnouncement) title = `${activeAnnouncement.title} | ${baseTitle}`;
+    
+    return (
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content="/logo.png" />
+        <meta property="og:type" content="website" />
+      </Helmet>
+    );
+  };
+
   return (
     <>
+      {getSEOMetadata()}
       {loading && (
         <div className={`loading-screen ${fadeOut ? 'fade-out' : ''}`}>
           <img src="/logo.png" alt="Temple Logo" className="loading-logo" />
@@ -219,7 +281,7 @@ function App() {
         </div>
         <div className="nav-marquee">
           <div className="nav-marquee-track">
-            {Array(10).fill(language === 'en' ? 'Om Namo Bhagavathe Vasudevaya  |  ' : 'ಓಂ ನಮೋ ಭಗವತೇ ವಾಸುದೇವಾಯ').map((text, i) => (
+            {Array(10).fill(language === 'en' ? 'Om Namo Bhagavathe Vasudevaya' : 'ಓಂ ನಮೋ ಭಗವತೇ ವಾಸುದೇವಾಯ').map((text, i) => (
               <span key={i} className={`marquee-text ${language === 'en' ? '' : 'font-devanagari'}`}>{text}</span>
             ))}
           </div>

@@ -157,3 +157,25 @@
     margin-bottom: 1rem; 
   } 
 }
+
+/* Staggered Blur Reveal Animation */
+.reveal-text {
+  opacity: 0;
+  transform: translateY(30px);
+  filter: blur(10px);
+  animation: fadeUpBlur 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes fadeUpBlur {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
