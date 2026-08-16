@@ -16,7 +16,7 @@ function AdminGallery() {
 
   const fetchImages = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/gallery', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/gallery`, {
         credentials: 'include'
       });
       const data = await res.json();
@@ -50,7 +50,7 @@ function AdminGallery() {
     formData.append('image', file);
 
     try {
-      const res = await fetch('http://localhost:5000/api/gallery/upload', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/gallery/upload`, {
         method: 'POST',
         credentials: 'include',
         body: formData
@@ -75,7 +75,7 @@ function AdminGallery() {
     if (!window.confirm('Are you sure you want to delete this image?')) return;
     
     try {
-      const res = await fetch(`http://localhost:5000/api/gallery/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/gallery/${id}`, {
         method: 'DELETE',
         credentials: 'include'
       });

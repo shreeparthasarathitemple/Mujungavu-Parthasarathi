@@ -9,7 +9,7 @@ function Announcement() {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/announcements')
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements`)
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {

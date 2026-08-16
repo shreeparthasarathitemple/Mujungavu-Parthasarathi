@@ -4,7 +4,7 @@ function AdminLake() {
   const [lakeBg, setLakeBg] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/settings/lake_bg')
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/settings/lake_bg`)
       .then(res => res.json())
       .then(data => {
         if (data && data.value) setLakeBg(data.value);
@@ -23,7 +23,7 @@ function AdminLake() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/settings', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/settings`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

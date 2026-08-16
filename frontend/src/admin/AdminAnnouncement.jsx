@@ -15,7 +15,7 @@ function AdminAnnouncement() {
 
   const fetchAnnouncements = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/announcements/all', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements/all`, {
         credentials: 'include'
       });
       const data = await res.json();
@@ -36,7 +36,7 @@ function AdminAnnouncement() {
     if (!title || !content) return;
 
     try {
-      const res = await fetch('http://localhost:5000/api/announcements', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -60,7 +60,7 @@ function AdminAnnouncement() {
     if (!window.confirm('Are you sure you want to delete this announcement?')) return;
     
     try {
-      const res = await fetch(`http://localhost:5000/api/announcements/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements/${id}`, {
         method: 'DELETE',
         credentials: 'include'
       });
@@ -78,7 +78,7 @@ function AdminAnnouncement() {
 
   const toggleActive = async (id, currentStatus) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/announcements/${id}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',

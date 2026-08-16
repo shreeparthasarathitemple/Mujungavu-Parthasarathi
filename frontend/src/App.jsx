@@ -29,7 +29,7 @@ function App() {
 
   useEffect(() => {
     // Initial check for admin session
-    fetch('http://localhost:5000/api/auth/check', { credentials: 'include' })
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/check`, { credentials: 'include' })
       .then(res => res.json())
       .then(data => {
         if (data.isAuthenticated) setIsAdminLoggedIn(true);
@@ -138,13 +138,13 @@ function App() {
                 <>
                   <Announcement />
                   <button 
-                  className="lang-toggle-btn"
-                  onClick={toggleLanguage}
-                  aria-label="Toggle language"
-                >
-                  <Globe size={20} />
-                  <span>{language === 'en' ? 'ಕನ್ನಡ' : 'English'}</span>
-                </button>
+                    className="lang-toggle-btn"
+                    onClick={toggleLanguage}
+                    aria-label="Toggle language"
+                  >
+                    <Globe size={20} />
+                    <span>{language === 'en' ? 'ಕನ್ನಡ' : 'English'}</span>
+                  </button>
                 </>
               )}
               

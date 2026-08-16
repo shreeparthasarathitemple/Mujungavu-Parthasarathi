@@ -6,7 +6,7 @@ function AdminFestivals() {
 
   const fetchFestivals = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/festivals');
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/festivals`);
       const data = await res.json();
       setFestivals(data);
     } catch (err) {
@@ -31,7 +31,7 @@ function AdminFestivals() {
     }
 
     try {
-      const res = await fetch('http://localhost:5000/api/festivals', {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/festivals`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ function AdminFestivals() {
   const handleDelete = async (id) => {
     if (!window.confirm('Delete this festival?')) return;
     try {
-      await fetch(`http://localhost:5000/api/festivals/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/festivals/${id}`, {
         method: 'DELETE',
         headers: { 'x-auth-token': localStorage.getItem('adminToken') }
       });
