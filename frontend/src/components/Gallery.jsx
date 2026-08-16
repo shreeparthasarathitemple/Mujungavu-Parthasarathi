@@ -6,6 +6,27 @@ import { Play, Pause } from 'lucide-react';
 function Gallery({ onNavigate }) {
   const { t, language } = useLanguage();
   const [playingState, setPlayingState] = useState({});
+  const videoRefs = React.useRef([]);
+
+  const togglePlay = (index) => {
+    const video = videoRefs.current[index];
+    if (!video) return;
+
+    if (video.paused) {
+      // Pause all other videos
+      videoRefs.current.forEach((v, i) => {
+        if (v && i !== index && !v.paused) {
+          v.pause();
+          setPlayingState(prev => ({ ...prev, [i]: false }));
+        }
+      });
+      video.play();
+      setPlayingState(prev => ({ ...prev, [index]: true }));
+    } else {
+      video.pause();
+      setPlayingState(prev => ({ ...prev, [index]: false }));
+    }
+  };
 
   const previewImages = [
     '/gallery/gallery1.png',
@@ -17,9 +38,9 @@ function Gallery({ onNavigate }) {
   ];
 
   const reelLinks = [
-    'https://drive.google.com/file/d/1ercbp7ZGVNzZM1j0xzod5VUuF4VkPLyQ/preview', 
-    'https://drive.google.com/file/d/1SsH_g1qgNW-La9BGeBclrW54Rnc5wKTI/preview', 
-    'https://drive.google.com/file/d/1f_DLYXgIrokVccMS8sYvmUVAQdNy4uef/preview'
+    'https://aingapwqyhtvjygwtiat.supabase.co/storage/v1/object/sign/videos/Mujungavu1.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZDI3ODZmMS1iNmU5LTRlZGYtOWIzNy0zOWJjM2Q0YmU4MDQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlb3MvTXVqdW5nYXZ1MS5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg2ODYzNDM0LCJleHAiOjIxMDIyMjM0MzR9.qkOvfXxBieJlI63wz_Tzpe1QJ7JzYkWdNfB22uPabeA',
+    'https://aingapwqyhtvjygwtiat.supabase.co/storage/v1/object/sign/videos/Mujungavu2.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZDI3ODZmMS1iNmU5LTRlZGYtOWIzNy0zOWJjM2Q0YmU4MDQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlb3MvTXVqdW5nYXZ1Mi5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg2ODYzNDYxLCJleHAiOjIxMDIyMjM0NjF9.KDTwGgWDK25Qo7k-3o3r9UpMkpN9We43wfyQeOrQABk',
+    'https://aingapwqyhtvjygwtiat.supabase.co/storage/v1/object/sign/videos/Mujungavu3.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZDI3ODZmMS1iNmU5LTRlZGYtOWIzNy0zOWJjM2Q0YmU4MDQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlb3MvTXVqdW5nYXZ1My5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg2ODYzNDc5LCJleHAiOjIxMDIyMjM0Nzl9.RMTf8yMp43vMVkQacjrkGh0USAHHwxGY9VmynsL82fw'
   ];
 
   return (
@@ -85,14 +106,41 @@ function Gallery({ onNavigate }) {
         <div className="reels-grid" style={{ marginTop: '5rem' }}>
           {reelLinks.map((src, index) => (
             <div key={index} className="animate-on-scroll" style={{ transitionDelay: `${0.2 + (index * 0.1)}s`, width: '100%', display: 'flex', justifyContent: 'center' }}>
-              <div className="reel-item" style={{ overflow: 'hidden', padding: 0 }}>
+              <div 
+                className="reel-item" 
+                style={{ overflow: 'hidden', padding: 0, position: 'relative', cursor: 'pointer' }}
+                onClick={() => togglePlay(index)}
+              >
                 {src ? (
-                  <iframe 
-                    src={src}
-                    style={{ width: '100%', height: '100%', border: 'none' }}
-                    allow="autoplay"
-                    title={`Reel ${index + 1}`}
-                  ></iframe>
+                  <>
+                    <video 
+                      ref={el => videoRefs.current[index] = el}
+                      src={src}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      playsInline
+                      onEnded={() => setPlayingState(prev => ({ ...prev, [index]: false }))}
+                      title={`Reel ${index + 1}`}
+                    />
+                    <div style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      backgroundColor: 'rgba(0,0,0,0.6)',
+                      borderRadius: '50%',
+                      padding: '1.2rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: 'white',
+                      pointerEvents: 'none',
+                      opacity: playingState[index] ? 0 : 1,
+                      transition: 'opacity 0.3s ease',
+                      zIndex: 10
+                    }}>
+                      <Play size={40} fill="white" style={{ marginLeft: '4px' }} />
+                    </div>
+                  </>
                 ) : (
                   <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#000', color: '#fff' }}>
                     No Video Link

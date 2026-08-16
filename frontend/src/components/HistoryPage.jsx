@@ -9,7 +9,10 @@ function HistoryPage({ onNavigate }) {
     <section className="section history-page-section">
       <div className="container">
         <div className="text-center mb-4 animate-on-scroll">
-          <button className="back-btn" onClick={() => onNavigate('home')}>
+          <button className="back-btn" onClick={() => {
+            window.location.hash = 'about';
+            onNavigate('home');
+          }}>
             ← {language === 'en' ? 'Back to Home' : 'ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ'}
           </button>
         </div>

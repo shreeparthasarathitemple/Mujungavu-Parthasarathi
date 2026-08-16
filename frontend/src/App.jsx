@@ -74,6 +74,16 @@ function App() {
   }, [currentPage, loading])
 
   useEffect(() => {
+    if (currentPage === 'home' && window.location.hash && window.location.hash !== '#admin') {
+      const element = document.getElementById(window.location.hash.substring(1));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+          window.history.replaceState(null, null, window.location.pathname + window.location.search);
+        }, 100);
+        return;
+      }
+    }
     window.scrollTo(0, 0);
   }, [currentPage])
 

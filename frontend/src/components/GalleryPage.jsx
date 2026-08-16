@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import './GalleryPage.css';
 import { useLanguage } from '../context/LanguageContext';
 
-function GalleryPage() {
+function GalleryPage({ onNavigate }) {
   const { t, language } = useLanguage();
 
   const images = [
@@ -28,6 +28,15 @@ function GalleryPage() {
   return (
     <div className="gallery-page">
       <div className="container">
+        <div className="text-center mb-4 animate-on-scroll">
+          <button className="back-btn" onClick={() => {
+            window.location.hash = 'gallery';
+            onNavigate('home');
+          }}>
+            ← {language === 'en' ? 'Back to Home' : 'ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ'}
+          </button>
+        </div>
+
         <h1 className="section-title">{t('gallery', 'title')}</h1>
         <p className="gallery-subtitle">{t('gallery', 'subtitle')}</p>
 
