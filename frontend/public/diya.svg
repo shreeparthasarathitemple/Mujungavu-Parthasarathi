@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Flame Base -->
+  <path fill="#FFB74D" d="M32 18c-4.4 7.3-8 14.3-8 20 0 4.4 3.6 8 8 8s8-3.6 8-8c0-5.7-3.6-12.7-8-20z"/>
+  <!-- Inner Flame -->
+  <path fill="#FFEB3B" d="M32 24c-2.2 4.4-4 8.7-4 12 0 2.2 1.8 4 4 4s4-1.8 4-4c0-3.3-1.8-7.6-4-12z"/>
+  <!-- Deep Inner Flame -->
+  <path fill="#FFF59D" d="M32 30c-1.1 2.2-2 4.3-2 6 0 1.1.9 2 2 2s2-.9 2-2c0-1.7-.9-3.8-2-6z"/>
+  <!-- Diya Bowl -->
+  <path fill="#8D6E63" d="M16 42c0 8.8 16 14 16 14s16-5.2 16-14H16z"/>
+  <path fill="#795548" d="M48 42c0 2.2-7.2 4-16 4s-16-1.8-16-4h32z"/>
+  <!-- Wick -->
+  <path fill="#5D4037" d="M31 38h2v5h-2z"/>
+  <!-- Glow (Optional) -->
+  <circle cx="32" cy="30" r="14" fill="#FFC107" opacity="0.3" filter="blur(4px)"/>
+</svg>

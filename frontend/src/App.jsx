@@ -31,6 +31,9 @@ function App() {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false)
   const [pushSubscribed, setPushSubscribed] = useState(false)
   const [subscribing, setSubscribing] = useState(false)
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [todaysStar, setTodaysStar] = useState('');
   const { language, toggleLanguage, t } = useLanguage()
 
   useEffect(() => {
@@ -58,6 +61,31 @@ function App() {
 
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
+
+  useEffect(() => {
+    // Live Clock & Nakshatra
+    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+    
+    try {
+      import('panchang-ts').then(({ getDailyPanchang }) => {
+        const result = getDailyPanchang(new Date(), { latitude: 12.5102, longitude: 74.9852 }, { timezone: 330 });
+        if (result && result.angas && result.angas.nakshatras && result.angas.nakshatras.length > 0) {
+          setTodaysStar(result.angas.nakshatras[0].name);
+        }
+      });
+    } catch(e) {
+      console.error("Panchang Error:", e);
+    }
+    
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatTime = (date) => {
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
+  const formatDate = (date) => {
+    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  };
 
   const handleSubscribe = async () => {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
@@ -149,6 +177,10 @@ function App() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
       setShowScrollTop(window.scrollY > window.innerHeight)
+
+      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      setScrollProgress(winScroll / height);
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -213,14 +245,17 @@ function App() {
 
   return (
     <>
+      <div className="scroll-progress-container">
+        <div className="scroll-progress-bar" style={{ transform: `scaleX(${scrollProgress})` }}></div>
+        <img src="/diya.svg" className="scroll-progress-diya" style={{ left: `${scrollProgress * 100}%` }} alt="Diya" />
+      </div>
+
       {getSEOMetadata()}
       {loading && (
         <div className={`loading-screen ${fadeOut ? 'fade-out' : ''}`}>
           <img src="/logo.png" alt="Temple Logo" className="loading-logo" />
         </div>
       )}
-
-
 
       {(currentPage !== 'admin' && !showLoginPopup) && (
       <nav className={`navbar ${scrolled || currentPage !== 'home' ? 'scrolled' : ''}`}>
@@ -251,6 +286,11 @@ function App() {
             </div>
 
             <div className="nav-actions">
+              <div className="nav-time-star" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginRight: '15px', color: 'var(--gold)', fontSize: '0.85rem' }}>
+                <span style={{ fontWeight: '600' }}>{formatTime(currentTime)}</span>
+                <span style={{ fontSize: '0.75rem', opacity: 0.9 }}>{todaysStar ? `Star: ${todaysStar}` : formatDate(currentTime)}</span>
+              </div>
+
               {currentPage !== 'admin' && (
                 <>
                   <Announcement onAnnouncementClick={(ann) => {
