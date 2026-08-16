@@ -11,6 +11,7 @@ import HistoryPage from './components/HistoryPage'
 import GalleryPage from './components/GalleryPage'
 import Reviews from './components/Reviews'
 import Announcement from './components/Announcement'
+import AnnouncementPage from './components/AnnouncementPage'
 import { useLanguage } from './context/LanguageContext'
 import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
@@ -21,6 +22,7 @@ function App() {
   const [loading, setLoading] = useState(true)
   const [fadeOut, setFadeOut] = useState(false)
   const [currentPage, setCurrentPage] = useState('home');
+  const [activeAnnouncement, setActiveAnnouncement] = useState(null);
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   // Check auth check will happen in AdminDashboard, so we can initialize from true/false here safely or use checking state
@@ -106,6 +108,7 @@ function App() {
 
 
 
+      {currentPage !== 'admin' && (
       <nav className={`navbar ${scrolled || currentPage !== 'home' ? 'scrolled' : ''}`}>
         <div className="nav-background">
           <div className="nav-container">
@@ -126,7 +129,7 @@ function App() {
                   <a href="#gallery" onClick={() => setIsMenuOpen(false)}>{t('nav', 'gallery')}</a>
                 </>
               )}
-              {(currentPage === 'history' || currentPage === 'gallery_page') && (
+              {(currentPage === 'history' || currentPage === 'gallery_page' || currentPage === 'announcement_page') && (
                 <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); setIsMenuOpen(false); }}>
                   {language === 'en' ? 'Back to Home' : 'ಮರಳಿ ಮನೆಗೆ'}
                 </a>
@@ -136,7 +139,11 @@ function App() {
             <div className="nav-actions">
               {currentPage !== 'admin' && (
                 <>
-                  <Announcement />
+                  <Announcement onAnnouncementClick={(ann) => {
+                    setActiveAnnouncement(ann);
+                    setCurrentPage('announcement_page');
+                    window.scrollTo(0, 0);
+                  }} />
                   <button 
                     className="lang-toggle-btn"
                     onClick={toggleLanguage}
@@ -166,6 +173,7 @@ function App() {
           </div>
         </div>
       </nav>
+      )}
 
       {currentPage === 'admin' ? (
         <main>
@@ -180,9 +188,17 @@ function App() {
         </main>
       ) : currentPage === 'history' ? (
         <main>
-          <HistoryPage onNavigate={setCurrentPage} />
+          <HistoryPage onBack={() => { setCurrentPage('home'); window.scrollTo(0, 0); }} />
         </main>
-      ) : currentPage === 'home' ? (
+      ) : currentPage === 'announcement_page' ? (
+        <main>
+          <AnnouncementPage announcement={activeAnnouncement} onBack={() => { setCurrentPage('home'); window.scrollTo(0, 0); }} />
+        </main>
+      ) : currentPage === 'gallery_page' ? (
+        <main>
+          <GalleryPage onNavigate={setCurrentPage} />
+        </main>
+      ) : (
         <main>
           <Hero />
           <About onNavigate={setCurrentPage} />
@@ -191,10 +207,6 @@ function App() {
           <Festivals />
           <Gallery onNavigate={setCurrentPage} />
           <Reviews />
-        </main>
-      ) : (
-        <main>
-          <GalleryPage onNavigate={setCurrentPage} />
         </main>
       )}
 

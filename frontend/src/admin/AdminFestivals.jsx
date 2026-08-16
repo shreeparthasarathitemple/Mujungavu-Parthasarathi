@@ -34,9 +34,9 @@ function AdminFestivals() {
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/festivals`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': localStorage.getItem('adminToken')
+          'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ ...formData, imageUrl: finalImageUrl })
       });
       if (res.ok) {
@@ -53,7 +53,7 @@ function AdminFestivals() {
     try {
       await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/festivals/${id}`, {
         method: 'DELETE',
-        headers: { 'x-auth-token': localStorage.getItem('adminToken') }
+        credentials: 'include'
       });
       fetchFestivals();
     } catch (err) {

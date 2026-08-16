@@ -26,9 +26,9 @@ function AdminLake() {
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/settings`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
-          'x-auth-token': localStorage.getItem('adminToken')
+          'Content-Type': 'application/json'
         },
+        credentials: 'include',
         body: JSON.stringify({ key: 'lake_bg', value: finalUrl })
       });
       if (res.ok) {

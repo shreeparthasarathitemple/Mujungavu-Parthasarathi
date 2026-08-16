@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Bell } from 'lucide-react';
 import './Announcement.css';
 
-function Announcement() {
+function Announcement({ onAnnouncementClick }) {
   const [announcements, setAnnouncements] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
@@ -37,6 +37,13 @@ function Announcement() {
     }
   };
 
+  const handleItemClick = (ann) => {
+    setIsOpen(false);
+    if (onAnnouncementClick) {
+      onAnnouncementClick(ann);
+    }
+  };
+
   if (announcements.length === 0) return null;
 
   return (
@@ -53,7 +60,12 @@ function Announcement() {
           </div>
           <div className="announcement-list">
             {announcements.map((ann, i) => (
-              <div key={i} className="announcement-item">
+              <div 
+                key={i} 
+                className="announcement-item" 
+                onClick={() => handleItemClick(ann)}
+                style={{ cursor: 'pointer' }}
+              >
                 <strong>{ann.title}</strong>
                 <p>{ann.content}</p>
               </div>

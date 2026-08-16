@@ -7,6 +7,7 @@ function AdminAnnouncement() {
   const [loading, setLoading] = useState(true);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
   const [error, setError] = useState(null);
 
   useEffect(() => {
@@ -40,7 +41,7 @@ function AdminAnnouncement() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ title, content })
+        body: JSON.stringify({ title, content, imageUrl })
       });
       const data = await res.json();
       
@@ -48,6 +49,7 @@ function AdminAnnouncement() {
         setAnnouncements([data, ...announcements]);
         setTitle('');
         setContent('');
+        setImageUrl('');
       } else {
         setError(data.message || 'Failed to create announcement');
       }
@@ -114,6 +116,15 @@ function AdminAnnouncement() {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="e.g. Special Pooja this Friday"
               required
+            />
+          </div>
+          <div className="form-group">
+            <label>Image URL (Optional)</label>
+            <input 
+              type="text" 
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+              placeholder="e.g. https://example.com/image.jpg"
             />
           </div>
           <div className="form-group">

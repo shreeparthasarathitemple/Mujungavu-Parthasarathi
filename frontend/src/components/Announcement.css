@@ -85,12 +85,17 @@
 }
 
 .announcement-item {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  transition: background-color 0.2s ease;
 }
 
 .announcement-item:last-child {
   border-bottom: none;
+}
+
+.announcement-item:hover {
+  background-color: rgba(0,0,0,0.03);
 }
 
 .announcement-item strong {

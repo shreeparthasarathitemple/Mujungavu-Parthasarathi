@@ -29,6 +29,7 @@ router.post('/', auth, async (req, res) => {
     const newAnnouncement = new Announcement({
       title: req.body.title,
       content: req.body.content,
+      imageUrl: req.body.imageUrl,
       isActive: req.body.isActive !== undefined ? req.body.isActive : true
     });
     await newAnnouncement.save();
