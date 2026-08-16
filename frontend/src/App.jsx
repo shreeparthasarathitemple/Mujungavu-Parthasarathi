@@ -282,7 +282,7 @@ function App() {
         <div className="nav-marquee">
           <div className="nav-marquee-track">
             {Array(10).fill(language === 'en' ? 'Om Namo Bhagavathe Vasudevaya' : 'ಓಂ ನಮೋ ಭಗವತೇ ವಾಸುದೇವಾಯ').map((text, i) => (
-              <span key={i} className={`marquee-text ${language === 'en' ? '' : 'font-devanagari'}`}>{text}</span>
+              <span key={i} className={`marquee-text ${language === 'en' ? '' : 'font-kannada-attractive'}`}>{text}</span>
             ))}
           </div>
         </div>

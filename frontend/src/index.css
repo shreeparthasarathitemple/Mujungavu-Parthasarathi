@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@300;400;500;600&family=Tiro+Kannada:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anek+Kannada:wght@300;400;500;600&family=Tiro+Kannada:ital@0;1&family=Baloo+Tamma+2:wght@400;600;700&display=swap');
 @import url('https://fonts.cdnfonts.com/css/samarkan');
 
 :root {
@@ -49,6 +49,12 @@ h1, h2, h3, h4, h5, h6 {
 .font-devanagari h2,
 .font-devanagari p {
   font-family: var(--font-devanagari) !important;
+}
+
+.font-kannada-attractive {
+  font-family: 'Baloo Tamma 2', cursive !important;
+  font-size: 1.15rem; /* slightly larger for readability */
+  letter-spacing: 0.5px;
 }
 
 a {
@@ -244,7 +250,7 @@ a {
   color: #FFA500;
   font-family: var(--font-heading);
   font-size: 0.9rem;
-  font-weight: 500;
+  font-weight: bold;
   white-space: nowrap;
   padding-right: 3rem;
   letter-spacing: 1px;
@@ -331,7 +337,6 @@ a {
   font-family: var(--font-heading);
   font-size: 1.8rem;
   color: var(--primary-color);
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
   transition: color 0.3s ease;
   font-weight: bold;
   display: flex;

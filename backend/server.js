@@ -37,12 +37,12 @@ app.use(session({
   }
 }));
 
-// Routes
 const authRoutes = require('./routes/auth');
 const announcementRoutes = require('./routes/announcements');
 const uploadRoutes = require('./routes/upload');
 const notificationsRoutes = require('./routes/notifications');
 const analyticsRoutes = require('./routes/analytics');
+const reviewsRoutes = require('./routes/reviews');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/festivals', require('./routes/festivals'));
@@ -52,6 +52,7 @@ app.use('/api/announcements', announcementRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/analytics', analyticsRoutes);
+app.use('/api/reviews', reviewsRoutes);
 
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/mujungavu-temple';
