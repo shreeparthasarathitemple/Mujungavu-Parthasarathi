@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import './GalleryPage.css';
 import { useLanguage } from '../context/LanguageContext';
 
+import { Home } from 'lucide-react';
+
 function GalleryPage({ onNavigate }) {
   const { t, language } = useLanguage();
 
@@ -32,8 +34,8 @@ function GalleryPage({ onNavigate }) {
           <button className="back-btn" onClick={() => {
             window.location.hash = 'gallery';
             onNavigate('home');
-          }}>
-            ← {language === 'en' ? 'Back to Home' : 'ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ'}
+          }} aria-label="Back to Home" title="Back to Home">
+            <Home size={24} />
           </button>
         </div>
 

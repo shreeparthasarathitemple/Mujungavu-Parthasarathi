@@ -36,12 +36,21 @@ function AdminAnnouncement() {
     e.preventDefault();
     if (!title || !content) return;
 
+    let finalImageUrl = imageUrl;
+    // Auto-convert Google Drive sharing links to direct image links
+    if (finalImageUrl.includes('drive.google.com/file/d/')) {
+      const match = finalImageUrl.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match && match[1]) {
+        finalImageUrl = `https://drive.google.com/uc?export=view&id=${match[1]}`;
+      }
+    }
+
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ title, content, imageUrl })
+        body: JSON.stringify({ title, content, imageUrl: finalImageUrl })
       });
       const data = await res.json();
       

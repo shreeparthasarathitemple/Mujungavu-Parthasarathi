@@ -2,6 +2,8 @@ import React from 'react';
 import './HistoryPage.css';
 import { useLanguage } from '../context/LanguageContext';
 
+import { Home } from 'lucide-react';
+
 function HistoryPage({ onNavigate }) {
   const { t, language } = useLanguage();
 
@@ -12,8 +14,8 @@ function HistoryPage({ onNavigate }) {
           <button className="back-btn" onClick={() => {
             window.location.hash = 'about';
             onNavigate('home');
-          }}>
-            ← {language === 'en' ? 'Back to Home' : 'ಮುಖಪುಟಕ್ಕೆ ಹಿಂತಿರುಗಿ'}
+          }} aria-label="Back to Home" title="Back to Home">
+            <Home size={24} />
           </button>
         </div>
         
