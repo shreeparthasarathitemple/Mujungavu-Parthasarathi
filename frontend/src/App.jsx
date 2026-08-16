@@ -108,7 +108,7 @@ function App() {
 
 
 
-      {currentPage !== 'admin' && (
+      {(currentPage !== 'admin' && !showLoginPopup) && (
       <nav className={`navbar ${scrolled || currentPage !== 'home' ? 'scrolled' : ''}`}>
         <div className="nav-background">
           <div className="nav-container">
@@ -130,8 +130,8 @@ function App() {
                 </>
               )}
               {(currentPage === 'history' || currentPage === 'gallery_page' || currentPage === 'announcement_page') && (
-                <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); setIsMenuOpen(false); }}>
-                  {language === 'en' ? 'Back to Home' : 'ಮರಳಿ ಮನೆಗೆ'}
+                <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); setIsMenuOpen(false); }} aria-label="Back to Home">
+                  <Home size={20} />
                 </a>
               )}
             </div>
