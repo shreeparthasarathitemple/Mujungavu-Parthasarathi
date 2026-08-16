@@ -8,14 +8,31 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const session = require('express-session');
+
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // Update this to match the frontend URL
+  credentials: true
+}));
 app.use(express.json());
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'fallback_secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24 // 1 day
+  }
+}));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/festivals', require('./routes/festivals'));
 app.use('/api/settings', require('./routes/settings'));
+app.use('/api/gallery', require('./routes/gallery'));
+app.use('/api/announcements', require('./routes/announcements'));
 
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/mujungavu-temple';

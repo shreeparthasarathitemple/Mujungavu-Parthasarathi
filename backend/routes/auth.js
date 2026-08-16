@@ -22,11 +22,29 @@ router.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, admin.password);
     if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-    const token = jwt.sign({ id: admin._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-    res.json({ token, username: admin.username });
+    req.session.adminId = admin._id;
+    res.json({ message: 'Logged in successfully', username: admin.username });
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
   }
+});
+
+router.get('/check', async (req, res) => {
+  if (req.session && req.session.adminId) {
+    const admin = await Admin.findById(req.session.adminId);
+    if (admin) {
+      return res.json({ isAuthenticated: true, username: admin.username });
+    }
+  }
+  res.json({ isAuthenticated: false });
+});
+
+router.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) return res.status(500).json({ message: 'Could not log out' });
+    res.clearCookie('connect.sid');
+    res.json({ message: 'Logged out successfully' });
+  });
 });
 
 module.exports = router;

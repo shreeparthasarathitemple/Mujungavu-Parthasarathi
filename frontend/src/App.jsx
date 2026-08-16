@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Menu, X, Globe, ChevronUp } from 'lucide-react'
+import { Menu, X, Globe, ChevronUp, Home } from 'lucide-react'
 import Hero from './components/Hero'
 import About from './components/About'
 import Lake from './components/Lake'
@@ -10,6 +10,7 @@ import Footer from './components/Footer'
 import HistoryPage from './components/HistoryPage'
 import GalleryPage from './components/GalleryPage'
 import Reviews from './components/Reviews'
+import Announcement from './components/Announcement'
 import { useLanguage } from './context/LanguageContext'
 import AdminLogin from './admin/AdminLogin'
 import AdminDashboard from './admin/AdminDashboard'
@@ -22,10 +23,18 @@ function App() {
   const [currentPage, setCurrentPage] = useState('home');
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
-  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(!!localStorage.getItem('adminToken'))
+  // Check auth check will happen in AdminDashboard, so we can initialize from true/false here safely or use checking state
+  const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false)
   const { language, toggleLanguage, t } = useLanguage()
 
   useEffect(() => {
+    // Initial check for admin session
+    fetch('http://localhost:5000/api/auth/check', { credentials: 'include' })
+      .then(res => res.json())
+      .then(data => {
+        if (data.isAuthenticated) setIsAdminLoggedIn(true);
+      }).catch(() => {});
+      
     const handleHash = () => {
       if (window.location.hash === '#admin') setCurrentPage('admin');
     };
@@ -95,6 +104,8 @@ function App() {
         </div>
       )}
 
+
+
       <nav className={`navbar ${scrolled || currentPage !== 'home' ? 'scrolled' : ''}`}>
         <div className="nav-background">
           <div className="nav-container">
@@ -106,7 +117,9 @@ function App() {
             <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
               {currentPage === 'home' && (
                 <>
-                  <a href="#home" onClick={() => setIsMenuOpen(false)}>{language === 'en' ? 'Home' : 'ಮನೆ'}</a>
+                  <a href="#home" onClick={() => setIsMenuOpen(false)} aria-label="Home">
+                    <Home size={20} />
+                  </a>
                   <a href="#about" onClick={() => setIsMenuOpen(false)}>{t('nav', 'history')}</a>
                   <a href="#lake" onClick={() => setIsMenuOpen(false)}>{t('nav', 'lake')}</a>
                   <a href="#services" onClick={() => setIsMenuOpen(false)}>{t('nav', 'rituals')}</a>
@@ -122,7 +135,9 @@ function App() {
 
             <div className="nav-actions">
               {currentPage !== 'admin' && (
-                <button 
+                <>
+                  <Announcement />
+                  <button 
                   className="lang-toggle-btn"
                   onClick={toggleLanguage}
                   aria-label="Toggle language"
@@ -130,6 +145,7 @@ function App() {
                   <Globe size={20} />
                   <span>{language === 'en' ? 'ಕನ್ನಡ' : 'English'}</span>
                 </button>
+                </>
               )}
               
               <button 
@@ -140,6 +156,13 @@ function App() {
                 {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
               </button>
             </div>
+          </div>
+        </div>
+        <div className="nav-marquee">
+          <div className="nav-marquee-track">
+            {Array(10).fill(language === 'en' ? 'Om Namo Bhagavathe Vasudevaya  |  ' : 'ಓಂ ನಮೋ ಭಗವತೇ ವಾಸುದೇವಾಯ').map((text, i) => (
+              <span key={i} className={`marquee-text ${language === 'en' ? '' : 'font-devanagari'}`}>{text}</span>
+            ))}
           </div>
         </div>
       </nav>

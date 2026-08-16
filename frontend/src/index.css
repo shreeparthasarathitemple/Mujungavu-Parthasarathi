@@ -182,12 +182,15 @@ a {
 .nav-background {
   padding: 1.5rem 0;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 10;
 }
 
 /* Hide brand and links when at the top (hero section) */
 .navbar:not(.scrolled) .nav-brand,
 .navbar:not(.scrolled) .nav-links,
-.navbar:not(.scrolled) .mobile-menu-btn {
+.navbar:not(.scrolled) .mobile-menu-btn,
+.navbar:not(.scrolled) .announcement-dropdown-container {
   display: none !important;
 }
 
@@ -209,6 +212,16 @@ a {
   background: #f0f0f0;
   padding: 0.3rem 0;
   margin-top: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.navbar:not(.scrolled) .announcement-bell-btn {
+  color: #fff;
+}
+
+.navbar.scrolled .announcement-bell-btn {
+  color: var(--text-dark);
 }
 
 .navbar.scrolled .nav-marquee {
@@ -252,7 +265,7 @@ a {
   color: var(--dark-text);
 }
 .navbar.scrolled .nav-brand {
-  color: #FFA500;
+  color: var(--saffron-dark);
 }
 
 .mobile-menu-btn {

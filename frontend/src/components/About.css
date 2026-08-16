@@ -136,7 +136,9 @@
 
 @media (max-width: 992px) {
   .about-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 3rem;
   }
   .about-text {
     padding-right: 0;
