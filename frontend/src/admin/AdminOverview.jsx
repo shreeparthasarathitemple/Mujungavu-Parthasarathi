@@ -133,6 +133,16 @@ function AdminOverview() {
         </div>
       </div>
 
+      <div className="admin-form-section glass-panel" style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+        <div>
+          <h4 style={{ color: '#333', marginBottom: '0.5rem' }}>Google Analytics (Live Traffic)</h4>
+          <p style={{ color: '#666', fontSize: '0.9rem', maxWidth: '600px' }}>View real-time active users, detailed demographics, and live traffic sources directly on your Google Analytics dashboard.</p>
+        </div>
+        <a href="https://analytics.google.com/analytics/web/" target="_blank" rel="noopener noreferrer" className="hero-btn admin-btn" style={{ whiteSpace: 'nowrap' }}>
+          Open Live Analytics <ExternalLink size={18} style={{ marginLeft: '8px' }} />
+        </a>
+      </div>
+
       <div className="live-view-section glass-panel">
         <div className="live-view-content">
           <h4>View Live Website</h4>
