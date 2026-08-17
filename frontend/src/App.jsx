@@ -329,9 +329,8 @@ function App() {
             </div>
 
             <div className="nav-actions">
-              <div className="nav-time-star" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', marginRight: '15px', color: 'var(--gold)', fontSize: '0.85rem' }}>
+              <div className="nav-time-star" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '15px', color: 'var(--gold)', fontSize: '0.9rem' }}>
                 <span style={{ fontWeight: '600' }}>{formatTime(currentTime)}</span>
-                <span style={{ fontSize: '0.75rem', opacity: 0.9 }}>{todaysStar ? `Star: ${todaysStar}` : formatDate(currentTime)}</span>
               </div>
 
               {currentPage !== 'admin' && (
