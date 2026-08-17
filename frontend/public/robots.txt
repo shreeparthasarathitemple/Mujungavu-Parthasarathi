@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Replace 'https://www.mujungavuparthasarathi.in' with your actual hosted domain
+Sitemap: https://www.mujungavuparthasarathi.in/sitemap.xml

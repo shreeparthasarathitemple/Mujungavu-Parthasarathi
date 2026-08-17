@@ -223,22 +223,69 @@ function App() {
   }, [currentPage])
 
   const getSEOMetadata = () => {
-    const baseTitle = "Shree Parthasarathi Mujungavu";
-    const description = "Discover the divine presence at Shree Parthasarathi Temple, Mujungavu. Join us for poojas, festivals, and spiritual guidance.";
+    const baseTitle = language === 'en' ? "Shree Parthasarathi Temple, Mujungavu" : "ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವಸ್ಥಾನ, ಮುಜುಂಗಾವು";
+    let description = language === 'en' 
+      ? "Discover the divine presence at Shree Parthasarathi Temple, Mujungavu. Join us for poojas, festivals, and spiritual guidance."
+      : "ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವಸ್ಥಾನ, ಮುಜುಂಗಾವು. ಪೂಜೆಗಳು, ಹಬ್ಬಗಳು ಮತ್ತು ಆಧ್ಯಾತ್ಮಿಕ ಮಾರ್ಗದರ್ಶನಕ್ಕಾಗಿ ನಮ್ಮನ್ನು ಭೇಟಿ ಮಾಡಿ.";
     let title = baseTitle;
     
-    if (currentPage === 'history') title = `History | ${baseTitle}`;
-    if (currentPage === 'gallery_page') title = `Gallery | ${baseTitle}`;
-    if (currentPage === 'announcement_page' && activeAnnouncement) title = `${activeAnnouncement.title} | ${baseTitle}`;
+    if (currentPage === 'history') title = `${language === 'en' ? 'History' : 'ಇತಿಹಾಸ'} | ${baseTitle}`;
+    if (currentPage === 'gallery_page') title = `${language === 'en' ? 'Gallery' : 'ಗ್ಯಾಲರಿ'} | ${baseTitle}`;
+    if (currentPage === 'announcement_page' && activeAnnouncement) {
+      title = `${activeAnnouncement.title} | ${baseTitle}`;
+      if (activeAnnouncement.description) {
+        // Create a short text description from HTML content
+        const tempDiv = document.createElement("div");
+        tempDiv.innerHTML = activeAnnouncement.description;
+        description = tempDiv.textContent || tempDiv.innerText || "";
+        description = description.substring(0, 150) + '...';
+      }
+    }
     
+    const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const imageUrl = `${origin}/logo.png`;
+
+    const schemaOrgJSONLD = {
+      "@context": "http://schema.org",
+      "@type": "HinduTemple",
+      "name": "Shree Parthasarathi Temple, Mujungavu",
+      "url": origin,
+      "logo": imageUrl,
+      "image": imageUrl,
+      "description": "Discover the divine presence at Shree Parthasarathi Temple, Mujungavu.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Mujungavu",
+        "addressRegion": "Kerala",
+        "addressCountry": "IN"
+      }
+    };
+
     return (
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
+        <link rel="canonical" href={currentUrl} />
+        
+        {/* Open Graph / Facebook / WhatsApp */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={currentUrl} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:image" content="/logo.png" />
-        <meta property="og:type" content="website" />
+        <meta property="og:image" content={imageUrl} />
+        
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={currentUrl} />
+        <meta property="twitter:title" content={title} />
+        <meta property="twitter:description" content={description} />
+        <meta property="twitter:image" content={imageUrl} />
+
+        {/* Schema.org for Google Rich Results */}
+        <script type="application/ld+json">
+          {JSON.stringify(schemaOrgJSONLD)}
+        </script>
       </Helmet>
     );
   };
