@@ -253,7 +253,16 @@ function App() {
       {getSEOMetadata()}
       {loading && (
         <div className={`loading-screen ${fadeOut ? 'fade-out' : ''}`}>
-          <img src="/logo.png" alt="Temple Logo" className="loading-logo" />
+          <div className="loading-content">
+            <div className="logo-wrapper">
+              <div className="glowing-ring"></div>
+              <img src="/logo.png" alt="Temple Logo" className="loading-logo-premium" />
+            </div>
+            <h2 className="loading-title">ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ಮುಜುಂಗಾವು</h2>
+            <div className="loading-dots">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
         </div>
       )}
 
