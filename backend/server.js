@@ -11,7 +11,14 @@ const PORT = process.env.PORT || 5000;
 const session = require('express-session');
 
 // Middleware
-const allowedOrigins = ['http://localhost:5173', 'https://mujungavu-parthasarathi.vercel.app', 'https://mujungavu-parthasarathi.onrender.com', process.env.FRONTEND_URL];
+const allowedOrigins = [
+  'http://localhost:5173', 
+  'https://mujungavu-parthasarathi.vercel.app', 
+  'https://mujungavu-parthasarathi.onrender.com', 
+  'https://www.mujungavuparthasarathi.in',
+  'https://mujungavuparthasarathi.in',
+  process.env.FRONTEND_URL
+];
 app.use(cors({
   origin: function(origin, callback) {
     if (!origin || allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes(origin)) {
@@ -53,6 +60,11 @@ app.use('/api/upload', uploadRoutes);
 app.use('/api/notifications', notificationsRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/reviews', reviewsRoutes);
+
+// Health check route for Render
+app.get('/', (req, res) => {
+  res.status(200).send('Mujungavu Parthasarathi Temple API is running.');
+});
 
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/mujungavu-temple';
