@@ -3,9 +3,17 @@ import './Hero.css';
 import { useLanguage } from '../context/LanguageContext';
 import { ChevronDown } from 'lucide-react';
 
-function Hero() {
+function Hero({ onReady }) {
   const { t, language } = useLanguage();
   const [isMobile, setIsMobile] = useState(false);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [logoLoaded, setLogoLoaded] = useState(false);
+
+  useEffect(() => {
+    if (videoLoaded && logoLoaded && onReady) {
+      onReady();
+    }
+  }, [videoLoaded, logoLoaded, onReady]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -28,12 +36,20 @@ function Hero() {
         muted 
         playsInline
         key={isMobile ? 'mobile' : 'desktop'}
+        onLoadedData={() => setVideoLoaded(true)}
+        onCanPlayThrough={() => setVideoLoaded(true)}
       >
         <source src={isMobile ? mobileVideo : desktopVideo} type="video/mp4" />
       </video>
       <div className="hero-overlay"></div>
       <div className={`hero-content ${language === 'en' ? 'font-devanagari' : ''}`}>
-        <img src="/logo.png" alt="Temple Logo" className="hero-logo animate-on-scroll" />
+        <img 
+          src="/logo.png" 
+          alt="Temple Logo" 
+          className="hero-logo animate-on-scroll" 
+          onLoad={() => setLogoLoaded(true)}
+          onError={() => setLogoLoaded(true)}
+        />
         <h1 className="hero-title reveal-text" style={{ animationDelay: '0.2s' }}>
           {t('hero', 'title')}
         </h1>
