@@ -312,7 +312,7 @@ a {
 }
 
 .navbar.scrolled .announcement-bell-btn {
-  color: var(--text-dark);
+  color: var(--dark-text);
 }
 
 .navbar.scrolled .nav-marquee {

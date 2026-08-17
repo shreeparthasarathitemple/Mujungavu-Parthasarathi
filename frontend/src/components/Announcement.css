@@ -15,6 +15,7 @@
 .announcement-bell-btn {
   background: none;
   border: none;
+  color: var(--primary-color);
   cursor: pointer;
   display: flex;
   align-items: center;
