@@ -1,12 +1,16 @@
 import React from 'react';
 import './AnnouncementPage.css';
-import { Megaphone, Calendar, Home } from 'lucide-react';
+import { Megaphone, Calendar, ArrowLeft } from 'lucide-react';
 
 function AnnouncementPage({ announcement, onBack }) {
   if (!announcement) return null;
 
   return (
     <div className="announcement-page-container">
+      <button onClick={onBack} className="back-btn">
+        <ArrowLeft size={20} style={{ marginRight: '8px' }} />
+        Back to Home
+      </button>
       <div className="announcement-page-header glass-panel">
         <div className="announcement-title-section">
           <div className="announcement-icon-badge">
