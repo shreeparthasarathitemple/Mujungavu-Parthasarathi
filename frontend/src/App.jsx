@@ -210,10 +210,10 @@ function App() {
   }, [currentPage])
 
   const getSEOMetadata = () => {
-    const baseTitle = language === 'en' ? "Shree Parthasarathi Temple, Mujungavu" : "ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವಸ್ಥಾನ, ಮುಜುಂಗಾವು";
+    const baseTitle = language === 'en' ? "Mujungavu Parthasarathi | Official Website" : "ಮುಜುಂಗಾವು ಪಾರ್ಥಸಾರಥಿ | ಅಧಿಕೃತ ವೆಬ್‌ಸೈಟ್";
     let description = language === 'en' 
-      ? "Discover the divine presence at Shree Parthasarathi Temple, Mujungavu. Join us for poojas, festivals, and spiritual guidance."
-      : "ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವಸ್ಥಾನ, ಮುಜುಂಗಾವು. ಪೂಜೆಗಳು, ಹಬ್ಬಗಳು ಮತ್ತು ಆಧ್ಯಾತ್ಮಿಕ ಮಾರ್ಗದರ್ಶನಕ್ಕಾಗಿ ನಮ್ಮನ್ನು ಭೇಟಿ ಮಾಡಿ.";
+      ? "Official website of Mujungavu Parthasarathi."
+      : "ಮುಜುಂಗಾವು ಪಾರ್ಥಸಾರಥಿಯ ಅಧಿಕೃತ ವೆಬ್‌ಸೈಟ್.";
     let title = baseTitle;
     
     if (currentPage === 'history') title = `${language === 'en' ? 'History' : 'ಇತಿಹಾಸ'} | ${baseTitle}`;
@@ -236,11 +236,11 @@ function App() {
     const schemaOrgJSONLD = {
       "@context": "http://schema.org",
       "@type": "HinduTemple",
-      "name": "Shree Parthasarathi Temple, Mujungavu",
+      "name": "Mujungavu Parthasarathi",
       "url": origin,
       "logo": imageUrl,
       "image": imageUrl,
-      "description": "Discover the divine presence at Shree Parthasarathi Temple, Mujungavu.",
+      "description": "Official website of Mujungavu Parthasarathi.",
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Mujungavu",
