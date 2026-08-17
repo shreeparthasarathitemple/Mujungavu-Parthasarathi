@@ -34,4 +34,18 @@ router.delete('/:id', auth, async (req, res) => {
   }
 });
 
+// Update festival
+router.put('/:id', auth, async (req, res) => {
+  try {
+    const updatedFestival = await Festival.findByIdAndUpdate(
+      req.params.id, 
+      { $set: req.body }, 
+      { new: true }
+    );
+    res.json(updatedFestival);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

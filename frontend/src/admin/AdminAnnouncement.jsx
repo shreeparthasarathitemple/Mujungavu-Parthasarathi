@@ -10,6 +10,7 @@ function AdminAnnouncement() {
   const [imageFile, setImageFile] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [error, setError] = useState(null);
+  const [editingId, setEditingId] = useState(null);
 
   useEffect(() => {
     fetchAnnouncements();
@@ -33,11 +34,32 @@ function AdminAnnouncement() {
     }
   };
 
-  const handleCreate = async (e) => {
+  const handleEdit = (item) => {
+    setEditingId(item._id);
+    setTitle(item.title);
+    setContent(item.content);
+    if (document.getElementById('announcementImage')) {
+      document.getElementById('announcementImage').value = '';
+    }
+    setImageFile(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setTitle('');
+    setContent('');
+    setImageFile(null);
+    if (document.getElementById('announcementImage')) {
+      document.getElementById('announcementImage').value = '';
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title || !content) return;
 
-    let finalImageUrl = '';
+    let finalImageUrl = undefined;
 
     if (imageFile) {
       setUploadingImage(true);
@@ -65,27 +87,38 @@ function AdminAnnouncement() {
       }
     }
 
+    const payload = { title, content };
+    if (finalImageUrl !== undefined) {
+      payload.imageUrl = finalImageUrl;
+    }
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements`, {
-        method: 'POST',
+      setUploadingImage(true);
+      const url = editingId 
+        ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements/${editingId}`
+        : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements`;
+      const method = editingId ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ title, content, imageUrl: finalImageUrl })
+        body: JSON.stringify(payload)
       });
       const data = await res.json();
       
       if (res.ok) {
-        setAnnouncements([data, ...announcements]);
-        setTitle('');
-        setContent('');
-        setImageFile(null);
-        document.getElementById('announcementImage').value = '';
+        if (editingId) {
+          setAnnouncements(announcements.map(a => a._id === editingId ? data : a));
+        } else {
+          setAnnouncements([data, ...announcements]);
+        }
+        handleCancelEdit();
       } else {
-        setError(data.message || 'Failed to create announcement');
+        setError(data.message || 'Failed to save announcement');
       }
     } catch (err) {
-      setError('Server error during creation');
+      setError('Server error during save');
     } finally {
       setUploadingImage(false);
     }
@@ -139,8 +172,8 @@ function AdminAnnouncement() {
       {error && <div className="admin-alert error">{error}</div>}
 
       <div className="admin-form-section glass-panel">
-        <h4>Create New Announcement</h4>
-        <form onSubmit={handleCreate} className="announcement-form">
+        <h4>{editingId ? 'Edit Announcement' : 'Create New Announcement'}</h4>
+        <form onSubmit={handleSubmit} className="announcement-form">
           <div className="form-group">
             <label>Title</label>
             <input 
@@ -170,9 +203,16 @@ function AdminAnnouncement() {
               rows={4}
             />
           </div>
-          <button type="submit" className="hero-btn admin-btn" disabled={uploadingImage}>
-            {uploadingImage ? 'Uploading...' : 'Post Announcement'}
-          </button>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <button type="submit" className="hero-btn admin-btn" disabled={uploadingImage}>
+              {uploadingImage ? 'Saving...' : editingId ? 'Update Announcement' : 'Post Announcement'}
+            </button>
+            {editingId && (
+              <button type="button" onClick={handleCancelEdit} className="hero-btn admin-btn" style={{ background: '#666' }}>
+                Cancel Edit
+              </button>
+            )}
+          </div>
         </form>
       </div>
 
@@ -201,7 +241,10 @@ function AdminAnnouncement() {
                   >
                     {item.isActive ? 'Active' : 'Hidden'}
                   </button>
-                  <button onClick={() => handleDelete(item._id)} className="icon-btn text-danger">
+                  <button onClick={() => handleEdit(item)} className="icon-btn text-primary" title="Edit">
+                    <Edit size={20} />
+                  </button>
+                  <button onClick={() => handleDelete(item._id)} className="icon-btn text-danger" title="Delete">
                     <Trash2 size={20} />
                   </button>
                 </div>

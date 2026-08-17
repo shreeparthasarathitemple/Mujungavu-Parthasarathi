@@ -5,6 +5,26 @@ function AdminFestivals() {
   const [formData, setFormData] = useState({ titleEn: '', titleKn: '', descEn: '', descKn: '' });
   const [imageFile, setImageFile] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+
+  const handleEdit = (f) => {
+    setEditingId(f._id);
+    setFormData({ titleEn: f.titleEn, titleKn: f.titleKn, descEn: f.descEn, descKn: f.descKn });
+    setImageFile(null);
+    if (document.getElementById('festivalImage')) {
+      document.getElementById('festivalImage').value = '';
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCancelEdit = () => {
+    setEditingId(null);
+    setFormData({ titleEn: '', titleKn: '', descEn: '', descKn: '' });
+    setImageFile(null);
+    if (document.getElementById('festivalImage')) {
+      document.getElementById('festivalImage').value = '';
+    }
+  };
 
   const fetchFestivals = async () => {
     try {
@@ -51,18 +71,24 @@ function AdminFestivals() {
     }
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/festivals`, {
-        method: 'POST',
+      const url = editingId 
+        ? `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/festivals/${editingId}`
+        : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/festivals`;
+      const method = editingId ? 'PUT' : 'POST';
+      
+      const payload = { ...formData };
+      if (finalImageUrl) payload.imageUrl = finalImageUrl;
+
+      const res = await fetch(url, {
+        method,
         headers: {
           'Content-Type': 'application/json'
         },
         credentials: 'include',
-        body: JSON.stringify({ ...formData, imageUrl: finalImageUrl })
+        body: JSON.stringify(payload)
       });
       if (res.ok) {
-        setFormData({ titleEn: '', titleKn: '', descEn: '', descKn: '' });
-        setImageFile(null);
-        document.getElementById('festivalImage').value = '';
+        handleCancelEdit();
         fetchFestivals();
       }
     } catch (err) {
@@ -87,7 +113,7 @@ function AdminFestivals() {
 
   return (
     <div>
-      <h3>Add New Festival</h3>
+      <h3>{editingId ? 'Edit Festival' : 'Add New Festival'}</h3>
       <form onSubmit={handleSubmit} className="admin-form">
         <div className="form-group">
           <label>Title (English)</label>
@@ -114,9 +140,16 @@ function AdminFestivals() {
             onChange={e => setImageFile(e.target.files[0])} 
           />
         </div>
-        <button type="submit" className="hero-btn admin-btn" style={{marginTop: '1rem'}} disabled={uploadingImage}>
-          {uploadingImage ? 'Uploading...' : 'Add Festival'}
-        </button>
+        <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+          <button type="submit" className="hero-btn admin-btn" disabled={uploadingImage}>
+            {uploadingImage ? 'Saving...' : editingId ? 'Update Festival' : 'Add Festival'}
+          </button>
+          {editingId && (
+            <button type="button" onClick={handleCancelEdit} className="hero-btn admin-btn" style={{ background: '#666' }}>
+              Cancel Edit
+            </button>
+          )}
+        </div>
       </form>
 
       <h3 style={{marginTop: '3rem'}}>Current Festivals</h3>
@@ -128,7 +161,10 @@ function AdminFestivals() {
               <strong>{f.titleEn} / {f.titleKn}</strong>
               <p>{f.descEn.substring(0, 80)}...</p>
             </div>
-            <button onClick={() => handleDelete(f._id)} className="delete-btn">Delete</button>
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+              <button onClick={() => handleEdit(f)} className="hero-btn" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}>Edit</button>
+              <button onClick={() => handleDelete(f._id)} className="delete-btn">Delete</button>
+            </div>
           </li>
         ))}
       </ul>
