@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Footer.css';
 import { useLanguage } from '../context/LanguageContext';
-import { Bell } from 'lucide-react';
+import { Bell, X } from 'lucide-react';
 
 const MapPinIcon = () => (
   <svg 
@@ -58,6 +58,7 @@ const LockIcon = () => (
 
 function Footer({ onAdminClick, onSubscribe, pushSubscribed, subscribing }) {
   const { t } = useLanguage();
+  const [showCredits, setShowCredits] = useState(false);
 
   return (
     <footer className="footer" id="contact">
@@ -131,7 +132,26 @@ function Footer({ onAdminClick, onSubscribe, pushSubscribed, subscribing }) {
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         </button>
-        <p>&copy; {new Date().getFullYear()} {t('footer', 'copyright')}</p>
+        <p style={{ cursor: 'pointer' }} onClick={() => setShowCredits(true)}>&copy; {new Date().getFullYear()} {t('footer', 'copyright')}</p>
+
+        {showCredits && (
+          <div className="credits-modal-overlay" onClick={() => setShowCredits(false)}>
+            <div className="credits-modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="credits-modal-close" onClick={() => setShowCredits(false)}>
+                <X size={20} />
+              </button>
+              <h4>Credits</h4>
+              <div className="credits-list">
+                <p>
+                  Video Credit <a href="https://www.instagram.com/kiran_skyscapes/" target="_blank" rel="noopener noreferrer">kiran_skyscapes</a>
+                </p>
+                <p>
+                  Developed By <a href="https://harikiranap.vercel.app/" target="_blank" rel="noopener noreferrer">Harikiran</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </footer>
   );

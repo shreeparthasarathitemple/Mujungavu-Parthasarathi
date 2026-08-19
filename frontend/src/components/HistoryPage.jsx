@@ -15,9 +15,13 @@ function HistoryPage({ onBack }) {
         </h1>
         
         <div className="history-content-box animate-on-scroll" style={{ transitionDelay: '0.2s' }}>
-          <p className="text-lg leading-relaxed history-paragraph">
-            {t('about', 'fullHistoryContent')}
-          </p>
+          {t('about', 'fullHistoryContent').split('\n').map((paragraph, index) => (
+            paragraph.trim() && (
+              <p key={index} className="text-lg leading-relaxed history-paragraph" style={{ marginBottom: '1rem' }}>
+                {paragraph}
+              </p>
+            )
+          ))}
         </div>
       </div>
     </section>

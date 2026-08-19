@@ -47,8 +47,104 @@ export const translations = {
     knowMore: { en: "Know More History", kn: "ಸಂಪೂರ್ಣ ಇತಿಹಾಸ ತಿಳಿಯಿರಿ" },
     fullHistoryTitle: { en: "The Complete History of Mujungavu", kn: "ಮುಜುಂಗಾವು: ಸಂಪೂರ್ಣ ಇತಿಹಾಸ" },
     fullHistoryContent: {
-      en: "The history of Mujungavu Shree Parthasarathi Temple dates back several centuries. It is deeply intertwined with the cultural and spiritual fabric of the Kasaragod region. Local lore suggests that the original idol was discovered by a pious farmer while ploughing his fields, after which a small shrine was erected by the local chieftain. Over the years, under the patronage of various ruling dynasties, the temple was expanded into the magnificent structure it is today. The temple holds significant importance for its unique 'Lake' (Sarovara) which is said to have therapeutic properties. The rituals practiced here have remained unchanged for generations, preserving the pristine purity of the ancient Vedic traditions. The annual festivals bring together thousands of devotees, making it a vibrant center of faith and community bonding.",
-      kn: "ಮುಜುಂಗಾವು ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವಾಲಯದ ಇತಿಹಾಸವು ಹಲವು ಶತಮಾನಗಳ ಹಿಂದಿನದು. ಇದು ಕಾಸರಗೋಡು ಪ್ರದೇಶದ ಸಾಂಸ್ಕೃತಿಕ ಮತ್ತು ಆಧ್ಯಾತ್ಮಿಕ ಪರಂಪರೆಯೊಂದಿಗೆ ಆಳವಾಗಿ ಹೆಣೆದುಕೊಂಡಿದೆ. ಸ್ಥಳೀಯ ಐತಿಹ್ಯಗಳ ಪ್ರಕಾರ, ಮೂಲ ವಿಗ್ರಹವು ಒಬ್ಬ ಭಕ್ತ ರೈತನಿಗೆ ತನ್ನ ಗದ್ದೆ ಉಳುಮೆ ಮಾಡುವಾಗ ಸಿಕ್ಕಿತು, ನಂತರ ಸ್ಥಳೀಯ ಆಡಳಿತಗಾರರಿಂದ ಸಣ್ಣ ಗುಡಿಯನ್ನು ನಿರ್ಮಿಸಲಾಯಿತು. ವರ್ಷಗಳ ಕಳೆಯುತ್ತಾ, ವಿವಿಧ ರಾಜವಂಶಗಳ ಪ್ರೋತ್ಸಾಹದಿಂದ, ದೇವಾಲಯವು ಇಂದು ಕಾಣುವ ಭವ್ಯವಾದ ರಚನೆಯಾಗಿ ವಿಸ್ತರಿಸಲ್ಪಟ್ಟಿತು. ದೇವಾಲಯವು ತನ್ನ ವಿಶಿಷ್ಟವಾದ 'ಸರೋವರ'ಕ್ಕೆ ಗಮನಾರ್ಹ ಪ್ರಾಮುಖ್ಯತೆಯನ್ನು ಹೊಂದಿದೆ, ಇದು ಚಿಕಿತ್ಸಕ ಗುಣಗಳನ್ನು ಹೊಂದಿದೆ ಎಂದು ಹೇಳಲಾಗುತ್ತದೆ. ಇಲ್ಲಿ ಆಚರಿಸಲಾಗುವ ಧಾರ್ಮಿಕ ವಿಧಿ-ವಿಧಾನಗಳು ತಲೆಮಾರುಗಳಿಂದ ಬದಲಾಗದೆ ಉಳಿದಿದ್ದು, ಪ್ರಾಚೀನ ವೈದಿಕ ಸಂಪ್ರದಾಯಗಳ ಶುದ್ಧತೆಯನ್ನು ಕಾಪಾಡಿಕೊಂಡಿವೆ. ವಾರ್ಷಿಕ ಉತ್ಸವಗಳು ಸಾವಿರಾರು ಭಕ್ತರನ್ನು ಒಟ್ಟುಗೂಡಿಸುತ್ತವೆ, ಇದು ನಂಬಿಕೆ ಮತ್ತು ಸಮುದಾಯದ ಬಾಂಧವ್ಯದ ರೋಮಾಂಚಕ ಕೇಂದ್ರವಾಗಿದೆ."
+      en: `Mujungavu Sri Parthasarathi Temple – Pauranic Background
+
+Mujungavu Sri Parthasarathi Temple, regarded as one of the four renowned temples of the Kumbla Seeme, is a sacred temple with an ancient Pauranic background and unique traditional practices. The temple is dedicated to Lord Krishna in His form as Parthasarathi, and its history is closely associated with the sage Muchukunda and the divine pastimes of Lord Krishna.
+
+King Muchukunda, who is well known in the Puranas, was righteous and valiant. He fought on behalf of the Devas in the battles between the Devas and Asuras and played a significant role in defeating the Asuras. Having become exhausted after fighting in the wars for a long period, Muchukunda sought a boon from the Devas so that he could rest.
+
+Pleased with his service and valour, the Devas granted Muchukunda a special boon. They blessed him that whoever disturbed his penance and caused him to open his eyes would be burnt to ashes by the power of his gaze.
+
+Having received this boon, Sage Muchukunda entered a cave and engaged himself in deep penance.
+
+Meanwhile, during the incarnation of Lord Krishna, a powerful Asura named Kalyavana came to attack the Yadavas. He was extremely powerful and difficult to defeat.
+
+With the intention of destroying Kalyavana, Lord Krishna led him towards a cave by allowing him to follow Him. Lord Krishna then went towards Sage Muchukunda and disappeared from there, making Kalyavana continue to follow Him.
+
+At that time, according to the local Pauranic tradition, Lord Krishna assumed the form of a fox. The yellow-coloured garment of Lord Krishna was near Sage Muchukunda.
+
+Following Lord Krishna, Kalyavana entered the cave. There he saw Sage Muchukunda engaged in penance. Seeing the yellow-coloured garment near Muchukunda, Kalyavana mistook him for Lord Krishna. In anger, he kicked Sage Muchukunda, thereby disturbing his penance.
+
+At that very moment, the penance of Sage Muchukunda was disturbed. He opened his eyes and looked at Kalyavana. Immediately, due to the power of the boon granted to him by the Devas, Kalyavana was burnt to ashes.
+
+After this, Lord Krishna appeared before Sage Muchukunda in the form of a fox. Muchukunda then addressed the fox and said, “Leave this place. If I open my eyes again, you too may meet the same fate as Kalyavana.”
+
+Thereafter, Lord Krishna appeared before Sage Muchukunda in His true divine form. On seeing the divine form of the Lord, Muchukunda praised Lord Krishna with devotion and surrendered himself completely at the feet of the Lord.
+
+Sage Muchukunda did not ask Lord Krishna for worldly wealth or material pleasures. Instead, he humbly prayed to the Lord to bless him with the opportunity to install the Lord here and worship Him every day.
+
+“O Lord, bless me with the opportunity to install You here and perform Your worship every day,” Muchukunda prayed to Lord Krishna.
+
+Pleased with the sincere devotion of Sage Muchukunda, Lord Krishna granted his prayer. With the permission and blessings of the Lord, Sage Muchukunda installed Lord Sri Parthasarathi here and began the worship and rituals, according to the traditional account.
+
+It is believed in local tradition that this sacred place, where Lord Sri Parthasarathi was installed by Sage Muchukunda, later became known as “Mujungavu.”
+
+The Special Significance of Mullusouthe Offering
+
+Another unique practice of this temple is associated with the Pauranic episode in which Lord Krishna assumed the form of a fox.
+
+As vegetables are considered food for the fox, it is traditionally believed that Sage Muchukunda first offered Mullusouthe as Naivedya to the Lord.
+
+This practice, which is believed to have been started by Sage Muchukunda, continues to this day at Mujungavu Sri Parthasarathi Temple. Therefore, the offering of Mullusouthe is one of the most distinctive traditional practices of this temple.
+
+Devotees offer Mullusouthe to Lord Sri Parthasarathi with devotion and pray for His divine blessings. This offering continues to be a sacred tradition that reminds devotees of the devotion of Sage Muchukunda and the divine pastime of Lord Krishna.
+
+The devotion of Sage Muchukunda, the divine pastime of Lord Krishna, the destruction of Kalyavana, and the installation of Lord Sri Parthasarathi are all closely connected to this sacred story. Together, they form an important part of the Kshetra Mahatme of Mujungavu Sri Parthasarathi Temple.
+
+Carrying the memory of the devotion of Sage Muchukunda and the blessings of Lord Krishna, this sacred temple continues to shine as a centre of faith and devotion for devotees.
+
+May the divine blessings of Lord Sri Parthasarathi always be upon all devotees.
+
+Om Namo Bhagavate Vasudevaya ॥`,
+      kn: `ಮುಜುಂಗಾವು ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವಸ್ಥಾನದ ಪೌರಾಣಿಕ ಹಿನ್ನೆಲೆ
+
+ಕುಂಭಳೆ ಸೀಮೆಯ ನಾಲ್ಕು ಪ್ರಸಿದ್ಧ ದೇವಾಲಯಗಳಲ್ಲಿ ಒಂದಾಗಿ ಪರಿಗಣಿಸಲ್ಪಡುವ ಮುಜುಂಗಾವು ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವಸ್ಥಾನವು ಪುರಾತನವಾದ ಪೌರಾಣಿಕ ಹಿನ್ನೆಲೆ ಮತ್ತು ವಿಶಿಷ್ಟವಾದ ಪದ್ಧತಿಗಳನ್ನು ಹೊಂದಿರುವ ಪುಣ್ಯಕ್ಷೇತ್ರವಾಗಿದೆ. ಶ್ರೀಕೃಷ್ಣನ ಪಾರ್ಥಸಾರಥಿ ರೂಪವನ್ನು ಆರಾಧಿಸುವ ಈ ದೇವಾಲಯದ ಇತಿಹಾಸವು ಮುಚುಕುಂದ ಮಹರ್ಷಿ ಮತ್ತು ಶ್ರೀಕೃಷ್ಣನ ದಿವ್ಯಲೀಲೆಯೊಂದಿಗೆ ನಿಕಟವಾಗಿ ಸಂಬಂಧ ಹೊಂದಿದೆ.
+
+ಪುರಾಣಗಳಲ್ಲಿ ಪ್ರಸಿದ್ಧನಾದ ಮುಚುಕುಂದ ಮಹಾರಾಜನು ಧರ್ಮನಿಷ್ಠನೂ, ಪರಾಕ್ರಮಶಾಲಿಯೂ ಆಗಿದ್ದನು. ದೇವತೆಗಳು ಮತ್ತು ಅಸುರರ ನಡುವೆ ನಡೆದ ಯುದ್ಧಗಳಲ್ಲಿ ದೇವತೆಗಳ ಪರವಾಗಿ ಹೋರಾಡಿ, ಅಸುರರನ್ನು ಸಂಹರಿಸುವಲ್ಲಿ ಮಹತ್ತರವಾದ ಪಾತ್ರ ವಹಿಸಿದ್ದನು. ದೀರ್ಘಕಾಲ ನಡೆದ ಯುದ್ಧಗಳಿಂದ ಬಳಲಿದ ಮುಚುಕುಂದನು ವಿಶ್ರಾಂತಿಗಾಗಿ ದೇವತೆಗಳ ಬಳಿ ವರವನ್ನು ಕೋರಿದನು.
+
+ಅವನ ಸೇವೆ ಮತ್ತು ಪರಾಕ್ರಮದಿಂದ ಸಂತುಷ್ಟರಾದ ದೇವತೆಗಳು ಮುಚುಕುಂದನಿಗೆ ಒಂದು ವಿಶೇಷ ವರವನ್ನು ನೀಡಿದರು. ಅವನ ತಪಸ್ಸಿಗೆ ಭಂಗ ತರುವ ಯಾರೇ ಆಗಲಿ, ಅವನು ಕಣ್ಣು ತೆರೆದು ನೋಡಿದ ಕ್ಷಣವೇ ಅವನ ದೃಷ್ಟಿಯ ಪ್ರಭಾವದಿಂದ ದಹನವಾಗುವಂತಹ ವರವನ್ನು ನೀಡಿದರು.
+
+ಈ ವರವನ್ನು ಪಡೆದ ಮುಚುಕುಂದ ಮಹರ್ಷಿಯು ಒಂದು ಗುಹೆಯಲ್ಲಿ ತಪಸ್ಸಿನಲ್ಲಿ ನಿರತರಾದನು.
+
+ಇತ್ತ ಶ್ರೀಕೃಷ್ಣನ ಅವತಾರಕಾಲದಲ್ಲಿ ಕಾಲಯವನ ಎಂಬ ಬಲಿಷ್ಠ ಅಸುರನು ಯಾದವರ ಮೇಲೆ ದಾಳಿ ಮಾಡಲು ಬಂದನು. ಅವನು ಅತ್ಯಂತ ಪರಾಕ್ರಮಶಾಲಿಯಾಗಿದ್ದು, ಅವನನ್ನು ಎದುರಿಸುವುದು ಕಷ್ಟಕರವಾಗಿತ್ತು.
+
+ಕಾಲಯವನನನ್ನು ಸಂಹರಿಸುವ ಉದ್ದೇಶದಿಂದ ಶ್ರೀಕೃಷ್ಣನು ಅವನನ್ನು ತನ್ನನ್ನು ಹಿಂಬಾಲಿಸುವಂತೆ ಮಾಡಿ ಒಂದು ಗುಹೆಯ ಕಡೆಗೆ ಕರೆದೊಯ್ದನು. ನಂತರ ಶ್ರೀಕೃಷ್ಣನು ಮುಚುಕುಂದ ಮಹರ್ಷಿಯ ಬಳಿಗೆ ತೆರಳಿ, ಕಾಲಯವನನಿಗೆ ತನ್ನನ್ನು ಹಿಂಬಾಲಿಸುವಂತೆ ಮಾಡಿ ಅಲ್ಲಿಂದ ಮರೆಯಾದನು.
+
+ಆ ಸಂದರ್ಭದಲ್ಲಿ ಶ್ರೀಕೃಷ್ಣನು ತನ್ನ ರೂಪವನ್ನು ಬದಲಿಸಿಕೊಂಡು ನರಿಯ ರೂಪವನ್ನು ತಾಳಿದನೆಂದು ಸ್ಥಳೀಯ ಪೌರಾಣಿಕ ಪರಂಪರೆಯಲ್ಲಿ ಹೇಳಲಾಗುತ್ತದೆ. ಶ್ರೀಕೃಷ್ಣನ ಪೀತವರ್ಣದ ವಸ್ತ್ರವು ಮುಚುಕುಂದ ಮಹರ್ಷಿಯ ಸಮೀಪದಲ್ಲಿತ್ತು.
+
+ಶ್ರೀಕೃಷ್ಣನನ್ನು ಹಿಂಬಾಲಿಸುತ್ತಾ ಕಾಲಯವನನು ಗುಹೆಯೊಳಗೆ ಪ್ರವೇಶಿಸಿದನು. ಅಲ್ಲಿ ಮುಚುಕುಂದ ಮಹರ್ಷಿಯು ತಪಸ್ಸಿನಲ್ಲಿ ನಿರತರಾಗಿರುವುದನ್ನು ಕಂಡನು. ಅವರ ಸಮೀಪದಲ್ಲಿದ್ದ ಪೀತವರ್ಣದ ವಸ್ತ್ರವನ್ನು ಕಂಡ ಕಾಲಯವನನು ಅದನ್ನೇ ಶ್ರೀಕೃಷ್ಣನೆಂದು ಭಾವಿಸಿದನು. ಕೋಪಗೊಂಡ ಅವನು ಮುಚುಕುಂದ ಮಹರ್ಷಿಯ ತಪಸ್ಸಿಗೆ ಭಂಗ ಉಂಟುಮಾಡುವಂತೆ ಕಾಲಿನಿಂದ ಒದ್ದನು.
+
+ಆ ಕ್ಷಣದಲ್ಲಿ ಮುಚುಕುಂದ ಮಹರ್ಷಿಯ ತಪಸ್ಸು ಭಂಗವಾಯಿತು. ಅವರು ಕಣ್ಣು ತೆರೆದು ಕಾಲಯವನನ ಕಡೆ ನೋಡಿದ ತಕ್ಷಣವೇ, ದೇವತೆಗಳಿಂದ ಪಡೆದಿದ್ದ ವರದ ಪ್ರಭಾವದಿಂದ ಕಾಲಯವನನು ದಹನಗೊಂಡು ಭಸ್ಮವಾದನು.
+
+ಆ ಬಳಿಕ ಮುಚುಕುಂದ ಮಹರ್ಷಿಯ ದೃಷ್ಟಿಗೆ ಶ್ರೀಕೃಷ್ಣನು ನರಿಯ ರೂಪದಲ್ಲಿ ಕಾಣಿಸಿಕೊಂಡನು. ಆಗ ಮುಚುಕುಂದನು ಆ ನರಿಯನ್ನು ಉದ್ದೇಶಿಸಿ, “ನೀನು ಇಲ್ಲಿಂದ ತೆರಳು. ನಾನು ಮತ್ತೆ ಕಣ್ಣು ತೆರೆದರೆ, ಕಾಲಯವನನಿಗೆ ಸಂಭವಿಸಿದಂತೆಯೇ ನಿನಗೂ ಸಂಭವಿಸಬಹುದು” ಎಂದು ಹೇಳಿದನೆಂದು ಸ್ಥಳೀಯ ಪರಂಪರೆಯಲ್ಲಿ ಹೇಳಲಾಗುತ್ತದೆ.
+
+ನಂತರ ಶ್ರೀಕೃಷ್ಣನು ಮುಚುಕುಂದ ಮಹರ್ಷಿಯ ಮುಂದೆ ತನ್ನ ನಿಜಸ್ವರೂಪದಲ್ಲಿ ಪ್ರತ್ಯಕ್ಷನಾದನು. ಭಗವಂತನ ದಿವ್ಯಸ್ವರೂಪವನ್ನು ಕಂಡ ಮುಚುಕುಂದನು ಭಕ್ತಿಭಾವದಿಂದ ಶ್ರೀಕೃಷ್ಣನನ್ನು ಸ್ತುತಿಸಿ, ತನ್ನ ಜೀವನದ ಪರಮ ಗುರಿಯನ್ನು ಭಗವಂತನ ಚರಣಗಳಲ್ಲಿ ಸಮರ್ಪಿಸಿದನು.
+
+ಮುಚುಕುಂದ ಮಹರ್ಷಿಯು ಶ್ರೀಕೃಷ್ಣನಲ್ಲಿ ಯಾವುದೇ ಲೌಕಿಕ ಸಂಪತ್ತು ಅಥವಾ ಭೌತಿಕ ಸುಖವನ್ನು ಬೇಡದೆ, ಭಗವಂತನನ್ನು ಇಲ್ಲಿ ಪ್ರತಿಷ್ಠಾಪಿಸಿ, ನಿತ್ಯವೂ ಆತನ ಪೂಜೆಯನ್ನು ನೆರವೇರಿಸುವ ಭಾಗ್ಯವನ್ನು ಕರುಣಿಸುವಂತೆ ಭಕ್ತಿಯಿಂದ ಪ್ರಾರ್ಥಿಸಿದನು.
+
+“ಹೇ ಭಗವಂತನೇ, ನಿನ್ನನ್ನು ಇಲ್ಲಿ ಪ್ರತಿಷ್ಠಾಪಿಸಿ, ನಿತ್ಯವೂ ನಿನ್ನ ಪೂಜೆಯನ್ನು ನೆರವೇರಿಸುವ ಅವಕಾಶವನ್ನು ನನಗೆ ಕರುಣಿಸು” ಎಂದು ಮುಚುಕುಂದನು ಶ್ರೀಕೃಷ್ಣನಲ್ಲಿ ಬೇಡಿಕೊಂಡನು.
+
+ಮುಚುಕುಂದ ಮಹರ್ಷಿಯ ನಿಷ್ಕಪಟ ಭಕ್ತಿಯಿಂದ ಸಂತುಷ್ಟನಾದ ಶ್ರೀಕೃಷ್ಣನು ಅವನ ಪ್ರಾರ್ಥನೆಯನ್ನು ಅನುಗ್ರಹಿಸಿದನು. ಭಗವಂತನ ಅನುಮತಿ ಮತ್ತು ಅನುಗ್ರಹದಿಂದ ಮುಚುಕುಂದ ಮಹರ್ಷಿಯು ಇಲ್ಲಿ ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ಭಗವಂತನನ್ನು ಪ್ರತಿಷ್ಠಾಪಿಸಿ, ಪೂಜಾ ಆರಾಧನೆಯನ್ನು ಆರಂಭಿಸಿದನೆಂದು ಪರಂಪರೆಯಿಂದ ತಿಳಿದುಬರುತ್ತದೆ.
+
+ಮುಚುಕುಂದ ಮಹರ್ಷಿಯಿಂದ ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ಭಗವಂತನ ಪ್ರತಿಷ್ಠೆ ನಡೆದ ಈ ಪವಿತ್ರ ಸ್ಥಳವೇ ಮುಂದೆ “ಮುಜುಂಗಾವು” ಎಂಬ ಹೆಸರಿನಿಂದ ಪ್ರಸಿದ್ಧಿಯಾಯಿತು ಎಂಬುದು ಸ್ಥಳೀಯ ನಂಬಿಕೆಯಾಗಿದೆ.
+
+ಮುಳ್ಳುಸೌತೆ ನೈವೇದ್ಯದ ವಿಶೇಷತೆ
+
+ಈ ದೇವಾಲಯದ ಮತ್ತೊಂದು ವಿಶಿಷ್ಟವಾದ ಪದ್ಧತಿಯು ಶ್ರೀಕೃಷ್ಣನು ನರಿಯ ರೂಪವನ್ನು ತಾಳಿದ ಈ ಪೌರಾಣಿಕ ಪ್ರಸಂಗದೊಂದಿಗೆ ಸಂಬಂಧ ಹೊಂದಿದೆ.
+
+ನರಿಗೆ ತರಕಾರಿಗಳು ಆಹಾರವಾಗಿರುವುದರಿಂದ, ಮುಚುಕುಂದ ಮಹರ್ಷಿಯು ಭಗವಂತನಿಗೆ ಮೊದಲಿಗೆ ಮುಳ್ಳುಸೌತೆಯನ್ನು ನೈವೇದ್ಯವಾಗಿ ಸಮರ್ಪಿಸಿದನೆಂದು ಸ್ಥಳೀಯ ಪರಂಪರೆಯಲ್ಲಿ ಹೇಳಲಾಗುತ್ತದೆ.
+
+ಮುಚುಕುಂದ ಮಹರ್ಷಿಯಿಂದ ಆರಂಭವಾದ ಈ ಪದ್ಧತಿಯು ಇಂದಿಗೂ ಮುಜುಂಗಾವು ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವಸ್ಥಾನದಲ್ಲಿ ವಿಶೇಷವಾಗಿ ಮುಂದುವರಿದುಬಂದಿದೆ. ಆದ್ದರಿಂದ ಮುಳ್ಳುಸೌತೆ ನೈವೇದ್ಯವು ಈ ದೇವಾಲಯದ ಅತ್ಯಂತ ವಿಶಿಷ್ಟವಾದ ಪದ್ಧತಿಗಳಲ್ಲಿ ಒಂದಾಗಿದೆ.
+
+ಭಕ್ತರು ಶ್ರದ್ಧಾಭಕ್ತಿಯಿಂದ ಮುಳ್ಳುಸೌತೆಯನ್ನು ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ಭಗವಂತನಿಗೆ ಸಮರ್ಪಿಸಿ, ಆತನ ದಿವ್ಯಾನುಗ್ರಹವನ್ನು ಪ್ರಾರ್ಥಿಸುತ್ತಾರೆ. ಈ ನೈವೇದ್ಯವು ಮುಚುಕುಂದ ಮಹರ್ಷಿಯ ಭಕ್ತಿ ಮತ್ತು ಶ್ರೀಕೃಷ್ಣನ ದಿವ್ಯಲೀಲೆಯನ್ನು ಸ್ಮರಿಸುವ ಪವಿತ್ರ ಪದ್ಧತಿಯಾಗಿ ಇಂದಿಗೂ ಮುಂದುವರಿದಿದೆ.
+
+ಮುಚುಕುಂದ ಮಹರ್ಷಿಯ ಭಕ್ತಿ, ಶ್ರೀಕೃಷ್ಣನ ದಿವ್ಯಲೀಲೆ, ಕಾಲಯವನನ ಸಂಹಾರ ಮತ್ತು ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ಭಗವಂತನ ಪ್ರತಿಷ್ಠೆ — ಇವೆಲ್ಲವೂ ಒಂದಕ್ಕೊಂದು ಸಂಬಂಧ ಹೊಂದಿರುವ ಈ ಪವಿತ್ರ ಕಥೆಯು ಮುಜುಂಗಾವು ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವಸ್ಥಾನದ ಕ್ಷೇತ್ರಮಾಹಾತ್ಮ್ಯವನ್ನು ವಿಶೇಷಗೊಳಿಸುತ್ತದೆ.
+
+ಮುಚುಕುಂದ ಮಹರ್ಷಿಯ ಭಕ್ತಿ ಮತ್ತು ಶ್ರೀಕೃಷ್ಣನ ಅನುಗ್ರಹದ ಸ್ಮರಣೆಯನ್ನು ಹೊತ್ತುಕೊಂಡಿರುವ ಈ ಪವಿತ್ರ ದೇವಾಲಯವು ಇಂದಿಗೂ ಭಕ್ತರ ಶ್ರದ್ಧೆ ಮತ್ತು ನಂಬಿಕೆಯ ಕೇಂದ್ರವಾಗಿ ಬೆಳಗುತ್ತಿದೆ.
+
+ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ಭಗವಂತನ ದಿವ್ಯಾನುಗ್ರಹವು ಸಕಲ ಭಕ್ತರ ಮೇಲೂ ಸದಾ ಇರಲಿ.
+
+ಓಂ ನಮೋ ಭಗವತೇ ವಾಸುದೇವಾಯ ॥`
     }
   },
   lake: {
