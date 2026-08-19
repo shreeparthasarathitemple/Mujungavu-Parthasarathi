@@ -108,60 +108,140 @@
   }
 }
 
-/* Credits Modal */
+/* Credits Modal Enhancements */
 .credits-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .credits-modal-content {
-  background-color: var(--bg-dark);
-  border: 1px solid var(--gold);
-  padding: 2rem;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 3rem 2.5rem;
+  border-radius: 20px;
   position: relative;
   max-width: 90%;
-  width: 400px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  width: 450px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   text-align: center;
+  animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes popIn {
+  from { transform: scale(0.8) translateY(20px); opacity: 0; }
+  to { transform: scale(1) translateY(0); opacity: 1; }
 }
 
 .credits-modal-close {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  color: #ccc;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
   cursor: pointer;
-  padding: 5px;
-  transition: color 0.3s ease;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s ease;
 }
 
 .credits-modal-close:hover {
-  color: var(--gold);
+  background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg) scale(1.1);
+}
+
+.credits-modal-content h4 {
+  font-size: 2rem;
+  margin-bottom: 2.5rem;
+  color: white;
+  position: relative;
+  display: inline-block;
+  font-weight: bold;
+}
+
+.credits-modal-content h4::after {
+  content: '';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 2px;
+}
+
+.credits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .credits-list p {
-  margin: 1rem 0;
-  color: #ccc;
-  font-size: 1rem;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.2rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.credits-list p:hover {
+  transform: translateY(-4px) scale(1.02);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .credits-list a {
-  color: var(--gold);
+  color: white;
   text-decoration: none;
+  font-weight: 600;
+  position: relative;
+}
+
+.credits-list a::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: white;
+  transition: width 0.3s ease;
 }
 
 .credits-list a:hover {
-  color: var(--saffron);
-  text-decoration: underline;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.credits-list a:hover::after {
+  width: 100%;
 }

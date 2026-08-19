@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Footer.css';
 import { useLanguage } from '../context/LanguageContext';
-import { Bell, X } from 'lucide-react';
+import { Bell, X, Video, Code } from 'lucide-react';
 
 const MapPinIcon = () => (
   <svg 
@@ -143,9 +143,11 @@ function Footer({ onAdminClick, onSubscribe, pushSubscribed, subscribing }) {
               <h4>Credits</h4>
               <div className="credits-list">
                 <p>
+                  <Video size={20} color="white" />
                   Video Credit <a href="https://www.instagram.com/kiran_skyscapes/" target="_blank" rel="noopener noreferrer">kiran_skyscapes</a>
                 </p>
                 <p>
+                  <Code size={20} color="white" />
                   Developed By <a href="https://harikiranap.vercel.app/" target="_blank" rel="noopener noreferrer">Harikiran</a>
                 </p>
               </div>
