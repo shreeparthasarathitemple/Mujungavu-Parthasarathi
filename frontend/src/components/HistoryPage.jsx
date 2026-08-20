@@ -34,6 +34,57 @@ function HistoryPage({ onBack }) {
           ))}
           </div>
         </div>
+
+        <div className="history-videos-section animate-on-scroll" style={{ marginTop: '4rem' }}>
+          <h3 className="videos-title">{t('about', 'videosTitle')}</h3>
+          <div className="videos-grid">
+            <div className="video-wrapper">
+              <video 
+                src="https://pkwijatqpaejzcoimemn.supabase.co/storage/v1/object/sign/History%20Video%20Temple/history1.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kN2ZkMzIyZS1iODAzLTQxMzQtYjRhNC1mNTJiZGEwZmZiZDkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJIaXN0b3J5IFZpZGVvIFRlbXBsZS9oaXN0b3J5MS5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg3MjQ2NjA4LCJleHAiOjIxMDI2MDY2MDh9.PTdD2jwhy2uxEeQlEtBp-dlUtxEQmsUJo3_t6HzCXwk" 
+                controls 
+                controlsList="nodownload noplaybackrate"
+                disablePictureInPicture
+                preload="metadata" 
+                playsInline 
+                onPlay={(e) => {
+                  document.querySelectorAll('video').forEach(v => {
+                    if (v !== e.target) v.pause();
+                  });
+                }}
+              />
+            </div>
+            <div className="video-wrapper">
+              <video 
+                src="https://pkwijatqpaejzcoimemn.supabase.co/storage/v1/object/sign/History%20Video%20Temple/history2.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kN2ZkMzIyZS1iODAzLTQxMzQtYjRhNC1mNTJiZGEwZmZiZDkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJIaXN0b3J5IFZpZGVvIFRlbXBsZS9oaXN0b3J5Mi5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg3MjQ2NjIyLCJleHAiOjIxMDI2MDY2MjJ9.p8JvkOpVTYEh2lq03FgnnuZhEqEYMMjZkebSyHew-48" 
+                controls 
+                controlsList="nodownload noplaybackrate"
+                disablePictureInPicture
+                preload="metadata" 
+                playsInline 
+                onPlay={(e) => {
+                  document.querySelectorAll('video').forEach(v => {
+                    if (v !== e.target) v.pause();
+                  });
+                }}
+              />
+            </div>
+            <div className="video-wrapper">
+              <video 
+                src="https://pkwijatqpaejzcoimemn.supabase.co/storage/v1/object/sign/History%20Video%20Temple/history3.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kN2ZkMzIyZS1iODAzLTQxMzQtYjRhNC1mNTJiZGEwZmZiZDkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJIaXN0b3J5IFZpZGVvIFRlbXBsZS9oaXN0b3J5My5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg3MjQ2NjU5LCJleHAiOjIxMDI2MDY2NTl9.rVSbAG2sAVb65Wn-DElL4kI40_XY6dFp0AqRwA8cHjY" 
+                controls 
+                controlsList="nodownload noplaybackrate"
+                disablePictureInPicture
+                preload="metadata" 
+                playsInline 
+                onPlay={(e) => {
+                  document.querySelectorAll('video').forEach(v => {
+                    if (v !== e.target) v.pause();
+                  });
+                }}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

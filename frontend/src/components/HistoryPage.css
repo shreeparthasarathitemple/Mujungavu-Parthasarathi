@@ -42,3 +42,55 @@
   line-height: 1.8;
   font-size: 1.15rem;
 }
+
+.history-videos-section {
+  padding-bottom: 2rem;
+}
+
+.videos-title {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--saffron-dark);
+  margin-bottom: 3rem;
+  font-weight: 600;
+}
+
+.videos-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.video-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border: 3px solid var(--gold);
+  background: var(--bg-dark);
+  aspect-ratio: 9 / 16;
+}
+
+.video-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+video::-webkit-media-controls-fullscreen-button,
+video::-webkit-media-controls-mute-button,
+video::-webkit-media-controls-volume-slider {
+  display: none !important;
+}
+
+@media (max-width: 992px) {
+  .videos-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .videos-grid {
+    grid-template-columns: 1fr;
+  }
+}

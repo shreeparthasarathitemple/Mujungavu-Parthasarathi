@@ -5,6 +5,7 @@
   justify-content: center;
   background-color: var(--primary-color);
   padding: 2rem;
+  padding-top: 150px;
   position: relative;
   overflow: hidden;
 }
@@ -97,20 +98,28 @@
   gap: 1rem;
   justify-content: center;
   flex-wrap: wrap;
+  max-width: 520px;
+  margin: 0 auto;
 }
 
 .action-buttons button,
 .action-buttons a {
-  display: flex;
+  flex: 1;
+  display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
-  padding: 0.8rem 1.5rem;
+  padding: 0.8rem 1rem;
   border-radius: 8px;
   font-weight: 600;
   font-size: 1rem;
+  font-family: inherit;
+  line-height: 1.5;
+  box-sizing: border-box;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
+  min-height: 54px;
 }
 
 .back-btn {

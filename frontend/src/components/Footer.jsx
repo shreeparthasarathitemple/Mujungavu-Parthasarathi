@@ -57,7 +57,7 @@ const LockIcon = () => (
   </svg>
 );
 
-function Footer({ onAdminClick, onSubscribe, pushSubscribed, subscribing }) {
+function Footer({ onAdminClick }) {
   const { t } = useLanguage();
   const [showCredits, setShowCredits] = useState(false);
 
@@ -86,17 +86,6 @@ function Footer({ onAdminClick, onSubscribe, pushSubscribed, subscribing }) {
             >
               <InstagramIcon />
             </a>
-            {!pushSubscribed && (
-              <button 
-                onClick={onSubscribe}
-                disabled={subscribing}
-                title="Subscribe to Notifications"
-                className="social-icon"
-                style={{ border: 'none', cursor: 'pointer' }}
-              >
-                <Bell size={24} />
-              </button>
-            )}
           </div>
         </div>
         

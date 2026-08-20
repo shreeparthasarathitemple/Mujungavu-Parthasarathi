@@ -15,9 +15,9 @@ import Announcement from './components/Announcement'
 import AnnouncementPage from './components/AnnouncementPage'
 import AnnouncementsGrid from './components/AnnouncementsGrid'
 import SectionWrapper from './components/SectionWrapper'
+import ContactPage from './components/ContactPage'
 import NotFound from './components/NotFound'
 import { useLanguage } from './context/LanguageContext'
-import { urlBase64ToUint8Array } from './utils/push'
 import { Helmet } from 'react-helmet-async'
 
 const AdminLogin = lazy(() => import('./admin/AdminLogin'))
@@ -46,9 +46,6 @@ function App() {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false)
-  const [pushSubscribed, setPushSubscribed] = useState(false)
-  const [subscribing, setSubscribing] = useState(false)
-  const [scrollProgress, setScrollProgress] = useState(0)
   const [currentTime, setCurrentTime] = useState(new Date())
   
   const { language, toggleLanguage, t } = useLanguage()
@@ -70,15 +67,6 @@ function App() {
       .then(data => {
         if (data.isAuthenticated) setIsAdminLoggedIn(true);
       }).catch(() => {});
-
-    // Register Service Worker for Push Notifications
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').then(reg => {
-        reg.pushManager.getSubscription().then(sub => {
-          if (sub) setPushSubscribed(true);
-        });
-      }).catch(err => console.error('Service Worker Registration Error:', err));
-    }
   }, []);
 
   useEffect(() => {
@@ -89,45 +77,6 @@ function App() {
 
   const formatTime = (date) => {
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  };
-
-  const handleSubscribe = async () => {
-    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-      alert('Push notifications are not supported by your browser.');
-      return;
-    }
-    
-    setSubscribing(true);
-    try {
-      const permission = await Notification.requestPermission();
-      if (permission !== 'granted') {
-        alert('Permission denied');
-        setSubscribing(false);
-        return;
-      }
-      
-      const reg = await navigator.serviceWorker.ready;
-      const pubKey = import.meta.env.VITE_VAPID_PUBLIC_KEY;
-      if (!pubKey) throw new Error("VAPID public key not found");
-
-      const subscription = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(pubKey)
-      });
-
-      await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notifications/subscribe`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(subscription)
-      });
-
-      setPushSubscribed(true);
-      alert('Successfully subscribed to notifications!');
-    } catch (err) {
-      console.error(err);
-      alert('Failed to subscribe: ' + err.message);
-    }
-    setSubscribing(false);
   };
 
   // Analytics Tracking
@@ -166,10 +115,6 @@ function App() {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50)
       setShowScrollTop(window.scrollY > window.innerHeight)
-
-      const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      setScrollProgress(winScroll / height);
     }
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
@@ -260,11 +205,6 @@ function App() {
 
   return (
     <>
-      <div className="scroll-progress-container">
-        <div className="scroll-progress-bar" style={{ transform: `scaleX(${scrollProgress})` }}></div>
-        <img src="/diya.svg" className="scroll-progress-diya" style={{ left: `${scrollProgress * 100}%` }} alt="Diya" />
-      </div>
-
       {getSEOMetadata()}
       
       {loading && (
@@ -367,8 +307,8 @@ function App() {
             <Route path="/services" element={<SectionWrapper><Services /></SectionWrapper>} />
             <Route path="/poojas" element={<SectionWrapper><Services /></SectionWrapper>} />
             <Route path="/festivals" element={<SectionWrapper><Festivals /></SectionWrapper>} />
-            <Route path="/contact" element={<SectionWrapper><About onNavigate={handleLegacyNavigation} /></SectionWrapper>} />
-            <Route path="/location" element={<SectionWrapper><About onNavigate={handleLegacyNavigation} /></SectionWrapper>} />
+            <Route path="/contact" element={<ContactPage />} />
+            <Route path="/location" element={<ContactPage />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={
@@ -386,7 +326,7 @@ function App() {
         </Suspense>
       </main>
 
-      {!isAdmin && <Footer onAdminClick={() => setShowLoginPopup(true)} onSubscribe={handleSubscribe} pushSubscribed={pushSubscribed} subscribing={subscribing} />}
+      {!isAdmin && <Footer onAdminClick={() => setShowLoginPopup(true)} />}
       
       {showScrollTop && (
         <button className="scroll-to-top" onClick={scrollToTop}>

@@ -32,7 +32,8 @@ app.use(cors({
 app.use(express.json());
 app.set('trust proxy', 1);
 
-const MongoStore = require('connect-mongo');
+const connectMongo = require('connect-mongo');
+const MongoStore = connectMongo.default || connectMongo.MongoStore || connectMongo;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/mujungavu-temple';
 
 app.use(session({
