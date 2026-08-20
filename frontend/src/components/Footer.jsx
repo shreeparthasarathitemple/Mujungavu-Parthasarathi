@@ -137,6 +137,10 @@ function Footer({ onAdminClick }) {
                   Video Credit <a href="https://www.instagram.com/kiran_skyscapes/" target="_blank" rel="noopener noreferrer">kiran_skyscapes</a>
                 </p>
                 <p>
+                  <Video size={20} color="white" />
+                  History Video <a href="https://www.instagram.com/i_anwesh_kumble/" target="_blank" rel="noopener noreferrer">Anwesh Kumble</a>
+                </p>
+                <p>
                   <Code size={20} color="white" />
                   Developed By <a href="https://harikiranap.vercel.app/" target="_blank" rel="noopener noreferrer">Harikiran</a>
                 </p>

@@ -61,6 +61,17 @@ function App() {
   }, [language]);
 
   useEffect(() => {
+    // Explicitly unregister any old service workers to fix video caching errors
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for(let registration of registrations) {
+          registration.unregister();
+        }
+      }).catch(function(err) {
+        console.log('Service Worker unregistration failed: ', err);
+      });
+    }
+
     // Initial check for admin session
     fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/check`, { credentials: 'include' })
       .then(res => res.json())
