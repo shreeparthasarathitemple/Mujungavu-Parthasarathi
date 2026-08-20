@@ -67,6 +67,21 @@ function About({ onNavigate }) {
             </div>
           </div>
         </div>
+
+        <div className="about-videos-section">
+          <h3 className="videos-title animate-on-scroll">{t('about', 'videosTitle')}</h3>
+          <div className="videos-grid">
+            <div className="video-wrapper animate-on-scroll">
+              <video src="/videos/about1.mp4" controls preload="metadata" playsInline />
+            </div>
+            <div className="video-wrapper animate-on-scroll" style={{ transitionDelay: '0.2s' }}>
+              <video src="/videos/about2.mp4" controls preload="metadata" playsInline />
+            </div>
+            <div className="video-wrapper animate-on-scroll" style={{ transitionDelay: '0.4s' }}>
+              <video src="/videos/about3.mp4" controls preload="metadata" playsInline />
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
