@@ -244,5 +244,25 @@ Om Namo Bhagavate Vasudevaya ॥`,
       en: "Read More",
       kn: "ಇನ್ನಷ್ಟು ಓದಿ"
     }
+  },
+  contact: {
+    title: { en: "Location & Contact", kn: "ಸ್ಥಳ ಮತ್ತು ಸಂಪರ್ಕ" },
+    locationTitle: { en: "Location", kn: "ಸ್ಥಳ" },
+    contactTitle: { en: "Contact Details", kn: "ಸಂಪರ್ಕ ವಿವರಗಳು" },
+    managementTitle: { en: "Management Trustee", kn: "ಆಡಳಿತ ಮೊಕ್ತೇಸರರು" },
+    managementName: { 
+      en: "Sri Danamarthandavarma Raja Yane Ramantarasu XIII", 
+      kn: "ಶ್ರೀ ದಾನಮಾರ್ತಾಂಡವರ್ಮ ರಾಜ ಯಾನೆ ರಾಮಂತರಸುಗಳು XIII" 
+    },
+    managementDesc: { 
+      en: "Maipadi Palace, Hereditary Trustee, Sri Kshetra Munjungavu", 
+      kn: "ಮಾಯ್ಪಾಡಿ ಅರಮನೆ, ಅನುವಂಶಿಕ ಮೊಕ್ತೇಸರರು, ಶ್ರೀ ಕ್ಷೇತ್ರ ಮುಂಜುಂಗಾವು" 
+    },
+    email: { en: "shreeparthasarathitemple@gmail.com", kn: "shreeparthasarathitemple@gmail.com" },
+    phone: { en: "+91 9495545642", kn: "+91 9495545642" },
+    address: { 
+      en: "Mujungavu, Koipady Village, Kumbla, Kasaragod District, Kerala, India", 
+      kn: "ಮುಜುಂಗಾವು, ಕೊಯಿಪಾಡಿ ಗ್ರಾಮ, ಕುಂಬ್ಳೆ, ಕಾಸರಗೋಡು ಜಿಲ್ಲೆ, ಕೇರಳ, ಭಾರತ" 
+    }
   }
 };
