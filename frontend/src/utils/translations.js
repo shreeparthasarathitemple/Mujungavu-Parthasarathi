@@ -44,6 +44,7 @@ export const translations = {
     timingMorning: { en: "Morning: 8:00 AM", kn: "ಬೆಳಗ್ಗೆ: 8:00" },
     timingNoon: { en: "Noon: 12:30 PM", kn: "ಮಧ್ಯಾಹ್ನ: 12:30" },
     timingNight: { en: "Night: 7:00 PM", kn: "ರಾತ್ರಿ: 7:00" },
+    videosTitle: { en: "Temple Videos", kn: "ದೇವಾಲಯದ ವೀಡಿಯೊಗಳು" },
     knowMore: { en: "Know More History", kn: "ಸಂಪೂರ್ಣ ಇತಿಹಾಸ ತಿಳಿಯಿರಿ" },
     fullHistoryTitle: { en: "The Complete History of Mujungavu", kn: "ಮುಜುಂಗಾವು: ಸಂಪೂರ್ಣ ಇತಿಹಾಸ" },
     fullHistoryContent: {

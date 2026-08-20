@@ -15,6 +15,7 @@ import Announcement from './components/Announcement'
 import AnnouncementPage from './components/AnnouncementPage'
 import AnnouncementsGrid from './components/AnnouncementsGrid'
 import SectionWrapper from './components/SectionWrapper'
+import NotFound from './components/NotFound'
 import { useLanguage } from './context/LanguageContext'
 import { urlBase64ToUint8Array } from './utils/push'
 import { Helmet } from 'react-helmet-async'
@@ -380,6 +381,7 @@ function App() {
                 </div>
               )
             } />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </main>

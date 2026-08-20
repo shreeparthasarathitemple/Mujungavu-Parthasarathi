@@ -32,10 +32,14 @@ app.use(cors({
 app.use(express.json());
 app.set('trust proxy', 1);
 
+const MongoStore = require('connect-mongo');
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/mujungavu-temple';
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback_secret',
   resave: false,
   saveUninitialized: false,
+  store: MongoStore.create({ mongoUrl: MONGO_URI }),
   cookie: {
     secure: process.env.NODE_ENV === 'production',
     sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
@@ -71,7 +75,6 @@ app.get('/health', (req, res) => {
 });
 
 // MongoDB Connection
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/mujungavu-temple';
 mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err));
