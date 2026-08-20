@@ -6,7 +6,30 @@ import { Play, Pause } from 'lucide-react';
 function Gallery({ onNavigate }) {
   const { t, language } = useLanguage();
   const [playingState, setPlayingState] = useState({});
+  const [isInteracting, setIsInteracting] = useState(false);
   const videoRefs = React.useRef([]);
+  const scrollContainerRef = React.useRef(null);
+
+  React.useEffect(() => {
+    let animationFrameId;
+    
+    const scroll = () => {
+      if (!isInteracting && scrollContainerRef.current) {
+        const container = scrollContainerRef.current;
+        container.scrollLeft += 1; // Speed of auto-scroll
+        
+        // Loop back to start smoothly when halfway through (since we duplicated items)
+        // Adjust for potential pixel rounding
+        if (container.scrollLeft >= container.scrollWidth / 2) {
+          container.scrollLeft = 0;
+        }
+      }
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isInteracting]);
 
   const togglePlay = (index) => {
     const video = videoRefs.current[index];
@@ -29,12 +52,12 @@ function Gallery({ onNavigate }) {
   };
 
   const previewImages = [
-    '/gallery/gallery1.png',
-    '/gallery/gallery2.png',
-    '/gallery/gallery3.jpg',
-    '/gallery/gallery4.jpg',
-    '/gallery/gallery5.jpg',
-    '/gallery/gallery6.jpg'
+    '/gallery/mujungavu-temple-entrance.png',
+    '/gallery/mujungavu-temple-lord.png',
+    '/gallery/mujungavu-temple-lake.jpg',
+    '/gallery/mujungavu-temple-entrance-krishna.jpg',
+    '/gallery/mujungavu-temple-festival-view.jpg',
+    '/gallery/mujungavu-temple-pallapooja.jpg'
   ];
 
   const reelLinks = [
@@ -52,7 +75,14 @@ function Gallery({ onNavigate }) {
         </p>
       </div>
 
-      <div className="gallery-scroll-container animate-on-scroll">
+      <div 
+        className="gallery-scroll-container animate-on-scroll" 
+        ref={scrollContainerRef}
+        onMouseEnter={() => setIsInteracting(true)}
+        onMouseLeave={() => setIsInteracting(false)}
+        onTouchStart={() => setIsInteracting(true)}
+        onTouchEnd={() => setIsInteracting(false)}
+      >
           <div className="gallery-marquee-track">
             {previewImages.map((src, index) => (
               <div key={`set1-${index}`} className="gallery-item flex-item">
@@ -62,7 +92,7 @@ function Gallery({ onNavigate }) {
                   className="gallery-img" 
                   onError={(e) => {
                     e.target.onerror = null; 
-                    e.target.src = `https://placehold.co/600x400/1f1105/d4af37?text=Image+${index + 1}`;
+                    e.target.src = "/logo.png";
                   }}
                 />
               </div>

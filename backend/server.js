@@ -66,6 +66,10 @@ app.get('/', (req, res) => {
   res.status(200).send('Mujungavu Parthasarathi Temple API is running.');
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date() });
+});
+
 // MongoDB Connection
 const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/mujungavu-temple';
 mongoose.connect(MONGO_URI)

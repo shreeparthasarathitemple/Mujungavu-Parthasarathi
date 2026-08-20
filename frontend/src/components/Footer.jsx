@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Footer.css';
 import { useLanguage } from '../context/LanguageContext';
 import { Bell, X, Video, Code } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const MapPinIcon = () => (
   <svg 
@@ -102,10 +103,10 @@ function Footer({ onAdminClick, onSubscribe, pushSubscribed, subscribing }) {
         <div className="footer-links">
           <h4>{t('footer', 'linksTitle')}</h4>
           <ul>
-            <li><a href="#about">{t('nav', 'history')}</a></li>
-            <li><a href="#lake">{t('nav', 'lake')}</a></li>
-            <li><a href="#services">{t('nav', 'rituals')}</a></li>
-            <li><a href="#festivals">{t('festivals', 'title')}</a></li>
+            <li><Link to="/#about">{t('nav', 'history')}</Link></li>
+            <li><Link to="/#lake">{t('nav', 'lake')}</Link></li>
+            <li><Link to="/#services">{t('nav', 'rituals')}</Link></li>
+            <li><Link to="/#festivals">{t('festivals', 'title')}</Link></li>
           </ul>
         </div>
         

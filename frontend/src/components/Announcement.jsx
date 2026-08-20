@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Bell } from 'lucide-react';
+import { useLanguage } from '../context/LanguageContext';
 import './Announcement.css';
 
 function Announcement({ onAnnouncementClick }) {
+  const { t } = useLanguage();
   const [announcements, setAnnouncements] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [hasUnread, setHasUnread] = useState(false);
@@ -41,11 +43,12 @@ function Announcement({ onAnnouncementClick }) {
     setIsOpen(false);
     if (onAnnouncementClick) {
       onAnnouncementClick(ann);
+    } else {
+      window.location.href = `/a/${ann._id.slice(-6)}`;
     }
   };
 
-  if (announcements.length === 0) return null;
-
+  // Always render the bell icon, even if empty
   return (
     <div className="announcement-dropdown-container" ref={dropdownRef}>
       <button className="announcement-bell-btn" onClick={handleToggle} aria-label="Announcements">
@@ -56,20 +59,37 @@ function Announcement({ onAnnouncementClick }) {
       {isOpen && (
         <div className="announcement-dropdown">
           <div className="announcement-header">
-            <h4>Announcements</h4>
+            <h4>{t('announcements', 'title')}</h4>
           </div>
           <div className="announcement-list">
-            {announcements.map((ann, i) => (
-              <div 
-                key={i} 
-                className="announcement-item" 
-                onClick={() => handleItemClick(ann)}
-                style={{ cursor: 'pointer' }}
-              >
-                <strong>{ann.title}</strong>
-                <p>{ann.content}</p>
+            {announcements.length > 0 ? (
+              announcements.slice(0, 5).map((ann, i) => (
+                <div 
+                  key={i} 
+                  className="announcement-item" 
+                  onClick={() => handleItemClick(ann)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <strong>{ann.title}</strong>
+                  <p>{ann.content}</p>
+                </div>
+              ))
+            ) : (
+              <div className="announcement-item" style={{ textAlign: 'center', opacity: 0.7 }}>
+                <p>No recent announcements</p>
               </div>
-            ))}
+            )}
+          </div>
+          <div className="announcement-footer">
+            <button 
+              className="view-all-btn"
+              onClick={() => {
+                setIsOpen(false);
+                window.location.href = '/announcements';
+              }}
+            >
+              {t('announcements', 'readMore')}
+            </button>
           </div>
         </div>
       )}

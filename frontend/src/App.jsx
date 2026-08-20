@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, Suspense, lazy } from 'react'
+import { Routes, Route, useLocation, useNavigate, Link } from 'react-router-dom'
 import { Menu, X, Globe, ChevronUp, Home, Bell } from 'lucide-react'
 import Hero from './components/Hero'
 import About from './components/About'
@@ -12,29 +13,54 @@ import GalleryPage from './components/GalleryPage'
 import Reviews from './components/Reviews'
 import Announcement from './components/Announcement'
 import AnnouncementPage from './components/AnnouncementPage'
+import AnnouncementsGrid from './components/AnnouncementsGrid'
+import SectionWrapper from './components/SectionWrapper'
 import { useLanguage } from './context/LanguageContext'
-import AdminLogin from './admin/AdminLogin'
-import AdminDashboard from './admin/AdminDashboard'
 import { urlBase64ToUint8Array } from './utils/push'
 import { Helmet } from 'react-helmet-async'
+
+const AdminLogin = lazy(() => import('./admin/AdminLogin'))
+const AdminDashboard = lazy(() => import('./admin/AdminDashboard'))
+
+function HomePage({ handleHeroReady, setCurrentPage }) {
+  return (
+    <>
+      <Hero onReady={handleHeroReady} />
+      <About onNavigate={setCurrentPage} />
+      <Lake />
+      <Services />
+      <Festivals />
+      <Gallery onNavigate={setCurrentPage} />
+      <Reviews />
+    </>
+  );
+}
 
 function App() {
   const [scrolled, setScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [fadeOut, setFadeOut] = useState(false)
-  const [currentPage, setCurrentPage] = useState('home');
-  const [activeAnnouncement, setActiveAnnouncement] = useState(null);
+  const [activeAnnouncement, setActiveAnnouncement] = useState(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
-  // Check auth check will happen in AdminDashboard, so we can initialize from true/false here safely or use checking state
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false)
   const [pushSubscribed, setPushSubscribed] = useState(false)
   const [subscribing, setSubscribing] = useState(false)
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [currentTime, setCurrentTime] = useState(new Date());
-  const [todaysStar, setTodaysStar] = useState('');
+  const [scrollProgress, setScrollProgress] = useState(0)
+  const [currentTime, setCurrentTime] = useState(new Date())
+  
   const { language, toggleLanguage, t } = useLanguage()
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const isHome = location.pathname === '/'
+  const isAdmin = location.pathname.startsWith('/admin')
+
+  useEffect(() => {
+    // Dynamically update document.documentElement.lang
+    document.documentElement.lang = language === 'kn' ? 'kn' : 'en';
+  }, [language]);
 
   useEffect(() => {
     // Initial check for admin session
@@ -43,12 +69,6 @@ function App() {
       .then(data => {
         if (data.isAuthenticated) setIsAdminLoggedIn(true);
       }).catch(() => {});
-      
-    const handleHash = () => {
-      if (window.location.hash === '#admin') setCurrentPage('admin');
-    };
-    window.addEventListener('hashchange', handleHash);
-    handleHash();
 
     // Register Service Worker for Push Notifications
     if ('serviceWorker' in navigator) {
@@ -58,33 +78,16 @@ function App() {
         });
       }).catch(err => console.error('Service Worker Registration Error:', err));
     }
-
-    return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
   useEffect(() => {
-    // Live Clock & Nakshatra
+    // Live Clock
     const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    
-    try {
-      import('panchang-ts').then(({ getDailyPanchang }) => {
-        const result = getDailyPanchang(new Date(), { latitude: 12.5102, longitude: 74.9852 }, { timezone: 330 });
-        if (result && result.angas && result.angas.nakshatras && result.angas.nakshatras.length > 0) {
-          setTodaysStar(result.angas.nakshatras[0].name);
-        }
-      });
-    } catch(e) {
-      console.error("Panchang Error:", e);
-    }
-    
     return () => clearInterval(timer);
   }, []);
 
   const formatTime = (date) => {
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  };
-  const formatDate = (date) => {
-    return date.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
   };
 
   const handleSubscribe = async () => {
@@ -128,32 +131,30 @@ function App() {
 
   // Analytics Tracking
   useEffect(() => {
-    if (currentPage && currentPage !== 'admin') {
+    if (!isAdmin) {
       fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/analytics/track`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ path: currentPage })
-      }).catch(err => console.error('Failed to track page view', err));
+        body: JSON.stringify({ path: location.pathname })
+      }).catch(() => {}); // Fail silently
     }
-  }, [currentPage]);
+  }, [location.pathname, isAdmin]);
 
   // Preloading & Loading Screen Logic
   useEffect(() => {
-    // If not starting on home page, hide loading screen immediately
-    if (currentPage !== 'home') {
+    if (!isHome) {
       setFadeOut(true);
       const timer = setTimeout(() => setLoading(false), 800);
       return () => clearTimeout(timer);
     }
     
-    // Fallback: If Hero hasn't signaled ready within 8 seconds, force load
     const fallbackTimer = setTimeout(() => {
       setFadeOut(true);
       setTimeout(() => setLoading(false), 800);
     }, 8000);
 
     return () => clearTimeout(fallbackTimer);
-  }, [currentPage]);
+  }, [isHome]);
 
   const handleHeroReady = () => {
     setFadeOut(true);
@@ -193,35 +194,39 @@ function App() {
     }, 100)
 
     return () => observer.disconnect()
-  }, [currentPage, loading])
+  }, [location.pathname, loading])
 
   useEffect(() => {
-    if (currentPage === 'home' && window.location.hash && window.location.hash !== '#admin') {
-      const element = document.getElementById(window.location.hash.substring(1));
+    if (isHome && location.hash) {
+      const element = document.getElementById(location.hash.substring(1));
       if (element) {
         setTimeout(() => {
           element.scrollIntoView({ behavior: 'smooth' });
-          window.history.replaceState(null, null, window.location.pathname + window.location.search);
         }, 100);
         return;
       }
+    } else {
+      window.scrollTo(0, 0);
     }
-    window.scrollTo(0, 0);
-  }, [currentPage])
+  }, [location.pathname, location.hash])
 
   const getSEOMetadata = () => {
     const baseTitle = language === 'en' ? "Mujungavu Parthasarathi | Official Website" : "ಮುಜುಂಗಾವು ಪಾರ್ಥಸಾರಥಿ | ಅಧಿಕೃತ ವೆಬ್‌ಸೈಟ್";
     let description = language === 'en' 
-      ? "Official website of Mujungavu Parthasarathi."
+      ? "Official website of Sri Parthasarathi Temple, Mujungavu, Kumbla, Kasaragod. Find temple timings, poojas, festivals, history, announcements, gallery and location information."
       : "ಮುಜುಂಗಾವು ಪಾರ್ಥಸಾರಥಿಯ ಅಧಿಕೃತ ವೆಬ್‌ಸೈಟ್.";
-    let title = baseTitle;
+    let title = `Sri Parthasarathi Temple Mujungavu | Mujungavu Temple, Kumbla`;
     
-    if (currentPage === 'history') title = `${language === 'en' ? 'History' : 'ಇತಿಹಾಸ'} | ${baseTitle}`;
-    if (currentPage === 'gallery_page') title = `${language === 'en' ? 'Gallery' : 'ಗ್ಯಾಲರಿ'} | ${baseTitle}`;
-    if (currentPage === 'announcement_page' && activeAnnouncement) {
+    if (location.pathname === '/history') title = `${language === 'en' ? 'History' : 'ಇತಿಹಾಸ'} | ${baseTitle}`;
+    if (location.pathname === '/about') title = `About | ${baseTitle}`;
+    if (location.pathname === '/temple-timings') title = `Temple Timings | ${baseTitle}`;
+    if (location.pathname === '/poojas') title = `Poojas | ${baseTitle}`;
+    if (location.pathname === '/festivals') title = `Festivals | ${baseTitle}`;
+    if (location.pathname === '/contact' || location.pathname === '/location') title = `Contact & Location | ${baseTitle}`;
+    if (location.pathname === '/gallery') title = `${language === 'en' ? 'Gallery' : 'ಗ್ಯಾಲರಿ'} | ${baseTitle}`;
+    if (location.pathname.startsWith('/announcement') && activeAnnouncement) {
       title = `${activeAnnouncement.title} | ${baseTitle}`;
       if (activeAnnouncement.description) {
-        // Create a short text description from HTML content
         const tempDiv = document.createElement("div");
         tempDiv.innerHTML = activeAnnouncement.description;
         description = tempDiv.textContent || tempDiv.innerText || "";
@@ -230,51 +235,26 @@ function App() {
     }
     
     const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const imageUrl = `${origin}/logo.png`;
-
-    const schemaOrgJSONLD = {
-      "@context": "http://schema.org",
-      "@type": "HinduTemple",
-      "name": "Mujungavu Parthasarathi",
-      "url": origin,
-      "logo": imageUrl,
-      "image": imageUrl,
-      "description": "Official website of Mujungavu Parthasarathi.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Mujungavu",
-        "addressRegion": "Kerala",
-        "addressCountry": "IN"
-      }
-    };
 
     return (
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={currentUrl} />
-        
-        {/* Open Graph / Facebook / WhatsApp */}
-        <meta property="og:type" content="website" />
         <meta property="og:url" content={currentUrl} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        <meta property="og:image" content={imageUrl} />
-        
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
         <meta property="twitter:url" content={currentUrl} />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
-        <meta property="twitter:image" content={imageUrl} />
-
-        {/* Schema.org for Google Rich Results */}
-        <script type="application/ld+json">
-          {JSON.stringify(schemaOrgJSONLD)}
-        </script>
       </Helmet>
     );
+  };
+
+  const handleLegacyNavigation = (page) => {
+    if (page === 'history') navigate('/history');
+    else if (page === 'gallery_page') navigate('/gallery');
+    else navigate('/');
   };
 
   return (
@@ -285,6 +265,7 @@ function App() {
       </div>
 
       {getSEOMetadata()}
+      
       {loading && (
         <div className={`loading-screen ${fadeOut ? 'fade-out' : ''}`}>
           <div className="loading-content">
@@ -300,17 +281,17 @@ function App() {
         </div>
       )}
 
-      {(currentPage !== 'admin' && !showLoginPopup) && (
-      <nav className={`navbar ${scrolled || currentPage !== 'home' ? 'scrolled' : ''}`}>
+      {(!isAdmin && !showLoginPopup) && (
+      <nav className={`navbar ${scrolled || !isHome ? 'scrolled' : ''}`}>
         <div className="nav-background">
           <div className="nav-container">
-            <a href="#" className="nav-brand" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}>
+            <Link to="/" className="nav-brand" onClick={() => setIsMenuOpen(false)}>
               <img src="/logo.png" alt="Temple Logo" style={{ height: '40px', width: 'auto', marginRight: '10px' }} />
               {t('nav', 'brand')}
-            </a>
+            </Link>
             
             <div className={`nav-links ${isMenuOpen ? 'active' : ''}`}>
-              {currentPage === 'home' && (
+              {isHome ? (
                 <>
                   <a href="#home" onClick={() => setIsMenuOpen(false)} aria-label="Home">
                     <Home size={20} />
@@ -320,11 +301,10 @@ function App() {
                   <a href="#services" onClick={() => setIsMenuOpen(false)}>{t('nav', 'rituals')}</a>
                   <a href="#gallery" onClick={() => setIsMenuOpen(false)}>{t('nav', 'gallery')}</a>
                 </>
-              )}
-              {(currentPage === 'history' || currentPage === 'gallery_page' || currentPage === 'announcement_page') && (
-                <a href="#" onClick={(e) => { e.preventDefault(); setCurrentPage('home'); setIsMenuOpen(false); }} aria-label="Back to Home">
+              ) : (
+                <Link to="/" onClick={() => setIsMenuOpen(false)} aria-label="Back to Home">
                   <Home size={20} />
-                </a>
+                </Link>
               )}
             </div>
 
@@ -333,20 +313,18 @@ function App() {
                 <span style={{ fontWeight: '600' }}>{formatTime(currentTime)}</span>
               </div>
 
-              {currentPage !== 'admin' && (
+              {!isAdmin && (
                 <>
                   <Announcement onAnnouncementClick={(ann) => {
-                    setActiveAnnouncement(ann);
-                    setCurrentPage('announcement_page');
-                    window.scrollTo(0, 0);
+                    navigate(`/a/${ann._id.slice(-6)}`);
                   }} />
                   <button 
                     className="lang-toggle-btn"
                     onClick={toggleLanguage}
                     aria-label="Toggle language"
                   >
-                    <Globe size={20} />
-                    <span>{language === 'en' ? 'ಕನ್ನಡ' : 'English'}</span>
+                    <Globe size={18} />
+                    <span>{language === 'en' ? 'KN' : 'EN'}</span>
                   </button>
                 </>
               )}
@@ -371,44 +349,42 @@ function App() {
       </nav>
       )}
 
-      {currentPage === 'admin' ? (
-        <main>
-          {isAdminLoggedIn ? (
-            <AdminDashboard onLogout={() => { localStorage.removeItem('adminToken'); setIsAdminLoggedIn(false); setCurrentPage('home'); window.location.hash = ''; }} />
-          ) : (
-            <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-              <h2>Access Denied</h2>
-              <button className="hero-btn" onClick={() => { setCurrentPage('home'); window.location.hash = ''; setShowLoginPopup(true); }}>Login to Admin</button>
-            </div>
-          )}
-        </main>
-      ) : currentPage === 'history' ? (
-        <main>
-          <HistoryPage onBack={() => { setCurrentPage('home'); window.scrollTo(0, 0); }} />
-        </main>
-      ) : currentPage === 'announcement_page' ? (
-        <main>
-          <AnnouncementPage announcement={activeAnnouncement} onBack={() => { setCurrentPage('home'); window.scrollTo(0, 0); }} />
-        </main>
-      ) : currentPage === 'gallery_page' ? (
-        <main>
-          <GalleryPage onNavigate={setCurrentPage} />
-        </main>
-      ) : (
-        <main>
-          <Hero onReady={handleHeroReady} />
-          <About onNavigate={setCurrentPage} />
-          <Lake />
-          <Services />
-          <Festivals />
-          <Gallery onNavigate={setCurrentPage} />
-          <Reviews />
-        </main>
-      )}
+      <main>
+        <Suspense fallback={<div style={{height: '100vh'}} />}>
+          <Routes>
+            <Route path="/" element={<HomePage handleHeroReady={handleHeroReady} setCurrentPage={handleLegacyNavigation} />} />
+            <Route path="/history" element={<HistoryPage onBack={() => navigate('/')} />} />
+            <Route path="/gallery" element={<GalleryPage onNavigate={handleLegacyNavigation} />} />
+            <Route path="/announcements" element={<AnnouncementsGrid />} />
+            <Route path="/a/:id" element={<AnnouncementPage />} />
+            <Route path="/announcement/:id" element={<AnnouncementPage />} /> {/* Legacy support */}
+            
+            {/* Standalone SEO Routes */}
+            <Route path="/about" element={<SectionWrapper><About onNavigate={handleLegacyNavigation} /></SectionWrapper>} />
+            <Route path="/temple-timings" element={<SectionWrapper><About onNavigate={handleLegacyNavigation} /></SectionWrapper>} />
+            <Route path="/lake" element={<SectionWrapper><Lake /></SectionWrapper>} />
+            <Route path="/services" element={<SectionWrapper><Services /></SectionWrapper>} />
+            <Route path="/poojas" element={<SectionWrapper><Services /></SectionWrapper>} />
+            <Route path="/festivals" element={<SectionWrapper><Festivals /></SectionWrapper>} />
+            <Route path="/contact" element={<SectionWrapper><About onNavigate={handleLegacyNavigation} /></SectionWrapper>} />
+            <Route path="/location" element={<SectionWrapper><About onNavigate={handleLegacyNavigation} /></SectionWrapper>} />
+            
+            {/* Admin Routes */}
+            <Route path="/admin" element={
+              isAdminLoggedIn ? (
+                <AdminDashboard onLogout={() => { localStorage.removeItem('adminToken'); setIsAdminLoggedIn(false); navigate('/'); }} />
+              ) : (
+                <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+                  <h2>Access Denied</h2>
+                  <button className="hero-btn" onClick={() => setShowLoginPopup(true)}>Login to Admin</button>
+                </div>
+              )
+            } />
+          </Routes>
+        </Suspense>
+      </main>
 
-      {currentPage !== 'admin' && <Footer onAdminClick={() => setShowLoginPopup(true)} onSubscribe={handleSubscribe} pushSubscribed={pushSubscribed} subscribing={subscribing} />}
-
-      
+      {!isAdmin && <Footer onAdminClick={() => setShowLoginPopup(true)} onSubscribe={handleSubscribe} pushSubscribed={pushSubscribed} subscribing={subscribing} />}
       
       {showScrollTop && (
         <button className="scroll-to-top" onClick={scrollToTop}>
@@ -420,12 +396,13 @@ function App() {
         <div className="admin-modal-overlay" onClick={(e) => { if (e.target.className === 'admin-modal-overlay') setShowLoginPopup(false); }}>
           <div className="admin-modal-content">
             <button className="close-modal-btn" onClick={() => setShowLoginPopup(false)}>&times;</button>
-            <AdminLogin onLoginSuccess={() => {
-              setIsAdminLoggedIn(true);
-              setShowLoginPopup(false);
-              setCurrentPage('admin');
-              window.location.hash = '#admin';
-            }} />
+            <Suspense fallback={<div>Loading...</div>}>
+              <AdminLogin onLoginSuccess={() => {
+                setIsAdminLoggedIn(true);
+                setShowLoginPopup(false);
+                navigate('/admin');
+              }} />
+            </Suspense>
           </div>
         </div>
       )}

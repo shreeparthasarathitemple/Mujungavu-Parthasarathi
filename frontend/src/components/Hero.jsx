@@ -24,8 +24,10 @@ function Hero({ onReady }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const desktopVideo = "https://aingapwqyhtvjygwtiat.supabase.co/storage/v1/object/sign/videos/hero-lap.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZDI3ODZmMS1iNmU5LTRlZGYtOWIzNy0zOWJjM2Q0YmU4MDQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlb3MvaGVyby1sYXAubXA0Iiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4Njg5Mjk0MCwiZXhwIjoyMTAyMjUyOTQwfQ.Tcw1fdflPVB-S7QPppbrymOuhhbEXKaIubBON8P01Og";
-  const mobileVideo = "https://aingapwqyhtvjygwtiat.supabase.co/storage/v1/object/sign/videos/hero-mbl.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV80ZDI3ODZmMS1iNmU5LTRlZGYtOWIzNy0zOWJjM2Q0YmU4MDQiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJ2aWRlb3MvaGVyby1tYmwubXA0Iiwic2NvcGUiOiJkb3dubG9hZCIsImlhdCI6MTc4Njg5MzA3NywiZXhwIjoyMTAyMjUzMDc3fQ.WUgNtRcS9ynOMeMevXIkdmi3268s3YfVDV9YPhPuAug"; 
+  const desktopVideo = "/videos/hero-lap.mp4";
+  const mobileVideo = "/videos/hero-mbl.mp4"; 
+  const desktopPoster = "/videos/hero-lap-poster.jpg";
+  const mobilePoster = "/videos/hero-mbl-poster.jpg";
 
   return (
     <section className="hero" id="home">
@@ -35,6 +37,8 @@ function Hero({ onReady }) {
         loop 
         muted 
         playsInline
+        preload="metadata"
+        poster={isMobile ? mobilePoster : desktopPoster}
         key={isMobile ? 'mobile' : 'desktop'}
         onLoadedData={() => setVideoLoaded(true)}
         onCanPlayThrough={() => setVideoLoaded(true)}

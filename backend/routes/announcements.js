@@ -13,6 +13,38 @@ router.get('/', async (req, res) => {
   }
 });
 
+// Get a specific announcement (Public)
+router.get('/:id', async (req, res) => {
+  try {
+    const announcement = await Announcement.findById(req.params.id);
+    if (!announcement) return res.status(404).json({ message: 'Announcement not found' });
+    res.json(announcement);
+  } catch (err) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
+// Like an announcement (Public)
+router.post('/:id/like', async (req, res) => {
+  try {
+    const incValue = req.body.action === 'unlike' ? -1 : 1;
+    const announcement = await Announcement.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { likes: incValue } },
+      { new: true }
+    );
+    if (!announcement) return res.status(404).json({ message: 'Announcement not found' });
+    // Prevent negative likes
+    if (announcement.likes < 0) {
+      announcement.likes = 0;
+      await announcement.save();
+    }
+    res.json({ likes: announcement.likes });
+  } catch (err) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 // Get all announcements (Admin)
 router.get('/all', auth, async (req, res) => {
   try {

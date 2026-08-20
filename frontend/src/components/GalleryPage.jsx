@@ -8,19 +8,19 @@ function GalleryPage({ onNavigate }) {
   const { t, language } = useLanguage();
 
   const images = [
-    '/gallery/gallery1.png',
-    '/gallery/gallery2.png',
-    '/gallery/gallery3.jpg',
-    '/gallery/gallery4.jpg',
-    '/gallery/gallery5.jpg',
-    '/gallery/gallery6.jpg',
-    '/gallery/gallery7.jpg',
-    '/gallery/gallery8.jpg',
-    '/gallery/gallery9.jpg',
-    '/gallery/gallery10.jpg',
-    '/gallery/gallery11.jpg',
-    '/gallery/gallery12.jpg',
-    '/gallery/gallery13.jpg'
+    '/gallery/mujungavu-temple-entrance.png',
+    '/gallery/mujungavu-temple-lord.png',
+    '/gallery/mujungavu-temple-lake.jpg',
+    '/gallery/mujungavu-temple-entrance-krishna.jpg',
+    '/gallery/mujungavu-temple-festival-view.jpg',
+    '/gallery/mujungavu-temple-ranga-pooje.jpg',
+    '/gallery/mujungavu-temple-pallapooja.jpg',
+    '/gallery/mujungavu-temple-kaveri-teertha.jpg',
+    '/gallery/mujungavu-temple-old-bramhakalasha.jpg',
+    '/gallery/mujungavu-temple-annual-festival-program.jpg',
+    '/gallery/mujungavu-temple-avabruta.jpg',
+    '/gallery/mujungavu-temple-festival-lighting.jpg',
+    '/gallery/mujungavu-temple-tulabara.jpg'
   ];
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function GalleryPage({ onNavigate }) {
                 className="gallery-img" 
                 onError={(e) => {
                   e.target.onerror = null; 
-                  e.target.src = `https://placehold.co/600x${400 + (index % 3) * 100}/1f1105/d4af37?text=Image+${index + 1}`;
+                  e.target.src = "/logo.png";
                 }}
               />
             </div>

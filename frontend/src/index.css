@@ -280,8 +280,7 @@ a {
 /* Hide brand and links when at the top (hero section) */
 .navbar:not(.scrolled) .nav-brand,
 .navbar:not(.scrolled) .nav-links,
-.navbar:not(.scrolled) .mobile-menu-btn,
-.navbar:not(.scrolled) .announcement-dropdown-container {
+.navbar:not(.scrolled) .mobile-menu-btn {
   display: none !important;
 }
 
@@ -458,8 +457,11 @@ a {
 }
 
 @media (max-width: 768px) {
+  .nav-container {
+    padding: 0 1rem; /* Reduced padding on mobile */
+  }
   .nav-brand {
-    font-size: 1.1rem;
+    font-size: 0.95rem; /* Smaller font to prevent pushing the menu out */
     white-space: nowrap;
   }
   .nav-brand img {

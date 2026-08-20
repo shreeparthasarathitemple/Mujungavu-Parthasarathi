@@ -12,31 +12,26 @@
 }
 
 .gallery-scroll-container {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   padding-bottom: 2rem;
   white-space: nowrap;
   position: relative;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.gallery-scroll-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
 }
 
 .gallery-marquee-track {
   display: flex;
   gap: 1.5rem;
   width: max-content;
-  animation: scroll-horizontal 25s linear infinite;
 }
 
-.gallery-marquee-track:hover {
-  animation-play-state: paused;
-}
-
-@keyframes scroll-horizontal {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(calc(-50% - 0.75rem));
-  }
-}
+/* Hidden animation since JS will handle it now */
 
 .flex-item {
   flex: 0 0 300px;

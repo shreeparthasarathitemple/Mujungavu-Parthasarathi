@@ -229,5 +229,19 @@ Om Namo Bhagavate Vasudevaya ॥`,
       en: "Read All on Google",
       kn: "ಗೂಗಲ್‌ನಲ್ಲಿ ಇನ್ನಷ್ಟು ಓದಿ"
     }
+  },
+  announcements: {
+    title: {
+      en: "Temple Announcements",
+      kn: "ದೇವಾಲಯದ ಪ್ರಕಟಣೆಗಳು"
+    },
+    subtitle: {
+      en: "Stay updated with the latest news and events",
+      kn: "ಇತ್ತೀಚಿನ ಸುದ್ದಿಗಳು ಮತ್ತು ಕಾರ್ಯಕ್ರಮಗಳ ಬಗ್ಗೆ ಮಾಹಿತಿ ಪಡೆಯಿರಿ"
+    },
+    readMore: {
+      en: "Read More",
+      kn: "ಇನ್ನಷ್ಟು ಓದಿ"
+    }
   }
 };
