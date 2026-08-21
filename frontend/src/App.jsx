@@ -17,6 +17,7 @@ import AnnouncementsGrid from './components/AnnouncementsGrid'
 import SectionWrapper from './components/SectionWrapper'
 import ContactPage from './components/ContactPage'
 import NotFound from './components/NotFound'
+import PrivacyPolicy from './components/PrivacyPolicy'
 import { useLanguage } from './context/LanguageContext'
 import { Helmet } from 'react-helmet-async'
 
@@ -320,6 +321,7 @@ function App() {
             <Route path="/festivals" element={<SectionWrapper><Festivals /></SectionWrapper>} />
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/location" element={<ContactPage />} />
+            <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={
