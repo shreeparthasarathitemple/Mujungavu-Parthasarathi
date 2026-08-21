@@ -18,6 +18,7 @@ import SectionWrapper from './components/SectionWrapper'
 import ContactPage from './components/ContactPage'
 import NotFound from './components/NotFound'
 import PrivacyPolicy from './components/PrivacyPolicy'
+import DataDeletion from './components/DataDeletion'
 import { useLanguage } from './context/LanguageContext'
 import { Helmet } from 'react-helmet-async'
 
@@ -322,6 +323,7 @@ function App() {
             <Route path="/contact" element={<ContactPage />} />
             <Route path="/location" element={<ContactPage />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/data-deletion" element={<DataDeletion />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={

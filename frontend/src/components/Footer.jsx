@@ -97,6 +97,7 @@ function Footer({ onAdminClick }) {
             <li><Link to="/#services">{t('nav', 'rituals')}</Link></li>
             <li><Link to="/#festivals">{t('festivals', 'title')}</Link></li>
             <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+            <li><Link to="/data-deletion">Data Deletion</Link></li>
           </ul>
         </div>
         
