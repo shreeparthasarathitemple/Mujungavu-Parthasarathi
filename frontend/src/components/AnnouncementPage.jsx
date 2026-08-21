@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import './AnnouncementPage.css';
 import { Megaphone, Calendar, ArrowLeft, Heart, Share2 } from 'lucide-react';
 
@@ -79,12 +80,19 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
     }).catch(err => console.error('Failed to update like status', err));
   };
 
+  const getShareUrl = () => {
+    if (!announcement) return window.location.href;
+    const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    return `${backendUrl}/api/announcements/share/${announcement._id}?redirect=${encodeURIComponent(window.location.href)}`;
+  };
+
   const handleShare = async () => {
     if (!announcement) return;
+    const shareUrl = getShareUrl();
     const shareData = {
       title: announcement.title,
       text: `${announcement.title}\n\nFor more details, click here:\n`,
-      url: window.location.href,
+      url: shareUrl,
     };
     if (navigator.share) {
       try {
@@ -93,14 +101,15 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
         console.error('Error sharing:', err);
       }
     } else {
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(shareUrl);
       alert('Link copied to clipboard!');
     }
   };
 
   const handleWhatsAppShare = () => {
     if (!announcement) return;
-    const text = `${announcement.title}\n\nFor more details, click here:\n${window.location.href}`;
+    const shareUrl = getShareUrl();
+    const text = `${announcement.title}\n\nFor more details, click here:\n${shareUrl}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
   };
 
@@ -108,7 +117,25 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
   if (!announcement) return <div style={{ padding: '130px 20px 40px', textAlign: 'center', minHeight: '100vh', color: 'var(--text-dark)' }} className="announcement-page-container">Announcement not found.</div>;
 
   return (
-    <div className="announcement-page-container">
+    <>
+      <Helmet>
+        <title>{announcement.title} | Sri Parthasarathi Temple</title>
+        <meta property="og:title" content={announcement.title} />
+        <meta property="twitter:title" content={announcement.title} />
+        {announcement.content && (
+          <meta property="og:description" content={announcement.content.substring(0, 150) + '...'} />
+        )}
+        {announcement.content && (
+          <meta property="twitter:description" content={announcement.content.substring(0, 150) + '...'} />
+        )}
+        {announcement.imageUrl && (
+          <meta property="og:image" content={announcement.imageUrl} />
+        )}
+        {announcement.imageUrl && (
+          <meta name="twitter:image" content={announcement.imageUrl} />
+        )}
+      </Helmet>
+      <div className="announcement-page-container">
       <div className="announcement-page-header glass-panel">
         <div className="announcement-title-section">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', width: '100%' }}>
@@ -154,6 +181,7 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
         </div>
       </div>
     </div>
+    </>
   );
 }
 

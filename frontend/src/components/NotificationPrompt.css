@@ -106,12 +106,13 @@
 
 @media (max-width: 480px) {
   .notification-prompt-overlay {
-    bottom: 0;
+    bottom: max(20px, env(safe-area-inset-bottom, 20px));
     left: 0;
     right: 0;
     display: flex;
     justify-content: center;
     padding: 1rem;
+    z-index: 10000;
   }
   
   .notification-prompt-card {
