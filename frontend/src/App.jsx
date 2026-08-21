@@ -19,6 +19,7 @@ import ContactPage from './components/ContactPage'
 import NotFound from './components/NotFound'
 import PrivacyPolicy from './components/PrivacyPolicy'
 import DataDeletion from './components/DataDeletion'
+import NotificationPrompt from './components/NotificationPrompt'
 import { useLanguage } from './context/LanguageContext'
 import { Helmet } from 'react-helmet-async'
 
@@ -63,14 +64,18 @@ function App() {
   }, [language]);
 
   useEffect(() => {
-    // Explicitly unregister any old service workers to fix video caching errors
+    // Register push service worker and clean up old caching ones
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.getRegistrations().then(function(registrations) {
         for(let registration of registrations) {
-          registration.unregister();
+          // Only unregister if it's not our explicit push service worker
+          if (registration.active && !registration.active.scriptURL.endsWith('/sw.js')) {
+            registration.unregister();
+          }
         }
-      }).catch(function(err) {
-        console.log('Service Worker unregistration failed: ', err);
+      });
+      navigator.serviceWorker.register('/sw.js').catch(err => {
+        console.log('Service Worker registration failed: ', err);
       });
     }
 
@@ -341,6 +346,7 @@ function App() {
         </Suspense>
       </main>
 
+      {!isAdmin && <NotificationPrompt />}
       {!isAdmin && <Footer onAdminClick={() => setShowLoginPopup(true)} />}
       
       {showScrollTop && (

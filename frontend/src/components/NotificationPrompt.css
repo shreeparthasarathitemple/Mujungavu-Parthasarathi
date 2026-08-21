@@ -1,0 +1,121 @@
+.notification-prompt-overlay {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  animation: slideUp 0.5s ease-out;
+}
+
+.notification-prompt-card {
+  background: var(--bg-dark);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 320px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  color: var(--text-light);
+  backdrop-filter: blur(10px);
+}
+
+.close-prompt-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close-prompt-btn:hover {
+  color: var(--text-light);
+}
+
+.prompt-icon-container {
+  background: rgba(255, 165, 0, 0.1);
+  color: var(--gold);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.notification-prompt-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-family: var(--font-heading);
+  color: var(--gold);
+  font-size: 1.2rem;
+}
+
+.notification-prompt-card p {
+  margin: 0 0 1.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.prompt-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.prompt-deny-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.prompt-deny-btn:hover {
+  color: var(--text-light);
+}
+
+.prompt-allow-btn {
+  background: var(--gold);
+  color: var(--bg-dark);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.prompt-allow-btn:hover {
+  background: #ffb732;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .notification-prompt-overlay {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .notification-prompt-card {
+    width: 100%;
+    max-width: 400px;
+  }
+}
