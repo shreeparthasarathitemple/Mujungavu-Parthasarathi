@@ -29,29 +29,42 @@ router.get('/share/:id', async (req, res) => {
     const announcement = await Announcement.findById(req.params.id);
     if (!announcement) return res.status(404).send('Announcement not found');
     
-    const redirectUrl = req.query.redirect || 'https://www.mujungavuparthasarathi.in';
+    const frontendUrl = process.env.FRONTEND_URL || 'https://www.mujungavuparthasarathi.in';
+    const redirectUrl = req.query.redirect || `${frontendUrl}/a/${announcement._id}`;
     const title = announcement.title;
     const description = announcement.content ? announcement.content.substring(0, 150) + '...' : 'Sri Parthasarathi Temple Announcement';
     const imageUrl = announcement.imageUrl || 'https://www.mujungavuparthasarathi.in/logo.png';
 
+    const currentUrl = `${req.protocol}://${req.get('host')}/api/announcements/share/${announcement._id}`;
+    
     const html = `
       <!DOCTYPE html>
-      <html>
+      <html lang="en">
       <head>
+        <meta charset="utf-8">
         <title>${title} | Sri Parthasarathi Temple</title>
+        <!-- Open Graph / Facebook / WhatsApp -->
+        <meta property="og:type" content="article">
+        <meta property="og:url" content="${currentUrl}">
         <meta property="og:title" content="${title}">
         <meta property="og:description" content="${description}">
         <meta property="og:image" content="${imageUrl}">
+        <meta property="og:site_name" content="Sri Parthasarathi Temple">
+        
+        <!-- Twitter -->
         <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:url" content="${currentUrl}">
         <meta name="twitter:title" content="${title}">
         <meta name="twitter:description" content="${description}">
         <meta name="twitter:image" content="${imageUrl}">
-        <meta http-equiv="refresh" content="0;url=${redirectUrl}">
-        <script>window.location.href = "${redirectUrl}";</script>
+        
+        <script>
+          // Redirect for human visitors (crawlers typically don't run JS)
+          window.location.href = "${redirectUrl}";
+        </script>
       </head>
       <body>
-        <p>Redirecting to announcement...</p>
-        <a href="${redirectUrl}">Click here if not redirected</a>
+        <p>Redirecting to announcement... <a href="${redirectUrl}">Click here</a> if not redirected.</p>
       </body>
       </html>
     `;
