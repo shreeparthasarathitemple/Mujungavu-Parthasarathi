@@ -82,8 +82,8 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
 
   const getShareUrl = () => {
     if (!announcement) return window.location.href;
-    const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-    return `${backendUrl}/api/announcements/share/${announcement._id}`;
+    const frontendUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
+    return `${frontendUrl}/a/${announcement._id}`;
   };
 
   const handleShare = async () => {
