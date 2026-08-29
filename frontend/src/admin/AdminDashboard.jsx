@@ -3,8 +3,10 @@ import AdminFestivals from './AdminFestivals';
 import AdminGallery from './AdminGallery';
 import AdminAnnouncement from './AdminAnnouncement';
 import AdminOverview from './AdminOverview';
+import AdminNewsletters from './AdminNewsletters';
+import AdminSEO from './AdminSEO';
 import './Admin.css';
-import { Calendar, Image as ImageIcon, Megaphone, LogOut, LayoutDashboard, Menu, X } from 'lucide-react';
+import { Calendar, Megaphone, LogOut, LayoutDashboard, Menu, X, Mail, Globe, ExternalLink } from 'lucide-react';
 
 function AdminDashboard({ onLogout }) {
   const [activeTab, setActiveTab] = useState('overview');
@@ -56,7 +58,10 @@ function AdminDashboard({ onLogout }) {
           <h2>Admin Dashboard</h2>
         </div>
         <div className="admin-user-info">
-          <span>Logged in as Admin</span>
+          <a href="/" target="_blank" rel="noopener noreferrer" className="hero-btn admin-btn" style={{ padding: '0.6rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}>
+            Visit Site <ExternalLink size={16} />
+          </a>
+          <span>Admin</span>
         </div>
       </header>
       <div className="admin-body">
@@ -74,12 +79,14 @@ function AdminDashboard({ onLogout }) {
               <Calendar size={20} className="sidebar-icon" />
               Manage Festivals
             </li>
-            {/*
-            <li className={activeTab === 'gallery' ? 'active' : ''} onClick={() => setActiveTab('gallery')}>
-              <ImageIcon size={20} className="sidebar-icon" />
-              Manage Gallery
+            <li className={activeTab === 'newsletters' ? 'active' : ''} onClick={() => { setActiveTab('newsletters'); setMobileMenuOpen(false); }}>
+              <Mail size={20} className="sidebar-icon" />
+              Newsletters
             </li>
-            */}
+            <li className={activeTab === 'seo' ? 'active' : ''} onClick={() => { setActiveTab('seo'); setMobileMenuOpen(false); }}>
+              <Globe size={20} className="sidebar-icon" />
+              SEO Settings
+            </li>
             <li onClick={handleLogout} className="logout-item">
               <LogOut size={20} className="sidebar-icon" />
               Log Out
@@ -90,7 +97,8 @@ function AdminDashboard({ onLogout }) {
           {activeTab === 'overview' && <AdminOverview />}
           {activeTab === 'announcements' && <AdminAnnouncement />}
           {activeTab === 'festivals' && <AdminFestivals />}
-          {/* {activeTab === 'gallery' && <AdminGallery />} */}
+          {activeTab === 'newsletters' && <AdminNewsletters />}
+          {activeTab === 'seo' && <AdminSEO />}
         </main>
       </div>
     </div>

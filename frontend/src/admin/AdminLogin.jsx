@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
+import { Eye, EyeOff, Lock, User, ArrowRight } from 'lucide-react';
 import './Admin.css';
 
 function AdminLogin({ onLoginSuccess }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/login`, {
         method: 'POST',
@@ -22,25 +27,82 @@ function AdminLogin({ onLoginSuccess }) {
         setError(data.message);
       }
     } catch (err) {
-      setError('Server error. Is backend running?');
+      setError('Server connection failed. Is the backend running?');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="admin-login-container admin-modal-container">
-      <form onSubmit={handleLogin} className="admin-login-form">
-        <h2>Admin Login</h2>
-        {error && <p className="error-msg">{error}</p>}
-        <div className="form-group">
-          <label>Username</label>
-          <input type="text" value={username} onChange={e => setUsername(e.target.value)} required />
+      <div className="login-wrapper">
+        <div className="login-visual">
+          <div className="visual-overlay"></div>
+          <div className="visual-content">
+            <img src="/logo.png" alt="Temple Logo" className="login-logo" />
+            <h2>Sri Parthasarathi Temple</h2>
+            <p>Admin Portal</p>
+          </div>
         </div>
-        <div className="form-group">
-          <label>Password</label>
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} required />
+        
+        <div className="login-form-container">
+          <form onSubmit={handleLogin} className="admin-login-form-premium">
+            <div className="login-header">
+              <h3>Welcome Back</h3>
+              <p>Sign in to manage the temple portal</p>
+            </div>
+            
+            {error && <div className="login-error-alert">{error}</div>}
+            
+            <div className="login-input-group">
+              <label>Username</label>
+              <div className="input-with-icon">
+                <User size={18} className="input-icon" />
+                <input 
+                  type="text" 
+                  value={username} 
+                  onChange={e => setUsername(e.target.value)} 
+                  placeholder="Enter admin username"
+                  required 
+                />
+              </div>
+            </div>
+            
+            <div className="login-input-group">
+              <label>Password</label>
+              <div className="input-with-icon">
+                <Lock size={18} className="input-icon" />
+                <input 
+                  type={showPassword ? "text" : "password"} 
+                  value={password} 
+                  onChange={e => setPassword(e.target.value)} 
+                  placeholder="Enter your password"
+                  required 
+                />
+                <button 
+                  type="button" 
+                  className="password-toggle"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+            
+            <button type="submit" className="login-submit-btn" disabled={loading}>
+              {loading ? (
+                <span className="loading-spinner-small"></span>
+              ) : (
+                <>Sign In <ArrowRight size={18} /></>
+              )}
+            </button>
+            
+            <div className="login-footer">
+              <p>Protected area. Authorized personnel only.</p>
+            </div>
+          </form>
         </div>
-        <button type="submit" className="hero-btn admin-btn" style={{marginTop: '1rem'}}>Login</button>
-      </form>
+      </div>
     </div>
   );
 }
