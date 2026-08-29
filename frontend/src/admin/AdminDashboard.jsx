@@ -3,10 +3,9 @@ import AdminFestivals from './AdminFestivals';
 import AdminGallery from './AdminGallery';
 import AdminAnnouncement from './AdminAnnouncement';
 import AdminOverview from './AdminOverview';
-import AdminNewsletters from './AdminNewsletters';
 import AdminSEO from './AdminSEO';
 import './Admin.css';
-import { Calendar, Megaphone, LogOut, LayoutDashboard, Menu, X, Mail, Globe, ExternalLink } from 'lucide-react';
+import { Calendar, Megaphone, LogOut, LayoutDashboard, Menu, X, Globe, ExternalLink } from 'lucide-react';
 
 function AdminDashboard({ onLogout }) {
   const [activeTab, setActiveTab] = useState('overview');
@@ -79,10 +78,6 @@ function AdminDashboard({ onLogout }) {
               <Calendar size={20} className="sidebar-icon" />
               Manage Festivals
             </li>
-            <li className={activeTab === 'newsletters' ? 'active' : ''} onClick={() => { setActiveTab('newsletters'); setMobileMenuOpen(false); }}>
-              <Mail size={20} className="sidebar-icon" />
-              Newsletters
-            </li>
             <li className={activeTab === 'seo' ? 'active' : ''} onClick={() => { setActiveTab('seo'); setMobileMenuOpen(false); }}>
               <Globe size={20} className="sidebar-icon" />
               SEO Settings
@@ -97,7 +92,6 @@ function AdminDashboard({ onLogout }) {
           {activeTab === 'overview' && <AdminOverview />}
           {activeTab === 'announcements' && <AdminAnnouncement />}
           {activeTab === 'festivals' && <AdminFestivals />}
-          {activeTab === 'newsletters' && <AdminNewsletters />}
           {activeTab === 'seo' && <AdminSEO />}
         </main>
       </div>

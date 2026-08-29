@@ -382,8 +382,8 @@ function App() {
 
       {showLoginPopup && (
         <div className="admin-modal-overlay" onClick={(e) => { if (e.target.className === 'admin-modal-overlay') setShowLoginPopup(false); }}>
-          <div className="admin-modal-content">
-            <button className="close-modal-btn" onClick={() => setShowLoginPopup(false)}>&times;</button>
+          <div style={{ position: 'relative', width: '100%', display: 'flex', justifyContent: 'center' }}>
+            <button className="close-modal-btn" style={{ position: 'absolute', top: 20, right: 30, zIndex: 100, color: 'var(--admin-sidebar)' }} onClick={() => setShowLoginPopup(false)}>&times;</button>
             <Suspense fallback={<div>Loading...</div>}>
               <AdminLogin onLoginSuccess={() => {
                 setIsAdminLoggedIn(true);
