@@ -9,7 +9,8 @@ router.get('/all', auth, async (req, res) => {
     const announcements = await Announcement.find().sort({ createdAt: -1 });
     res.json(announcements);
   } catch (err) {
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Error fetching announcements /all:', err);
+    res.status(500).json({ message: err.message || 'Server Error' });
   }
 });
 
@@ -19,7 +20,8 @@ router.get('/', async (req, res) => {
     const announcements = await Announcement.find({ isActive: true }).sort({ createdAt: -1 });
     res.json(announcements);
   } catch (err) {
-    res.status(500).json({ message: 'Server Error' });
+    console.error('Error fetching announcements /:', err);
+    res.status(500).json({ message: err.message || 'Server Error' });
   }
 });
 
@@ -106,6 +108,21 @@ router.post('/:id/like', async (req, res) => {
   }
 });
 
+// Increment share count (Public)
+router.post('/:id/share', async (req, res) => {
+  try {
+    const announcement = await Announcement.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { shares: 1 } },
+      { new: true }
+    );
+    if (!announcement) return res.status(404).json({ message: 'Announcement not found' });
+    res.json({ shares: announcement.shares });
+  } catch (err) {
+    res.status(500).json({ message: 'Server Error' });
+  }
+});
+
 
 
 const Subscription = require('../models/Subscription');
@@ -124,10 +141,11 @@ router.post('/', auth, async (req, res) => {
 
     // Send Push Notifications
     try {
+      const frontendUrl = process.env.FRONTEND_URL || 'https://www.mujungavuparthasarathi.in';
       const payload = JSON.stringify({
         title: 'New Temple Announcement!',
         body: newAnnouncement.title,
-        url: '/'
+        url: frontendUrl
       });
       
       const subscriptions = await Subscription.find();

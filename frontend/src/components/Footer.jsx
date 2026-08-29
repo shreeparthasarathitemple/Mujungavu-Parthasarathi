@@ -60,6 +60,30 @@ const LockIcon = () => (
 function Footer({ onAdminClick }) {
   const { t } = useLanguage();
   const [showCredits, setShowCredits] = useState(false);
+  const [email, setEmail] = useState('');
+  const [newsletterMsg, setNewsletterMsg] = useState('');
+  const [isSubscribing, setIsSubscribing] = useState(false);
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    setIsSubscribing(true);
+    setNewsletterMsg('');
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/newsletters/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await res.json();
+      setNewsletterMsg(data.message);
+      if (res.ok) setEmail('');
+    } catch (err) {
+      setNewsletterMsg('Failed to subscribe. Try again.');
+    } finally {
+      setIsSubscribing(false);
+    }
+  };
 
   return (
     <footer className="footer" id="contact">
@@ -103,7 +127,7 @@ function Footer({ onAdminClick }) {
         
         <div className="footer-contact">
           <h4>{t('footer', 'visitTitle')}</h4>
-          <address style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', fontStyle: 'normal' }}>
+          <address style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', fontStyle: 'normal', marginBottom: '1.5rem' }}>
             <a href="mailto:shreeparthasarathitemple@gmail.com" style={{ color: 'var(--bg-light)', textDecoration: 'none' }}>
               shreeparthasarathitemple@gmail.com
             </a>
@@ -111,6 +135,25 @@ function Footer({ onAdminClick }) {
               +91 9495545642
             </a>
           </address>
+
+          <h4>Newsletter</h4>
+          <p style={{ fontSize: '0.85rem', color: '#cbd5e1', marginBottom: '0.8rem' }}>Subscribe for temple updates and festivals.</p>
+          <form onSubmit={handleSubscribe} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <input 
+                type="email" 
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Your email address" 
+                required
+                style={{ flex: 1, padding: '0.6rem 1rem', borderRadius: '8px', border: 'none', outline: 'none' }}
+              />
+              <button type="submit" disabled={isSubscribing} style={{ padding: '0.6rem 1rem', borderRadius: '8px', border: 'none', background: 'var(--gold)', color: '#000', fontWeight: '600', cursor: 'pointer' }}>
+                {isSubscribing ? '...' : 'Join'}
+              </button>
+            </div>
+            {newsletterMsg && <span style={{ fontSize: '0.8rem', color: newsletterMsg.includes('Failed') || newsletterMsg.includes('already') ? '#ff4d4f' : '#4ade80' }}>{newsletterMsg}</span>}
+          </form>
         </div>
       </div>
       

@@ -13,6 +13,7 @@ const WhatsAppIcon = ({ size = 20 }) => (
 function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
+  const [shareCount, setShareCount] = useState(0);
   const [fetchedAnnouncement, setFetchedAnnouncement] = useState(null);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
@@ -53,6 +54,7 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
       const isLiked = localStorage.getItem(`liked_announcement_${announcement._id}`);
       setLiked(!!isLiked);
       setLikeCount(announcement.likes || 0);
+      setShareCount(announcement.shares || 0);
     }
   }, [announcement]);
 
@@ -86,6 +88,14 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
     return `${frontendUrl}/a/${announcement._id}`;
   };
 
+  const trackShare = () => {
+    if (!announcement) return;
+    setShareCount(prev => prev + 1);
+    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/announcements/${announcement._id}/share`, {
+      method: 'POST'
+    }).catch(err => console.error('Failed to track share', err));
+  };
+
   const handleShare = async () => {
     if (!announcement) return;
     const shareUrl = getShareUrl();
@@ -97,11 +107,13 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
     if (navigator.share) {
       try {
         await navigator.share(shareData);
+        trackShare();
       } catch (err) {
         console.error('Error sharing:', err);
       }
     } else {
       navigator.clipboard.writeText(shareUrl);
+      trackShare();
       alert('Link copied to clipboard!');
     }
   };
@@ -111,6 +123,7 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
     const shareUrl = getShareUrl();
     const text = `${announcement.title}\n\nFor more details, click here:\n${shareUrl}`;
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+    trackShare();
   };
 
   if (loading) return <div style={{ padding: '130px 20px 40px', textAlign: 'center', minHeight: '100vh', color: 'var(--text-dark)' }} className="announcement-page-container">Loading...</div>;
@@ -174,6 +187,7 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
           </button>
           <button className="action-btn share-btn" onClick={handleShare} title="Share">
             <Share2 size={20} />
+            {shareCount > 0 && <span style={{ fontWeight: '600', marginLeft: '0.2rem' }}>{shareCount}</span>}
           </button>
           <button className="action-btn share-btn whatsapp-btn" onClick={handleWhatsAppShare} title="Share on WhatsApp" style={{ color: '#25D366' }}>
             <WhatsAppIcon size={20} />

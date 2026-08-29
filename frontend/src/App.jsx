@@ -50,6 +50,7 @@ function App() {
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false)
   const [currentTime, setCurrentTime] = useState(new Date())
+  const [seoData, setSeoData] = useState(null)
   
   const { language, toggleLanguage, t } = useLanguage()
   const location = useLocation()
@@ -97,7 +98,7 @@ function App() {
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
   };
 
-  // Analytics Tracking
+  // Analytics Tracking & Dynamic SEO
   useEffect(() => {
     if (!isAdmin) {
       fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/analytics/track`, {
@@ -105,6 +106,18 @@ function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ path: location.pathname })
       }).catch(() => {}); // Fail silently
+      
+      // Fetch dynamic SEO for this route
+      fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/seo/page?route=${encodeURIComponent(location.pathname)}`)
+        .then(res => {
+          if (res.ok) return res.json();
+          return null;
+        })
+        .then(data => {
+          if (data) setSeoData(data);
+          else setSeoData(null); // Reset if not found
+        })
+        .catch(() => setSeoData(null));
     }
   }, [location.pathname, isAdmin]);
 
@@ -176,25 +189,34 @@ function App() {
 
   const getSEOMetadata = () => {
     const baseTitle = language === 'en' ? "Mujungavu Parthasarathi | Official Website" : "ಮುಜುಂಗಾವು ಪಾರ್ಥಸಾರಥಿ | ಅಧಿಕೃತ ವೆಬ್‌ಸೈಟ್";
-    let description = language === 'en' 
+    let defaultDesc = language === 'en' 
       ? "Official website of Sri Parthasarathi Temple, Mujungavu, Kumbla, Kasaragod. Find temple timings, poojas, festivals, history, announcements, gallery and location information."
       : "ಮುಜುಂಗಾವು ಪಾರ್ಥಸಾರಥಿಯ ಅಧಿಕೃತ ವೆಬ್‌ಸೈಟ್.";
-    let title = `Sri Parthasarathi Temple Mujungavu | Mujungavu Temple, Kumbla`;
+    let defaultTitle = `Sri Parthasarathi Temple Mujungavu | Mujungavu Temple, Kumbla`;
     
-    if (location.pathname === '/history') title = `${language === 'en' ? 'History' : 'ಇತಿಹಾಸ'} | ${baseTitle}`;
-    if (location.pathname === '/about') title = `About | ${baseTitle}`;
-    if (location.pathname === '/temple-timings') title = `Temple Timings | ${baseTitle}`;
-    if (location.pathname === '/poojas') title = `Poojas | ${baseTitle}`;
-    if (location.pathname === '/festivals') title = `Festivals | ${baseTitle}`;
-    if (location.pathname === '/contact' || location.pathname === '/location') title = `Contact & Location | ${baseTitle}`;
-    if (location.pathname === '/gallery') title = `${language === 'en' ? 'Gallery' : 'ಗ್ಯಾಲರಿ'} | ${baseTitle}`;
-    if (location.pathname.startsWith('/announcement') && activeAnnouncement) {
-      title = `${activeAnnouncement.title} | ${baseTitle}`;
-      if (activeAnnouncement.description) {
-        const tempDiv = document.createElement("div");
-        tempDiv.innerHTML = activeAnnouncement.description;
-        description = tempDiv.textContent || tempDiv.innerText || "";
-        description = description.substring(0, 150) + '...';
+    // Use dynamic SEO data if available, otherwise fallback to defaults
+    let title = seoData?.title || defaultTitle;
+    let description = seoData?.description || defaultDesc;
+    let keywords = seoData?.keywords || "";
+    let imageUrl = seoData?.imageUrl || "";
+
+    // Specific static fallbacks if no dynamic SEO is configured
+    if (!seoData) {
+      if (location.pathname === '/history') title = `${language === 'en' ? 'History' : 'ಇತಿಹಾಸ'} | ${baseTitle}`;
+      if (location.pathname === '/about') title = `About | ${baseTitle}`;
+      if (location.pathname === '/temple-timings') title = `Temple Timings | ${baseTitle}`;
+      if (location.pathname === '/poojas') title = `Poojas | ${baseTitle}`;
+      if (location.pathname === '/festivals') title = `Festivals | ${baseTitle}`;
+      if (location.pathname === '/contact' || location.pathname === '/location') title = `Contact & Location | ${baseTitle}`;
+      if (location.pathname === '/gallery') title = `${language === 'en' ? 'Gallery' : 'ಗ್ಯಾಲರಿ'} | ${baseTitle}`;
+      if (location.pathname.startsWith('/announcement') && activeAnnouncement) {
+        title = `${activeAnnouncement.title} | ${baseTitle}`;
+        if (activeAnnouncement.description) {
+          const tempDiv = document.createElement("div");
+          tempDiv.innerHTML = activeAnnouncement.description;
+          description = tempDiv.textContent || tempDiv.innerText || "";
+          description = description.substring(0, 150) + '...';
+        }
       }
     }
     
@@ -204,13 +226,16 @@ function App() {
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
+        {keywords && <meta name="keywords" content={keywords} />}
         <link rel="canonical" href={currentUrl} />
         <meta property="og:url" content={currentUrl} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
+        {imageUrl && <meta property="og:image" content={imageUrl} />}
         <meta property="twitter:url" content={currentUrl} />
         <meta property="twitter:title" content={title} />
         <meta property="twitter:description" content={description} />
+        {imageUrl && <meta name="twitter:image" content={imageUrl} />}
       </Helmet>
     );
   };
