@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Save, AlertCircle } from 'lucide-react';
+import { Save, AlertCircle, Eye, EyeOff, Key } from 'lucide-react';
 import './Admin.css';
 
 function AdminSettings() {
   const [geminiKey, setGeminiKey] = useState('');
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [showKey, setShowKey] = useState(false);
 
   useEffect(() => {
     fetchSettings();
@@ -52,41 +53,62 @@ function AdminSettings() {
 
   return (
     <div className="admin-tab-content">
-      <div className="admin-header-actions" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h3 style={{ margin: 0 }}>General Settings</h3>
+      <div className="admin-header-inline">
+        <h3>General Settings</h3>
+        <p>Configure API integrations and advanced features.</p>
       </div>
 
-      <div className="admin-card">
-        <h4>AI Integration</h4>
-        <p style={{ color: '#888', marginBottom: '1.5rem', fontSize: '0.9rem' }}>
-          Configure API keys for AI features such as the News Portal's automated article generation.
-        </p>
+      <div className="premium-card" style={{ maxWidth: '800px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '1.5rem' }}>
+          <div style={{ background: 'rgba(212, 175, 55, 0.1)', padding: '12px', borderRadius: '12px', color: 'var(--admin-primary)' }}>
+            <Key size={24} />
+          </div>
+          <div>
+            <h4 style={{ margin: 0, fontSize: '1.4rem', color: 'var(--admin-sidebar)' }}>AI Integration</h4>
+            <p style={{ color: '#64748b', margin: '4px 0 0 0', fontSize: '0.95rem' }}>
+              Securely store API keys for the AI News Generator.
+            </p>
+          </div>
+        </div>
 
         {message && (
-          <div className={`admin-alert ${message.includes('Error') ? 'error' : 'success'}`} style={{ marginBottom: '1rem', padding: '10px', borderRadius: '4px', background: message.includes('Error') ? 'rgba(239, 68, 68, 0.1)' : 'rgba(34, 197, 94, 0.1)', color: message.includes('Error') ? '#ef4444' : '#22c55e', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <AlertCircle size={18} />
-            {message}
+          <div className={`admin-alert ${message.includes('Error') ? 'error' : 'success'}`} style={{ marginBottom: '2rem', padding: '1rem', borderRadius: '12px', background: message.includes('Error') ? '#fef2f2' : '#f0fdf4', color: message.includes('Error') ? '#dc2626' : '#16a34a', display: 'flex', alignItems: 'center', gap: '10px', border: `1px solid ${message.includes('Error') ? '#fca5a5' : '#bbf7d0'}` }}>
+            <AlertCircle size={20} />
+            <span style={{ fontWeight: 500 }}>{message}</span>
           </div>
         )}
 
         <form onSubmit={handleSave}>
-          <div className="admin-form-group">
+          <div className="premium-input-group">
             <label>Google Gemini API Key</label>
-            <input 
-              type="password"
-              placeholder="AIzaSy..."
-              value={geminiKey}
-              onChange={(e) => setGeminiKey(e.target.value)}
-              className="admin-input"
-            />
-            <small style={{ color: '#666', display: 'block', marginTop: '5px' }}>
-              Used for generating news titles, blurbs, and articles automatically. Get an API key from Google AI Studio.
+            <div style={{ position: 'relative' }}>
+              <input 
+                type={showKey ? "text" : "password"}
+                placeholder="Enter your Gemini API key (e.g. AIzaSy...)"
+                value={geminiKey}
+                onChange={(e) => setGeminiKey(e.target.value)}
+                className="premium-input"
+                style={{ paddingRight: '3rem' }}
+              />
+              <button 
+                type="button" 
+                onClick={() => setShowKey(!showKey)}
+                style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', padding: '4px' }}
+                title={showKey ? "Hide key" : "Show key"}
+              >
+                {showKey ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+            <small style={{ color: '#94a3b8', display: 'block', marginTop: '8px', fontSize: '0.9rem' }}>
+              This key is encrypted and stored safely. It allows the system to generate rich, traditional news articles instantly.
             </small>
           </div>
 
-          <button type="submit" className="admin-submit-btn" disabled={loading} style={{ display: 'flex', alignItems: 'center', gap: '8px', width: 'fit-content' }}>
-            {loading ? 'Saving...' : <><Save size={18} /> Save Settings</>}
-          </button>
+          <div style={{ marginTop: '2.5rem', borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem', display: 'flex', justifyContent: 'flex-end' }}>
+            <button type="submit" className="premium-btn primary" disabled={loading}>
+              {loading ? 'Saving...' : <><Save size={20} /> Save Configuration</>}
+            </button>
+          </div>
         </form>
       </div>
     </div>
