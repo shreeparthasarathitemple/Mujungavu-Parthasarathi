@@ -34,14 +34,18 @@ function NewsArticle() {
   };
 
   const handleShare = () => {
+    const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+    // Use the backend share link so WhatsApp bots can read the HTML OG tags
+    const shareUrl = `${backendUrl}/api/news/share/${id}`;
+    
     if (navigator.share) {
       navigator.share({
         title: getLocalizedContent(news?.generatedTitle, news?.adminTitle),
         text: getLocalizedContent(news?.generatedBlurb, news?.adminDescription),
-        url: window.location.href,
+        url: shareUrl,
       }).catch(console.error);
     } else {
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(shareUrl);
       alert('Link copied to clipboard!');
     }
   };

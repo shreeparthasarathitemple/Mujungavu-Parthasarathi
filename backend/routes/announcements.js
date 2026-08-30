@@ -31,7 +31,7 @@ router.get('/share/:id', async (req, res) => {
     const announcement = await Announcement.findById(req.params.id);
     if (!announcement) return res.status(404).send('Announcement not found');
     
-    const frontendUrl = process.env.FRONTEND_URL || 'https://www.mujungavuparthasarathi.in';
+    const frontendUrl = 'https://www.mujungavuparthasarathi.in';
     const redirectUrl = req.query.redirect || `${frontendUrl}/a/${announcement._id}`;
     const title = announcement.title;
     const description = announcement.content ? announcement.content.substring(0, 150) + '...' : 'Sri Parthasarathi Temple Announcement';
@@ -141,11 +141,11 @@ router.post('/', auth, async (req, res) => {
 
     // Send Push Notifications
     try {
-      const frontendUrl = process.env.FRONTEND_URL || 'https://www.mujungavuparthasarathi.in';
+      const frontendUrl = 'https://www.mujungavuparthasarathi.in';
       const payload = JSON.stringify({
         title: 'New Temple Announcement!',
         body: newAnnouncement.title,
-        url: frontendUrl
+        url: `${frontendUrl}/announcements`
       });
       
       const subscriptions = await Subscription.find();

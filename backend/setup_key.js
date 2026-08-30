@@ -1,4 +1,4 @@
-require('dotenv').config();
+its coming like this i nee require('dotenv').config();
 const mongoose = require('mongoose');
 const Setting = require('./models/Setting');
 
