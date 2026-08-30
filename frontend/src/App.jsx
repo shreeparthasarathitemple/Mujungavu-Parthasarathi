@@ -14,6 +14,8 @@ import Reviews from './components/Reviews'
 import Announcement from './components/Announcement'
 import AnnouncementPage from './components/AnnouncementPage'
 import AnnouncementsGrid from './components/AnnouncementsGrid'
+import NewsPortal from './components/NewsPortal'
+import NewsArticle from './components/NewsArticle'
 import SectionWrapper from './components/SectionWrapper'
 import ContactPage from './components/ContactPage'
 import NotFound from './components/NotFound'
@@ -302,6 +304,9 @@ function App() {
                   <Announcement onAnnouncementClick={(ann) => {
                     navigate(`/a/${ann._id.slice(-6)}`);
                   }} />
+                  <Link to="/news" className="nav-link" onClick={() => setIsMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', margin: '0 15px', fontWeight: '500' }}>
+                    {language === 'en' ? 'News' : 'ಸುದ್ದಿ'}
+                  </Link>
                   <button 
                     className="lang-toggle-btn"
                     onClick={toggleLanguage}
@@ -340,6 +345,8 @@ function App() {
             <Route path="/history" element={<HistoryPage onBack={() => navigate('/')} />} />
             <Route path="/gallery" element={<GalleryPage onNavigate={handleLegacyNavigation} />} />
             <Route path="/announcements" element={<AnnouncementsGrid />} />
+            <Route path="/news" element={<NewsPortal />} />
+            <Route path="/news/:id" element={<NewsArticle />} />
             <Route path="/a/:id" element={<AnnouncementPage />} />
             <Route path="/announcement/:id" element={<AnnouncementPage />} /> {/* Legacy support */}
             
