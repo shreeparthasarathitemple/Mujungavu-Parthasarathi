@@ -25,6 +25,12 @@ function NewsPortal() {
     fetchNews();
   }, []);
 
+  const getLocalizedContent = (field, fallback) => {
+    if (!field) return fallback;
+    if (typeof field === 'string') return field;
+    return field[language] || field.en || fallback;
+  };
+
   return (
     <div className="announcements-page">
       <div className="container" style={{ paddingTop: '100px' }}>
@@ -58,7 +64,7 @@ function NewsPortal() {
                 <div key={news._id} className="announcement-card" style={{ display: 'flex', flexDirection: 'column' }}>
                   <div className="announcement-image-wrapper">
                     {news.imageUrl ? (
-                      <img src={news.imageUrl} alt={news.generatedTitle || news.adminTitle} />
+                      <img src={news.imageUrl} alt={getLocalizedContent(news.generatedTitle, news.adminTitle)} />
                     ) : (
                       <div className="placeholder-image">
                         <img src="/logo.png" alt="Logo" style={{ opacity: 0.2 }} />
@@ -74,8 +80,8 @@ function NewsPortal() {
                         day: 'numeric'
                       })}
                     </div>
-                    <h3 className="announcement-card-title">{news.generatedTitle || news.adminTitle}</h3>
-                    <p className="announcement-card-desc" style={{ flexGrow: 1 }}>{news.generatedBlurb || news.adminDescription}</p>
+                    <h3 className="announcement-card-title">{getLocalizedContent(news.generatedTitle, news.adminTitle)}</h3>
+                    <p className="announcement-card-desc" style={{ flexGrow: 1 }}>{getLocalizedContent(news.generatedBlurb, news.adminDescription)}</p>
                     <Link to={`/news/${news._id}`} className="read-more-btn" style={{ marginTop: '15px' }}>
                       {language === 'en' ? 'Read Full Article' : 'ಪೂರ್ಣ ಲೇಖನವನ್ನು ಓದಿ'} <ChevronRight size={16} />
                     </Link>
