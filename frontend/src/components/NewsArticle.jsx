@@ -27,11 +27,17 @@ function NewsArticle() {
     fetchNews();
   }, [id]);
 
+  const getLocalizedContent = (field, fallback) => {
+    if (!field) return fallback;
+    if (typeof field === 'string') return field;
+    return field[language] || field.en || fallback;
+  };
+
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: news?.generatedTitle || news?.adminTitle,
-        text: news?.generatedBlurb || news?.adminDescription,
+        title: getLocalizedContent(news?.generatedTitle, news?.adminTitle),
+        text: getLocalizedContent(news?.generatedBlurb, news?.adminDescription),
         url: window.location.href,
       }).catch(console.error);
     } else {
@@ -43,8 +49,9 @@ function NewsArticle() {
   if (loading) return <div className="text-center" style={{ paddingTop: '100px', minHeight: '60vh' }}>Loading...</div>;
   if (!news) return <div className="text-center" style={{ paddingTop: '100px', minHeight: '60vh' }}>News article not found.</div>;
 
-  const title = news.generatedTitle || news.adminTitle;
-  const blurb = news.generatedBlurb || news.adminDescription;
+  const title = getLocalizedContent(news.generatedTitle, news.adminTitle);
+  const blurb = getLocalizedContent(news.generatedBlurb, news.adminDescription);
+  const content = getLocalizedContent(news.generatedContent, `<p>${news.adminDescription}</p>`);
 
   return (
     <>
@@ -102,7 +109,7 @@ function NewsArticle() {
               <div 
                 className="detail-body html-content" 
                 style={{ fontSize: '1.05rem', lineHeight: '1.8', color: '#333' }}
-                dangerouslySetInnerHTML={{ __html: news.generatedContent || `<p>${news.adminDescription}</p>` }} 
+                dangerouslySetInnerHTML={{ __html: content }} 
               />
             </div>
           </article>
