@@ -35,6 +35,59 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// Dynamic Share Route for WhatsApp/Facebook Link Previews
+router.get('/share/:id', async (req, res) => {
+  try {
+    const newsItem = await News.findById(req.params.id);
+    if (!newsItem) return res.status(404).send('News not found');
+
+    const frontendUrl = 'https://www.mujungavuparthasarathi.in';
+    const articleUrl = `${frontendUrl}/news/${newsItem._id}`;
+    
+    // Choose Kannada by default for the preview since the user requested it
+    const title = newsItem.generatedTitle?.kn || newsItem.adminTitle;
+    const blurb = newsItem.generatedBlurb?.kn || newsItem.adminDescription;
+    const imageUrl = newsItem.imageUrl || `${frontendUrl}/logo.png`;
+
+    const html = `
+<!DOCTYPE html>
+<html lang="kn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title}</title>
+    
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="${articleUrl}" />
+    <meta property="og:title" content="${title}" />
+    <meta property="og:description" content="${blurb}" />
+    <meta property="og:image" content="${imageUrl}" />
+    <meta property="og:site_name" content="Sri Parthasarathi Temple Mujungavu" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="${articleUrl}" />
+    <meta property="twitter:title" content="${title}" />
+    <meta property="twitter:description" content="${blurb}" />
+    <meta property="twitter:image" content="${imageUrl}" />
+
+    <!-- Redirect Real Users -->
+    <meta http-equiv="refresh" content="0; url=${articleUrl}">
+    <script>window.location.replace("${articleUrl}");</script>
+</head>
+<body>
+    <p>Redirecting to <a href="${articleUrl}">Sri Parthasarathi Temple</a>...</p>
+</body>
+</html>`;
+
+    res.send(html);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Server Error');
+  }
+});
+
 // Generate content using Gemini
 router.post('/generate', auth, async (req, res) => {
   try {
@@ -142,6 +195,36 @@ router.post('/', auth, async (req, res) => {
   try {
     const newArticle = new News(req.body);
     const saved = await newArticle.save();
+
+    // Send Push Notifications for News
+    if (saved.status === 'published') {
+      try {
+        const Subscription = require('../models/Subscription');
+        const webpush = require('web-push');
+        const frontendUrl = 'https://www.mujungavuparthasarathi.in';
+        
+        // Use Kannada title if available, else English admin title
+        const newsTitle = saved.generatedTitle?.kn || saved.adminTitle;
+        const payload = JSON.stringify({
+          title: 'ಹೊಸ ಸುದ್ದಿ (New Update)',
+          body: newsTitle,
+          url: `${frontendUrl}/news/${saved._id}`
+        });
+        
+        const subscriptions = await Subscription.find();
+        const pushPromises = subscriptions.map(sub => 
+          webpush.sendNotification(sub, payload).catch(err => {
+            if (err.statusCode === 410 || err.statusCode === 404) {
+              return Subscription.findByIdAndDelete(sub._id);
+            }
+          })
+        );
+        await Promise.all(pushPromises);
+      } catch (pushErr) {
+        console.error('Push notification error for news:', pushErr);
+      }
+    }
+
     res.status(201).json(saved);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });
