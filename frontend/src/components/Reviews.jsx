@@ -79,33 +79,9 @@ function Reviews() {
       <div className="reviews-scroll-container animate-on-scroll">
         {!loading && (
           <div className="reviews-marquee-track">
-            {/* First set of reviews */}
+            {/* Set of reviews */}
             {reviewsData.map((review) => (
               <div key={`set1-${review.id}`} className="review-card glassmorphism-card">
-                <div className="review-header">
-                  <div className="reviewer-avatar">
-                    {review.profile_photo_url ? (
-                      <img src={review.profile_photo_url} alt={review.name} style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
-                    ) : (
-                      review.name.charAt(0)
-                    )}
-                  </div>
-                  <div className="reviewer-info">
-                    <h4>{review.name}</h4>
-                    <span className="google-review-label">
-                      <img src="/google-logo.svg" alt="Google Logo" />
-                      Google Review
-                    </span>
-                  </div>
-                </div>
-                <StarRating rating={review.rating} />
-                <p className="review-text">"{review.text}"</p>
-              </div>
-            ))}
-
-            {/* Duplicated set of reviews for infinite scrolling */}
-            {reviewsData.map((review) => (
-              <div key={`set2-${review.id}`} className="review-card glassmorphism-card">
                 <div className="review-header">
                   <div className="reviewer-avatar">
                     {review.profile_photo_url ? (

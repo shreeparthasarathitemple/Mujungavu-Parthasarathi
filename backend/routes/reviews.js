@@ -41,7 +41,7 @@ router.get('/', async (req, res) => {
 
     if (data.reviews) {
       // Map New API response format to our frontend format
-      const formattedReviews = data.reviews.slice(0, 5).map((review, index) => {
+      const formattedReviews = data.reviews.map((review, index) => {
         return {
           id: index + 1,
           name: review.authorAttribution?.displayName || "Google User",

@@ -46,10 +46,20 @@
 
 .reviews-scroll-container {
   width: 100%;
-  overflow: hidden;
+  overflow-x: auto;
   position: relative;
-  padding: 2rem 0;
+  padding: 2rem 1rem;
   margin-top: 2rem;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+.reviews-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+.reviews-scroll-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Removed gradient fade effect on the edges */
@@ -58,21 +68,6 @@
   display: flex;
   gap: 2rem;
   width: max-content;
-  animation: scroll-reviews 35s linear infinite;
-}
-
-.reviews-scroll-container:hover .reviews-marquee-track {
-  animation-play-state: paused;
-}
-
-@keyframes scroll-reviews {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    /* Translate exactly half since the array is duplicated */
-    transform: translateX(calc(-50% - 1rem));
-  }
 }
 
 .review-card {
