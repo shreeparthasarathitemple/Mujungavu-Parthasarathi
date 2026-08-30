@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './Reviews.css';
 import { useLanguage } from '../context/LanguageContext';
 import { Star } from 'lucide-react';
@@ -7,6 +7,13 @@ function Reviews() {
   const { t } = useLanguage();
   const [reviewsData, setReviewsData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const scrollRef = useRef(null);
+  const [isHovering, setIsHovering] = useState(false);
+  
+  // Drag to scroll state
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeftPos, setScrollLeftPos] = useState(0);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -32,6 +39,54 @@ function Reviews() {
     };
     fetchReviews();
   }, []);
+
+  useEffect(() => {
+    let animationId;
+    const scroll = () => {
+      if (scrollRef.current && !isHovering) {
+        scrollRef.current.scrollLeft += 1;
+        
+        // For seamless infinite scrolling, we duplicated the reviews exactly once (2 sets total).
+        // When we've scrolled exactly halfway (the width of one set), we instantly snap back to 0.
+        // Because the second set looks identical to the first, the user won't notice the snap.
+        if (scrollRef.current.scrollLeft >= (scrollRef.current.scrollWidth / 2)) {
+          scrollRef.current.scrollLeft = 0;
+        }
+      }
+      animationId = requestAnimationFrame(scroll);
+    };
+    
+    // Only animate if we have enough reviews to scroll and not dragging
+    if (reviewsData.length > 0 && !isDragging) {
+      animationId = requestAnimationFrame(scroll);
+    }
+    
+    return () => cancelAnimationFrame(animationId);
+  }, [isHovering, isDragging, reviewsData]);
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setIsHovering(true); // pause auto-scroll
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeftPos(scrollRef.current.scrollLeft);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+    setIsHovering(false);
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // scroll speed multiplier
+    scrollRef.current.scrollLeft = scrollLeftPos - walk;
+  };
 
   const StarRating = ({ rating }) => {
     return (
@@ -76,12 +131,23 @@ function Reviews() {
         </a>
       </div>
 
-      <div className="reviews-scroll-container animate-on-scroll">
+      <div 
+        className={`reviews-scroll-container animate-on-scroll ${isDragging ? 'active' : ''}`}
+        ref={scrollRef}
+        onMouseEnter={() => setIsHovering(true)}
+        onMouseLeave={handleMouseLeave}
+        onMouseDown={handleMouseDown}
+        onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+        onTouchStart={() => setIsHovering(true)}
+        onTouchEnd={() => setIsHovering(false)}
+        style={{ cursor: isDragging ? 'grabbing' : 'grab' }}
+      >
         {!loading && (
           <div className="reviews-marquee-track">
-            {/* Set of reviews */}
-            {reviewsData.map((review) => (
-              <div key={`set1-${review.id}`} className="review-card glassmorphism-card">
+            {/* We render exactly 2 sets of reviews for seamless infinite scrolling */}
+            {[...reviewsData, ...reviewsData].map((review, index) => (
+              <div key={`set-${index}-${review.id}`} className="review-card glassmorphism-card">
                 <div className="review-header">
                   <div className="reviewer-avatar">
                     {review.profile_photo_url ? (

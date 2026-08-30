@@ -50,7 +50,6 @@
   position: relative;
   padding: 2rem 1rem;
   margin-top: 2rem;
-  scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 }
 
