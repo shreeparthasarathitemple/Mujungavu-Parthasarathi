@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
-import { Calendar, ChevronRight } from 'lucide-react';
-import './AnnouncementsGrid.css'; // Reusing similar styling for grids
+import { Calendar, ChevronRight, ArrowLeft } from 'lucide-react';
+import './AnnouncementPage.css'; // Reusing styling
 
 function NewsPortal() {
   const { t, language } = useLanguage();
   const [newsList, setNewsList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchNews = async () => {
@@ -27,9 +28,22 @@ function NewsPortal() {
   return (
     <div className="announcements-page">
       <div className="container" style={{ paddingTop: '100px' }}>
-        <h1 className="section-title text-center" style={{ marginBottom: '2rem' }}>
-          {language === 'en' ? 'Temple News & Updates' : 'ದೇವಾಲಯದ ಸುದ್ದಿಗಳು ಮತ್ತು ನವೀಕರಣಗಳು'}
-        </h1>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '0.5rem', flexWrap: 'nowrap' }}>
+            <button 
+              onClick={() => navigate('/')} 
+              className="back-btn icon-only" 
+              style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(204, 85, 0, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '0', margin: 0, flexShrink: 0, cursor: 'pointer', border: 'none', color: 'var(--saffron-dark)' }}
+              title="Back to Home"
+            >
+              <ArrowLeft size={24} />
+            </button>
+            <h1 className="section-title text-center" style={{ margin: 0, paddingBottom: 0, fontSize: 'clamp(1.2rem, 5vw, 2.5rem)', color: 'var(--saffron-dark)', whiteSpace: 'nowrap' }}>
+              {language === 'en' ? 'Temple News & Updates' : 'ದೇವಾಲಯದ ಸುದ್ದಿಗಳು ಮತ್ತು ನವೀಕರಣಗಳು'}
+            </h1>
+          </div>
+          <div style={{ width: '60px', height: '3px', background: 'var(--gold)', margin: '1rem auto' }}></div>
+        </div>
 
         {loading ? (
           <div className="text-center" style={{ padding: '3rem' }}>Loading...</div>

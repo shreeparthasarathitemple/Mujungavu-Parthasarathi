@@ -280,7 +280,8 @@ a {
 /* Hide brand and links when at the top (hero section) */
 .navbar:not(.scrolled) .nav-brand,
 .navbar:not(.scrolled) .nav-links,
-.navbar:not(.scrolled) .mobile-menu-btn {
+.navbar:not(.scrolled) .mobile-menu-btn,
+.navbar:not(.scrolled) .news-nav-link {
   display: none !important;
 }
 

@@ -286,6 +286,9 @@ function App() {
                   <a href="#lake" onClick={() => setIsMenuOpen(false)}>{t('nav', 'lake')}</a>
                   <a href="#services" onClick={() => setIsMenuOpen(false)}>{t('nav', 'rituals')}</a>
                   <a href="#gallery" onClick={() => setIsMenuOpen(false)}>{t('nav', 'gallery')}</a>
+                  <Link to="/news" onClick={() => setIsMenuOpen(false)}>
+                    {language === 'en' ? 'News' : 'ಸುದ್ದಿ'}
+                  </Link>
                 </>
               ) : (
                 <Link to="/" onClick={() => setIsMenuOpen(false)} aria-label="Back to Home">
@@ -294,19 +297,13 @@ function App() {
               )}
             </div>
 
-            <div className="nav-actions">
-              <div className="nav-time-star" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginRight: '15px', color: 'var(--gold)', fontSize: '0.9rem' }}>
-                <span style={{ fontWeight: '600' }}>{formatTime(currentTime)}</span>
-              </div>
+            <div className="nav-actions" style={{ marginLeft: '20px' }}>
 
               {!isAdmin && (
                 <>
                   <Announcement onAnnouncementClick={(ann) => {
                     navigate(`/a/${ann._id.slice(-6)}`);
                   }} />
-                  <Link to="/news" className="nav-link" onClick={() => setIsMenuOpen(false)} style={{ color: 'white', textDecoration: 'none', margin: '0 15px', fontWeight: '500' }}>
-                    {language === 'en' ? 'News' : 'ಸುದ್ದಿ'}
-                  </Link>
                   <button 
                     className="lang-toggle-btn"
                     onClick={toggleLanguage}
@@ -315,6 +312,9 @@ function App() {
                     <Globe size={18} />
                     <span>{language === 'en' ? 'KN' : 'EN'}</span>
                   </button>
+                  <div className="nav-time-star" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '10px', color: 'var(--gold)', fontSize: '0.9rem' }}>
+                    <span style={{ fontWeight: '600' }}>{formatTime(currentTime)}</span>
+                  </div>
                 </>
               )}
               
