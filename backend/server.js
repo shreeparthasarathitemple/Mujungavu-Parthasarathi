@@ -57,6 +57,7 @@ const analyticsRoutes = require('./routes/analytics');
 const reviewsRoutes = require('./routes/reviews');
 const newslettersRoutes = require('./routes/newsletters');
 const seoRoutes = require('./routes/seo');
+const newsRoutes = require('./routes/news');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/festivals', require('./routes/festivals'));
@@ -69,6 +70,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/reviews', reviewsRoutes);
 app.use('/api/newsletters', newslettersRoutes);
 app.use('/api/seo', seoRoutes);
+app.use('/api/news', newsRoutes);
 
 // Health check route for Render
 app.get('/', (req, res) => {

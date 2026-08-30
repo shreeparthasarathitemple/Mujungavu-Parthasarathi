@@ -4,8 +4,10 @@ import AdminGallery from './AdminGallery';
 import AdminAnnouncement from './AdminAnnouncement';
 import AdminOverview from './AdminOverview';
 import AdminSEO from './AdminSEO';
+import AdminNews from './AdminNews';
+import AdminSettings from './AdminSettings';
 import './Admin.css';
-import { Calendar, Megaphone, LogOut, LayoutDashboard, Menu, X, Globe, ExternalLink } from 'lucide-react';
+import { Calendar, Megaphone, LogOut, LayoutDashboard, Menu, X, Globe, ExternalLink, Settings, Newspaper } from 'lucide-react';
 
 function AdminDashboard({ onLogout }) {
   const [activeTab, setActiveTab] = useState('overview');
@@ -78,9 +80,17 @@ function AdminDashboard({ onLogout }) {
               <Calendar size={20} className="sidebar-icon" />
               Manage Festivals
             </li>
+            <li className={activeTab === 'news' ? 'active' : ''} onClick={() => { setActiveTab('news'); setMobileMenuOpen(false); }}>
+              <Newspaper size={20} className="sidebar-icon" />
+              News Portal
+            </li>
             <li className={activeTab === 'seo' ? 'active' : ''} onClick={() => { setActiveTab('seo'); setMobileMenuOpen(false); }}>
               <Globe size={20} className="sidebar-icon" />
               SEO Settings
+            </li>
+            <li className={activeTab === 'settings' ? 'active' : ''} onClick={() => { setActiveTab('settings'); setMobileMenuOpen(false); }}>
+              <Settings size={20} className="sidebar-icon" />
+              Settings
             </li>
             <li onClick={handleLogout} className="logout-item">
               <LogOut size={20} className="sidebar-icon" />
@@ -91,8 +101,10 @@ function AdminDashboard({ onLogout }) {
         <main className="admin-content">
           {activeTab === 'overview' && <AdminOverview />}
           {activeTab === 'announcements' && <AdminAnnouncement />}
+          {activeTab === 'news' && <AdminNews />}
           {activeTab === 'festivals' && <AdminFestivals />}
           {activeTab === 'seo' && <AdminSEO />}
+          {activeTab === 'settings' && <AdminSettings />}
         </main>
       </div>
     </div>
