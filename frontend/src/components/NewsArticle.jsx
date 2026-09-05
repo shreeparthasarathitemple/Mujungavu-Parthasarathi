@@ -33,16 +33,45 @@ function NewsArticle() {
     return field[language] || field.en || fallback;
   };
 
-  const handleShare = () => {
+  const handleShare = async () => {
     const frontendUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
     const shareUrl = `${frontendUrl}/news/${id}`;
+    const shareTitle = getLocalizedContent(news?.generatedTitle, news?.adminTitle);
+    const shareText = getLocalizedContent(news?.generatedBlurb, news?.adminDescription);
     
     if (navigator.share) {
-      navigator.share({
-        title: getLocalizedContent(news?.generatedTitle, news?.adminTitle),
-        text: getLocalizedContent(news?.generatedBlurb, news?.adminDescription),
-        url: shareUrl,
-      }).catch(console.error);
+      try {
+        const shareData = {
+          title: shareTitle,
+          text: shareText,
+          url: shareUrl,
+        };
+
+        if (news?.imageUrl) {
+          try {
+            // Attempt to fetch the image and share it as a file for better WhatsApp previews
+            const response = await fetch(news.imageUrl);
+            const blob = await response.blob();
+            const ext = blob.type.split('/')[1] || 'jpg';
+            const file = new File([blob], `article-image.${ext}`, { type: blob.type });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              shareData.files = [file];
+              // When sharing a file, WhatsApp uses the text as a caption.
+              // Include the URL in the text so it's clickable.
+              shareData.text = `${shareText}\n\nRead more: ${shareUrl}`;
+              delete shareData.url; // Remove explicit URL so the file takes priority
+            }
+          } catch (imgErr) {
+            console.error('Error preparing image for share:', imgErr);
+            // Fallback to sharing without the image file if fetch/CORS fails
+          }
+        }
+
+        await navigator.share(shareData);
+      } catch (err) {
+        console.error('Share failed:', err);
+      }
     } else {
       navigator.clipboard.writeText(shareUrl);
       alert('Link copied to clipboard!');
