@@ -34,9 +34,8 @@ function NewsArticle() {
   };
 
   const handleShare = () => {
-    const backendUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000';
-    // Use the backend share link so WhatsApp bots can read the HTML OG tags
-    const shareUrl = `${backendUrl}/api/news/share/${id}`;
+    const frontendUrl = import.meta.env.VITE_FRONTEND_URL || window.location.origin;
+    const shareUrl = `${frontendUrl}/news/${id}`;
     
     if (navigator.share) {
       navigator.share({
