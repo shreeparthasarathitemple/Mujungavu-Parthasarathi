@@ -14,6 +14,12 @@
   transition: transform 0.3s ease, color 0.3s ease;
   display: inline-flex;
   align-items: center;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.back-btn:focus {
+  outline: none;
 }
 
 .back-btn:hover {
