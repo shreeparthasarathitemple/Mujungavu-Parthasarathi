@@ -4,7 +4,24 @@ import { useLanguage } from '../context/LanguageContext';
 
 function GalleryPage({ onNavigate }) {
   const { t } = useLanguage();
-  const [media, setMedia] = useState([]);
+
+  const staticImages = [
+    { _id: 'static1', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-entrance.png' },
+    { _id: 'static2', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-lord.png' },
+    { _id: 'static3', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-lake.jpg' },
+    { _id: 'static4', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-entrance-krishna.jpg' },
+    { _id: 'static5', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-festival-view.jpg' },
+    { _id: 'static6', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-ranga-pooje.jpg' },
+    { _id: 'static7', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-pallapooja.jpg' },
+    { _id: 'static8', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-kaveri-teertha.jpg' },
+    { _id: 'static9', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-old-bramhakalasha.jpg' },
+    { _id: 'static10', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-annual-festival-program.jpg' },
+    { _id: 'static11', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-avabruta.jpg' },
+    { _id: 'static12', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-festival-lighting.jpg' },
+    { _id: 'static13', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-tulabara.jpg' }
+  ];
+
+  const [media, setMedia] = useState(staticImages);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,7 +34,7 @@ function GalleryPage({ onNavigate }) {
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/gallery`);
       const data = await res.json();
       if (res.ok) {
-        setMedia(data);
+        setMedia([...staticImages, ...data]);
       }
     } catch (err) {
       console.error('Failed to fetch gallery media', err);
@@ -46,7 +63,7 @@ function GalleryPage({ onNavigate }) {
               <div key={item._id} className="gallery-item">
                 {item.mediaType === 'video' ? (
                   <video 
-                    src={item.imageUrl} 
+                    src={item.imageUrl || item.url} 
                     controls 
                     className="gallery-img" 
                     style={{ background: '#000' }}
@@ -54,7 +71,7 @@ function GalleryPage({ onNavigate }) {
                   />
                 ) : (
                   <img 
-                    src={item.imageUrl} 
+                    src={item.imageUrl || item.url} 
                     alt="Temple Gallery" 
                     className="gallery-img" 
                     onError={(e) => {
