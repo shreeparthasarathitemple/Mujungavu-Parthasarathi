@@ -469,6 +469,7 @@ body {
 .form-group input[type="url"],
 .form-group input[type="email"],
 .form-group input[type="number"],
+.form-group input[type="datetime-local"],
 .form-group textarea {
   width: 100%;
   padding: 0.8rem 1rem;
@@ -484,6 +485,7 @@ body {
 .form-group input[type="url"]:focus,
 .form-group input[type="email"]:focus,
 .form-group input[type="number"]:focus,
+.form-group input[type="datetime-local"]:focus,
 .form-group textarea:focus {
   border-color: var(--admin-primary);
   background: #ffffff;

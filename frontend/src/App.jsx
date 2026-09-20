@@ -21,7 +21,6 @@ import ContactPage from './components/ContactPage'
 import NotFound from './components/NotFound'
 import PrivacyPolicy from './components/PrivacyPolicy'
 import DataDeletion from './components/DataDeletion'
-import NotificationPrompt from './components/NotificationPrompt'
 import { useLanguage } from './context/LanguageContext'
 import { Helmet } from 'react-helmet-async'
 
@@ -67,20 +66,7 @@ function App() {
   }, [language]);
 
   useEffect(() => {
-    // Register push service worker and clean up old caching ones
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(function(registrations) {
-        for(let registration of registrations) {
-          // Only unregister if it's not our explicit push service worker
-          if (registration.active && !registration.active.scriptURL.endsWith('/sw.js')) {
-            registration.unregister();
-          }
-        }
-      });
-      navigator.serviceWorker.register('/sw.js').catch(err => {
-        console.log('Service Worker registration failed: ', err);
-      });
-    }
+    // Removed service worker push registration
 
     // Initial check for admin session
     fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/check`, { credentials: 'include' })
@@ -378,7 +364,6 @@ function App() {
         </Suspense>
       </main>
 
-      {!isAdmin && <NotificationPrompt />}
       {!isAdmin && <Footer onAdminClick={() => setShowLoginPopup(true)} />}
       
       {showScrollTop && (

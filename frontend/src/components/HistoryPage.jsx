@@ -40,7 +40,7 @@ function HistoryPage({ onBack }) {
           <div className="videos-grid">
             <div className="video-wrapper">
               <video 
-                src="https://pkwijatqpaejzcoimemn.supabase.co/storage/v1/object/sign/History%20Video%20Temple/history1.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kN2ZkMzIyZS1iODAzLTQxMzQtYjRhNC1mNTJiZGEwZmZiZDkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJIaXN0b3J5IFZpZGVvIFRlbXBsZS9oaXN0b3J5MS5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg3MjQ2NjA4LCJleHAiOjIxMDI2MDY2MDh9.PTdD2jwhy2uxEeQlEtBp-dlUtxEQmsUJo3_t6HzCXwk" 
+                src="https://pub-dd1323676be64127a747771afa2443ab.r2.dev/history/history1.mp4" 
                 controls 
                 controlsList="nodownload noplaybackrate"
                 disablePictureInPicture
@@ -55,7 +55,7 @@ function HistoryPage({ onBack }) {
             </div>
             <div className="video-wrapper">
               <video 
-                src="https://pkwijatqpaejzcoimemn.supabase.co/storage/v1/object/sign/History%20Video%20Temple/history2.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kN2ZkMzIyZS1iODAzLTQxMzQtYjRhNC1mNTJiZGEwZmZiZDkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJIaXN0b3J5IFZpZGVvIFRlbXBsZS9oaXN0b3J5Mi5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg3MjQ2NjIyLCJleHAiOjIxMDI2MDY2MjJ9.p8JvkOpVTYEh2lq03FgnnuZhEqEYMMjZkebSyHew-48" 
+                src="https://pub-dd1323676be64127a747771afa2443ab.r2.dev/history/history2.mp4" 
                 controls 
                 controlsList="nodownload noplaybackrate"
                 disablePictureInPicture
@@ -70,7 +70,7 @@ function HistoryPage({ onBack }) {
             </div>
             <div className="video-wrapper">
               <video 
-                src="https://pkwijatqpaejzcoimemn.supabase.co/storage/v1/object/sign/History%20Video%20Temple/history3.mp4?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9kN2ZkMzIyZS1iODAzLTQxMzQtYjRhNC1mNTJiZGEwZmZiZDkiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJIaXN0b3J5IFZpZGVvIFRlbXBsZS9oaXN0b3J5My5tcDQiLCJzY29wZSI6ImRvd25sb2FkIiwiaWF0IjoxNzg3MjQ2NjU5LCJleHAiOjIxMDI2MDY2NTl9.rVSbAG2sAVb65Wn-DElL4kI40_XY6dFp0AqRwA8cHjY" 
+                src="https://pub-dd1323676be64127a747771afa2443ab.r2.dev/history/history3.mp4" 
                 controls 
                 controlsList="nodownload noplaybackrate"
                 disablePictureInPicture

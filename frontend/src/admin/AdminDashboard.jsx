@@ -7,7 +7,7 @@ import AdminSEO from './AdminSEO';
 import AdminNews from './AdminNews';
 import AdminSettings from './AdminSettings';
 import './Admin.css';
-import { Calendar, Megaphone, LogOut, LayoutDashboard, Menu, X, Globe, ExternalLink, Settings, Newspaper } from 'lucide-react';
+import { Calendar, Megaphone, LogOut, LayoutDashboard, Menu, X, Globe, ExternalLink, Settings, Newspaper, Image as ImageIcon } from 'lucide-react';
 
 function AdminDashboard({ onLogout }) {
   const [activeTab, setActiveTab] = useState('overview');
@@ -84,6 +84,10 @@ function AdminDashboard({ onLogout }) {
               <Newspaper size={20} className="sidebar-icon" />
               News Portal
             </li>
+            <li className={activeTab === 'gallery' ? 'active' : ''} onClick={() => { setActiveTab('gallery'); setMobileMenuOpen(false); }}>
+              <ImageIcon size={20} className="sidebar-icon" />
+              Manage Gallery
+            </li>
             <li className={activeTab === 'seo' ? 'active' : ''} onClick={() => { setActiveTab('seo'); setMobileMenuOpen(false); }}>
               <Globe size={20} className="sidebar-icon" />
               SEO Settings
@@ -103,6 +107,7 @@ function AdminDashboard({ onLogout }) {
           {activeTab === 'announcements' && <AdminAnnouncement />}
           {activeTab === 'news' && <AdminNews />}
           {activeTab === 'festivals' && <AdminFestivals />}
+          {activeTab === 'gallery' && <AdminGallery />}
           {activeTab === 'seo' && <AdminSEO />}
           {activeTab === 'settings' && <AdminSettings />}
         </main>

@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const { createClient } = require('@supabase/supabase-js');
+const { S3Client, PutObjectCommand } = require('@aws-sdk/client-s3');
+
 // Authentication middleware
 const isAuthenticated = (req, res, next) => {
   if (req.session && req.session.adminId) {
@@ -13,18 +14,28 @@ const isAuthenticated = (req, res, next) => {
 // Setup multer for memory storage
 const upload = multer({ storage: multer.memoryStorage() });
 
-// Check Supabase credentials
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
+// Check Cloudflare R2 credentials
+const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+const accessKeyId = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
+const secretAccessKey = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
+const bucketName = process.env.CLOUDFLARE_R2_BUCKET_NAME;
+const publicUrlBase = process.env.CLOUDFLARE_R2_PUBLIC_URL;
 
-let supabase = null;
-if (supabaseUrl && supabaseKey) {
-  supabase = createClient(supabaseUrl, supabaseKey);
+let s3Client = null;
+if (accountId && accessKeyId && secretAccessKey) {
+  s3Client = new S3Client({
+    region: 'auto',
+    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+    credentials: {
+      accessKeyId,
+      secretAccessKey,
+    }
+  });
 }
 
 router.post('/', isAuthenticated, upload.single('image'), async (req, res) => {
-  if (!supabase) {
-    return res.status(500).json({ message: 'Supabase credentials are not configured in the backend' });
+  if (!s3Client || !bucketName || !publicUrlBase) {
+    return res.status(500).json({ message: 'Cloudflare R2 credentials are not fully configured in the backend environment variables' });
   }
 
   try {
@@ -35,29 +46,24 @@ router.post('/', isAuthenticated, upload.single('image'), async (req, res) => {
 
     const fileExt = file.originalname.split('.').pop();
     const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
-    const filePath = `${fileName}`;
+    const filePath = `gallery/${fileName}`;
 
-    const { data, error } = await supabase.storage
-      .from('gallery')
-      .upload(filePath, file.buffer, {
-        contentType: file.mimetype,
-        cacheControl: '3600',
-        upsert: false
-      });
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: filePath,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    });
 
-    if (error) {
-      console.error('Supabase upload error:', error);
-      return res.status(500).json({ message: 'Failed to upload to Supabase', error: error.message });
-    }
+    await s3Client.send(command);
 
-    const { data: { publicUrl } } = supabase.storage
-      .from('gallery')
-      .getPublicUrl(filePath);
+    // Construct the public URL using the provided base URL
+    const publicUrl = `${publicUrlBase.replace(/\/$/, '')}/${filePath}`;
 
     res.json({ imageUrl: publicUrl });
   } catch (err) {
     console.error('Upload route error:', err);
-    res.status(500).json({ message: 'Server error during upload' });
+    res.status(500).json({ message: 'Server error during Cloudflare R2 upload' });
   }
 });
 

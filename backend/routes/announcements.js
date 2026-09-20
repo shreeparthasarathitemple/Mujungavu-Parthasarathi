@@ -125,9 +125,6 @@ router.post('/:id/share', async (req, res) => {
 
 
 
-const Subscription = require('../models/Subscription');
-const webpush = require('web-push');
-
 // Create announcement (Protected)
 router.post('/', auth, async (req, res) => {
   try {
@@ -138,28 +135,6 @@ router.post('/', auth, async (req, res) => {
       isActive: req.body.isActive !== undefined ? req.body.isActive : true
     });
     await newAnnouncement.save();
-
-    // Send Push Notifications
-    try {
-      const frontendUrl = 'https://www.mujungavuparthasarathi.in';
-      const payload = JSON.stringify({
-        title: 'New Temple Announcement!',
-        body: newAnnouncement.title,
-        url: `${frontendUrl}/announcements`
-      });
-      
-      const subscriptions = await Subscription.find();
-      const pushPromises = subscriptions.map(sub => 
-        webpush.sendNotification(sub, payload).catch(err => {
-          if (err.statusCode === 410 || err.statusCode === 404) {
-            return Subscription.findByIdAndDelete(sub._id);
-          }
-        })
-      );
-      await Promise.all(pushPromises);
-    } catch (pushErr) {
-      console.error('Push notification error:', pushErr);
-    }
 
     res.status(201).json(newAnnouncement);
   } catch (err) {

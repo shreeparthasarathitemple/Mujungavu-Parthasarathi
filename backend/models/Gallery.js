@@ -5,6 +5,11 @@ const GallerySchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  mediaType: {
+    type: String,
+    enum: ['image', 'video'],
+    default: 'image'
+  },
   createdAt: {
     type: Date,
     default: Date.now

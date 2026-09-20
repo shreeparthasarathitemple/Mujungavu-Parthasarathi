@@ -107,13 +107,17 @@ function AdminGallery() {
             <input 
               type="file" 
               id="gallery-upload"
-              accept="image/*"
+              accept="image/*,video/*"
               onChange={handleFileChange}
               className="hidden-input"
             />
             <label htmlFor="gallery-upload" className="upload-placeholder">
               {preview ? (
-                <img src={preview} alt="Preview" className="upload-preview" />
+                file?.type.startsWith('video/') ? (
+                  <video src={preview} controls className="upload-preview" />
+                ) : (
+                  <img src={preview} alt="Preview" className="upload-preview" />
+                )
               ) : (
                 <div className="upload-prompt">
                   <Upload size={40} className="upload-icon" />
@@ -125,7 +129,7 @@ function AdminGallery() {
           
           <button 
             type="submit" 
-            className="hero-btn admin-btn upload-btn" 
+            className="premium-btn primary upload-btn" 
             disabled={!file || uploading}
           >
             {uploading ? 'Uploading...' : 'Upload Image'}
@@ -139,7 +143,11 @@ function AdminGallery() {
         ) : images.length > 0 ? (
           images.map((img) => (
             <div key={img._id} className="admin-gallery-card">
-              <img src={img.imageUrl} alt="Gallery item" />
+              {img.mediaType === 'video' ? (
+                <video src={img.imageUrl} controls={false} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              ) : (
+                <img src={img.imageUrl} alt="Gallery item" />
+              )}
               <div className="gallery-card-overlay">
                 <button 
                   onClick={() => handleDelete(img._id)} 

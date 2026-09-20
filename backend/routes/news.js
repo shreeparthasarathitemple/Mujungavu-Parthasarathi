@@ -196,35 +196,6 @@ router.post('/', auth, async (req, res) => {
     const newArticle = new News(req.body);
     const saved = await newArticle.save();
 
-    // Send Push Notifications for News
-    if (saved.status === 'published') {
-      try {
-        const Subscription = require('../models/Subscription');
-        const webpush = require('web-push');
-        const frontendUrl = 'https://www.mujungavuparthasarathi.in';
-        
-        // Use Kannada title if available, else English admin title
-        const newsTitle = saved.generatedTitle?.kn || saved.adminTitle;
-        const payload = JSON.stringify({
-          title: 'ಹೊಸ ಸುದ್ದಿ (New Update)',
-          body: newsTitle,
-          url: `${frontendUrl}/news/${saved._id}`
-        });
-        
-        const subscriptions = await Subscription.find();
-        const pushPromises = subscriptions.map(sub => 
-          webpush.sendNotification(sub, payload).catch(err => {
-            if (err.statusCode === 410 || err.statusCode === 404) {
-              return Subscription.findByIdAndDelete(sub._id);
-            }
-          })
-        );
-        await Promise.all(pushPromises);
-      } catch (pushErr) {
-        console.error('Push notification error for news:', pushErr);
-      }
-    }
-
     res.status(201).json(saved);
   } catch (err) {
     res.status(500).json({ message: 'Server error' });

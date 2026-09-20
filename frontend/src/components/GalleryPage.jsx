@@ -1,31 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './GalleryPage.css';
 import { useLanguage } from '../context/LanguageContext';
 
-import { Home } from 'lucide-react';
-
 function GalleryPage({ onNavigate }) {
-  const { t, language } = useLanguage();
-
-  const images = [
-    '/gallery/mujungavu-temple-entrance.png',
-    '/gallery/mujungavu-temple-lord.png',
-    '/gallery/mujungavu-temple-lake.jpg',
-    '/gallery/mujungavu-temple-entrance-krishna.jpg',
-    '/gallery/mujungavu-temple-festival-view.jpg',
-    '/gallery/mujungavu-temple-ranga-pooje.jpg',
-    '/gallery/mujungavu-temple-pallapooja.jpg',
-    '/gallery/mujungavu-temple-kaveri-teertha.jpg',
-    '/gallery/mujungavu-temple-old-bramhakalasha.jpg',
-    '/gallery/mujungavu-temple-annual-festival-program.jpg',
-    '/gallery/mujungavu-temple-avabruta.jpg',
-    '/gallery/mujungavu-temple-festival-lighting.jpg',
-    '/gallery/mujungavu-temple-tulabara.jpg'
-  ];
+  const { t } = useLanguage();
+  const [media, setMedia] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    fetchMedia();
   }, []);
+
+  const fetchMedia = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/gallery`);
+      const data = await res.json();
+      if (res.ok) {
+        setMedia(data);
+      }
+    } catch (err) {
+      console.error('Failed to fetch gallery media', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="gallery-page">
@@ -33,21 +32,41 @@ function GalleryPage({ onNavigate }) {
         <h1 className="section-title">{t('gallery', 'title')}</h1>
         <p className="gallery-subtitle">{t('gallery', 'subtitle')}</p>
 
-        <div className="masonry-layout">
-          {images.map((src, index) => (
-            <div key={index} className="gallery-item">
-              <img 
-                src={src} 
-                alt={`Temple Gallery ${index + 1}`} 
-                className="gallery-img" 
-                onError={(e) => {
-                  e.target.onerror = null; 
-                  e.target.src = "/logo.png";
-                }}
-              />
-            </div>
-          ))}
-        </div>
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>
+            <p>Loading gallery...</p>
+          </div>
+        ) : media.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>
+            <p>Gallery is currently empty.</p>
+          </div>
+        ) : (
+          <div className="masonry-layout">
+            {media.map((item) => (
+              <div key={item._id} className="gallery-item">
+                {item.mediaType === 'video' ? (
+                  <video 
+                    src={item.imageUrl} 
+                    controls 
+                    className="gallery-img" 
+                    style={{ background: '#000' }}
+                    preload="metadata"
+                  />
+                ) : (
+                  <img 
+                    src={item.imageUrl} 
+                    alt="Temple Gallery" 
+                    className="gallery-img" 
+                    onError={(e) => {
+                      e.target.onerror = null; 
+                      e.target.src = "/logo.png";
+                    }}
+                  />
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
