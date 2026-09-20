@@ -89,18 +89,23 @@ router.delete('/:id', auth, async (req, res) => {
     const image = await Gallery.findById(req.params.id);
     if (!image) return res.status(404).json({ message: 'Image not found' });
 
+    const targetUrl = image.imageUrl || image.url;
+
     // Try to delete from Cloudflare R2 (extract path from URL)
-    if (s3Client && bucketName) {
+    if (s3Client && bucketName && targetUrl) {
       try {
-        const urlObj = new URL(image.imageUrl);
+        const urlObj = new URL(targetUrl);
         const filePath = urlObj.pathname.substring(1); // Remove leading slash
         
-        const deleteCommand = new DeleteObjectCommand({
-          Bucket: bucketName,
-          Key: filePath,
-        });
-        
-        await s3Client.send(deleteCommand);
+        // Only try to delete from S3 if it looks like a path in our bucket
+        if (filePath.startsWith('gallery/')) {
+          const deleteCommand = new DeleteObjectCommand({
+            Bucket: bucketName,
+            Key: filePath,
+          });
+          
+          await s3Client.send(deleteCommand);
+        }
       } catch (deleteErr) {
         console.error('Cloudflare R2 delete error:', deleteErr);
       }
@@ -109,6 +114,7 @@ router.delete('/:id', auth, async (req, res) => {
     await Gallery.findByIdAndDelete(req.params.id);
     res.json({ message: 'Image deleted' });
   } catch (err) {
+    console.error('Delete route error:', err);
     res.status(500).json({ message: 'Server Error' });
   }
 });
