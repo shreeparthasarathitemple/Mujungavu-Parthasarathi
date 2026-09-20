@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const { createClient } = require('@supabase/supabase-js');
+const { S3Client, PutObjectCommand, DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const Gallery = require('../models/Gallery');
 const auth = require('../middleware/auth');
 
@@ -9,12 +9,23 @@ const auth = require('../middleware/auth');
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Setup Supabase
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-let supabase;
-if (supabaseUrl && supabaseKey) {
-  supabase = createClient(supabaseUrl, supabaseKey);
+// Check Cloudflare R2 credentials
+const accountId = process.env.CLOUDFLARE_ACCOUNT_ID;
+const accessKeyId = process.env.CLOUDFLARE_R2_ACCESS_KEY_ID;
+const secretAccessKey = process.env.CLOUDFLARE_R2_SECRET_ACCESS_KEY;
+const bucketName = process.env.CLOUDFLARE_R2_BUCKET_NAME;
+const publicUrlBase = process.env.CLOUDFLARE_R2_PUBLIC_URL;
+
+let s3Client = null;
+if (accountId && accessKeyId && secretAccessKey) {
+  s3Client = new S3Client({
+    region: 'auto',
+    endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+    credentials: {
+      accessKeyId,
+      secretAccessKey,
+    }
+  });
 }
 
 // Get all gallery images
@@ -34,32 +45,35 @@ router.post('/upload', auth, upload.single('image'), async (req, res) => {
       return res.status(400).json({ message: 'No file uploaded' });
     }
 
-    if (!supabase) {
-      return res.status(500).json({ message: 'Supabase credentials missing' });
+    if (!s3Client || !bucketName || !publicUrlBase) {
+      return res.status(500).json({ message: 'Cloudflare R2 credentials missing' });
     }
 
     const fileExt = req.file.originalname.split('.').pop();
     const fileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}.${fileExt}`;
+    const filePath = `gallery/${fileName}`;
     
-    // Upload to Supabase Storage
-    const { data, error } = await supabase.storage
-      .from('gallery')
-      .upload(fileName, req.file.buffer, {
-        contentType: req.file.mimetype
-      });
+    // Upload to Cloudflare R2
+    const command = new PutObjectCommand({
+      Bucket: bucketName,
+      Key: filePath,
+      Body: req.file.buffer,
+      ContentType: req.file.mimetype,
+    });
 
-    if (error) {
-      console.error('Supabase upload error:', error);
+    try {
+      await s3Client.send(command);
+    } catch (error) {
+      console.error('Cloudflare R2 upload error:', error);
       return res.status(500).json({ message: 'Failed to upload image' });
     }
 
-    // Get public URL
-    const { data: { publicUrl } } = supabase.storage
-      .from('gallery')
-      .getPublicUrl(fileName);
+    // Construct the public URL
+    const publicUrl = `${publicUrlBase.replace(/\/$/, '')}/${filePath}`;
 
     // Save to MongoDB
-    const newImage = new Gallery({ imageUrl: publicUrl });
+    const mediaType = req.file.mimetype.startsWith('video/') ? 'video' : 'image';
+    const newImage = new Gallery({ imageUrl: publicUrl, mediaType });
     await newImage.save();
 
     res.status(201).json(newImage);
@@ -75,11 +89,21 @@ router.delete('/:id', auth, async (req, res) => {
     const image = await Gallery.findById(req.params.id);
     if (!image) return res.status(404).json({ message: 'Image not found' });
 
-    // Try to delete from Supabase (extract filename from URL)
-    if (supabase) {
-      const urlParts = image.imageUrl.split('/');
-      const fileName = urlParts[urlParts.length - 1];
-      await supabase.storage.from('gallery').remove([fileName]);
+    // Try to delete from Cloudflare R2 (extract path from URL)
+    if (s3Client && bucketName) {
+      try {
+        const urlObj = new URL(image.imageUrl);
+        const filePath = urlObj.pathname.substring(1); // Remove leading slash
+        
+        const deleteCommand = new DeleteObjectCommand({
+          Bucket: bucketName,
+          Key: filePath,
+        });
+        
+        await s3Client.send(deleteCommand);
+      } catch (deleteErr) {
+        console.error('Cloudflare R2 delete error:', deleteErr);
+      }
     }
 
     await Gallery.findByIdAndDelete(req.params.id);

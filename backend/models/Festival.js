@@ -6,6 +6,7 @@ const festivalSchema = new mongoose.Schema({
   descEn: { type: String, required: true },
   descKn: { type: String, required: true },
   imageUrl: { type: String, default: '' },
+  eventDate: { type: Date },
   createdAt: { type: Date, default: Date.now }
 });
 

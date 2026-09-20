@@ -2,6 +2,58 @@ import React, { useState, useEffect } from 'react';
 import './Festivals.css';
 import { useLanguage } from '../context/LanguageContext';
 
+const Countdown = ({ targetDate }) => {
+  const [timeLeft, setTimeLeft] = useState({});
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const difference = +new Date(targetDate) - +new Date();
+      let time = {};
+
+      if (difference > 0) {
+        time = {
+          days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+          hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+          minutes: Math.floor((difference / 1000 / 60) % 60),
+          seconds: Math.floor((difference / 1000) % 60),
+        };
+      }
+      return time;
+    };
+
+    setTimeLeft(calculateTimeLeft());
+    
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [targetDate]);
+
+  if (Object.keys(timeLeft).length === 0) return null;
+
+  return (
+    <div className="festival-countdown">
+      <div className="countdown-item">
+        <span className="countdown-value">{timeLeft.days}</span>
+        <span className="countdown-label">Days</span>
+      </div>
+      <div className="countdown-item">
+        <span className="countdown-value">{timeLeft.hours}</span>
+        <span className="countdown-label">Hours</span>
+      </div>
+      <div className="countdown-item">
+        <span className="countdown-value">{timeLeft.minutes}</span>
+        <span className="countdown-label">Mins</span>
+      </div>
+      <div className="countdown-item">
+        <span className="countdown-value">{timeLeft.seconds}</span>
+        <span className="countdown-label">Secs</span>
+      </div>
+    </div>
+  );
+};
+
 function Festivals() {
   const { t, language } = useLanguage();
   const [festivals, setFestivals] = useState([]);
@@ -42,7 +94,17 @@ function Festivals() {
         <div className="festivals-grid">
           {festivals.map((f, i) => (
             <div key={f._id} className="festival-card glass-card animate-on-scroll" style={{ transitionDelay: `${i * 0.1}s` }}>
+              {f.eventDate && (
+                <div className="festival-date">
+                  {new Date(f.eventDate).toLocaleDateString(language === 'en' ? 'en-IN' : 'kn-IN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                  })}
+                </div>
+              )}
               <h3 className="festival-name">{language === 'en' ? f.titleEn : f.titleKn}</h3>
+              {f.eventDate && <Countdown targetDate={f.eventDate} />}
               <p>
                 {language === 'en' ? f.descEn : f.descKn}
               </p>

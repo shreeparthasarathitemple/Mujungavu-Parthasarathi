@@ -2,14 +2,23 @@ import React, { useState, useEffect } from 'react';
 
 function AdminFestivals() {
   const [festivals, setFestivals] = useState([]);
-  const [formData, setFormData] = useState({ titleEn: '', titleKn: '', descEn: '', descKn: '' });
+  const [formData, setFormData] = useState({ titleEn: '', titleKn: '', descEn: '', descKn: '', eventDate: '' });
   const [imageFile, setImageFile] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
   const handleEdit = (f) => {
     setEditingId(f._id);
-    setFormData({ titleEn: f.titleEn, titleKn: f.titleKn, descEn: f.descEn, descKn: f.descKn });
+    
+    // Format date for datetime-local input
+    let eventDateStr = '';
+    if (f.eventDate) {
+      const d = new Date(f.eventDate);
+      const tzOffset = d.getTimezoneOffset() * 60000;
+      eventDateStr = new Date(d.getTime() - tzOffset).toISOString().slice(0, 16);
+    }
+    
+    setFormData({ titleEn: f.titleEn, titleKn: f.titleKn, descEn: f.descEn, descKn: f.descKn, eventDate: eventDateStr });
     setImageFile(null);
     if (document.getElementById('festivalImage')) {
       document.getElementById('festivalImage').value = '';
@@ -19,7 +28,7 @@ function AdminFestivals() {
 
   const handleCancelEdit = () => {
     setEditingId(null);
-    setFormData({ titleEn: '', titleKn: '', descEn: '', descKn: '' });
+    setFormData({ titleEn: '', titleKn: '', descEn: '', descKn: '', eventDate: '' });
     setImageFile(null);
     if (document.getElementById('festivalImage')) {
       document.getElementById('festivalImage').value = '';
@@ -132,6 +141,14 @@ function AdminFestivals() {
           <textarea value={formData.descKn} onChange={e => setFormData({...formData, descKn: e.target.value})} required />
         </div>
         <div className="form-group">
+          <label>Event Date & Time (Optional for Countdown)</label>
+          <input 
+            type="datetime-local" 
+            value={formData.eventDate} 
+            onChange={e => setFormData({...formData, eventDate: e.target.value})} 
+          />
+        </div>
+        <div className="form-group">
           <label>Image Upload</label>
           <input 
             type="file" 
@@ -141,29 +158,33 @@ function AdminFestivals() {
           />
         </div>
         <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
-          <button type="submit" className="hero-btn admin-btn" disabled={uploadingImage}>
+          <button type="submit" className="premium-btn primary" disabled={uploadingImage}>
             {uploadingImage ? 'Saving...' : editingId ? 'Update Festival' : 'Add Festival'}
           </button>
           {editingId && (
-            <button type="button" onClick={handleCancelEdit} className="hero-btn admin-btn" style={{ background: '#666' }}>
+            <button type="button" onClick={handleCancelEdit} className="premium-btn secondary">
               Cancel Edit
             </button>
           )}
         </div>
       </form>
 
-      <h3 style={{marginTop: '3rem'}}>Current Festivals</h3>
-      <ul className="admin-list">
+      <h3 style={{marginTop: '3rem', marginBottom: '1.5rem'}}>Current Festivals</h3>
+      <ul className="admin-list vertical">
         {festivals.map(f => (
-          <li key={f._id} className="admin-list-item">
-            {f.imageUrl && <img src={f.imageUrl} className="admin-list-item-img" alt="Festival" />}
-            <div className="admin-list-item-content">
-              <strong>{f.titleEn} / {f.titleKn}</strong>
-              <p>{f.descEn.substring(0, 80)}...</p>
+          <li key={f._id} className="admin-list-item horizontal">
+            {f.imageUrl && (
+              <div style={{ width: '120px', height: '120px', flexShrink: 0, marginRight: '1.5rem', borderRadius: '12px', overflow: 'hidden' }}>
+                <img src={f.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="Festival" />
+              </div>
+            )}
+            <div className="admin-list-item-content" style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+              <h4 style={{ margin: '0 0 0.5rem 0', fontSize: '1.2rem', color: 'var(--admin-sidebar)' }}>{f.titleEn} / {f.titleKn}</h4>
+              <p style={{ margin: 0, color: '#64748b', lineHeight: 1.6 }}>{f.descEn.substring(0, 100)}...</p>
             </div>
-            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-              <button onClick={() => handleEdit(f)} className="hero-btn" style={{ padding: '0.3rem 0.6rem', fontSize: '0.8rem' }}>Edit</button>
-              <button onClick={() => handleDelete(f._id)} className="delete-btn">Delete</button>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', justifyContent: 'center', minWidth: '100px' }}>
+              <button onClick={() => handleEdit(f)} className="premium-btn secondary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>Edit</button>
+              <button onClick={() => handleDelete(f._id)} className="premium-btn" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem', background: '#fee2e2', color: '#ef4444', borderColor: '#fca5a5' }}>Delete</button>
             </div>
           </li>
         ))}

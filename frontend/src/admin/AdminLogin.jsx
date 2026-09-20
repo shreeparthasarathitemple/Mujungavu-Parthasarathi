@@ -14,11 +14,14 @@ function AdminLogin({ onLoginSuccess }) {
     setLoading(true);
     setError('');
     try {
+      const trimmedUsername = username.trim();
+      const trimmedPassword = password.trim();
+      
       const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username: trimmedUsername, password: trimmedPassword })
       });
       const data = await res.json();
       if (res.ok) {
