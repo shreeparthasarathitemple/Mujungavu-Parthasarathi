@@ -6,8 +6,6 @@ function GalleryPage({ onNavigate }) {
   const { t } = useLanguage();
 
   const staticImages = [
-    { _id: 'static1', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-entrance.png' },
-    { _id: 'static2', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-lord.png' },
     { _id: 'static3', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-lake.jpg' },
     { _id: 'static4', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-entrance-krishna.jpg' },
     { _id: 'static5', mediaType: 'image', imageUrl: '/gallery/mujungavu-temple-festival-view.jpg' },
