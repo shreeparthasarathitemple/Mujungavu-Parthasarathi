@@ -97,7 +97,7 @@ function NewsArticle() {
       </Helmet>
 
       <div className="announcement-page-wrapper">
-        <div className="container" style={{ maxWidth: '800px', paddingTop: '100px', paddingBottom: '60px' }}>
+        <div className="container" style={{ maxWidth: '800px', paddingTop: '150px', paddingBottom: '60px' }}>
           
           <Link to="/news" className="back-link" style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', color: 'var(--saffron)', marginBottom: '20px', textDecoration: 'none' }}>
             <ArrowLeft size={20} />

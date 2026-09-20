@@ -25,9 +25,9 @@ function AnnouncementsGrid() {
   }, []);
 
   return (
-    <div className="announcement-page-container" style={{ minHeight: '100vh', padding: '130px 20px 40px' }}>
+    <div className="announcement-page-container" style={{ minHeight: '100vh', padding: '150px 20px 40px' }}>
       <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '0.5rem', flexWrap: 'nowrap' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
           <button 
             onClick={() => navigate('/')} 
             className="back-btn icon-only" 
@@ -36,7 +36,7 @@ function AnnouncementsGrid() {
           >
             <ArrowLeft size={24} />
           </button>
-          <h2 style={{ margin: 0, paddingBottom: 0, fontSize: 'clamp(1.2rem, 5vw, 2rem)', color: 'var(--saffron-dark)', whiteSpace: 'nowrap' }}>{t('announcements', 'title')}</h2>
+          <h2 style={{ margin: 0, paddingBottom: 0, fontSize: 'clamp(1.2rem, 5vw, 2rem)', color: 'var(--saffron-dark)' }}>{t('announcements', 'title')}</h2>
         </div>
         <div style={{ width: '60px', height: '3px', background: 'var(--gold)', margin: '0 auto 1rem' }}></div>
         <p className="gallery-subtitle" style={{ color: 'var(--text-muted)', marginTop: '0.5rem', marginBottom: '2rem' }}>{t('announcements', 'subtitle')}</p>
