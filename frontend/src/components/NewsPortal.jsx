@@ -33,9 +33,9 @@ function NewsPortal() {
 
   return (
     <div className="announcements-page">
-      <div className="container" style={{ paddingTop: '100px' }}>
+      <div className="container" style={{ paddingTop: '150px' }}>
         <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '0.5rem', flexWrap: 'nowrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', marginBottom: '0.5rem', flexWrap: 'wrap' }}>
             <button 
               onClick={() => navigate('/')} 
               className="back-btn icon-only" 
@@ -44,7 +44,7 @@ function NewsPortal() {
             >
               <ArrowLeft size={24} />
             </button>
-            <h1 className="section-title text-center" style={{ margin: 0, paddingBottom: 0, fontSize: 'clamp(1.2rem, 5vw, 2.5rem)', color: 'var(--saffron-dark)', whiteSpace: 'nowrap' }}>
+            <h1 className="section-title text-center" style={{ margin: 0, paddingBottom: 0, fontSize: 'clamp(1.2rem, 5vw, 2.5rem)', color: 'var(--saffron-dark)' }}>
               {language === 'en' ? 'Temple News & Updates' : 'ದೇವಾಲಯದ ಸುದ್ದಿಗಳು ಮತ್ತು ನವೀಕರಣಗಳು'}
             </h1>
           </div>

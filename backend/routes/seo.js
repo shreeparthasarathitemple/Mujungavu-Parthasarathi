@@ -23,7 +23,8 @@ router.get('/page', async (req, res) => {
   try {
     const seoData = await Seo.findOne({ pageRoute: route });
     if (!seoData) {
-      return res.status(404).json({ message: 'SEO data not found for this route' });
+      // Return 200 with null instead of 404 to prevent scary browser console errors
+      return res.status(200).json(null);
     }
     res.json(seoData);
   } catch (err) {
