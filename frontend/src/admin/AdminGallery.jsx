@@ -144,9 +144,9 @@ function AdminGallery() {
           images.map((img) => (
             <div key={img._id} className="admin-gallery-card">
               {img.mediaType === 'video' ? (
-                <video src={img.imageUrl} controls={false} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <video src={img.imageUrl || img.url} controls={false} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               ) : (
-                <img src={img.imageUrl} alt="Gallery item" />
+                <img src={img.imageUrl || img.url} alt="Gallery item" />
               )}
               <div className="gallery-card-overlay">
                 <button 
