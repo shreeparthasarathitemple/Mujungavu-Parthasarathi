@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Festivals.css';
 import { useLanguage } from '../context/LanguageContext';
+import { Calendar } from 'lucide-react';
 
 const Countdown = ({ targetDate }) => {
   const [timeLeft, setTimeLeft] = useState({});
@@ -95,11 +96,15 @@ function Festivals() {
           {festivals.map((f, i) => (
             <div key={f._id} className="festival-card glass-card animate-on-scroll" style={{ transitionDelay: `${i * 0.1}s` }}>
               {f.eventDate && (
-                <div className="festival-date">
-                  {new Date(f.eventDate).toLocaleDateString(language === 'en' ? 'en-IN' : 'kn-IN', {
+                <div className="festival-date" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.8rem' }}>
+                  <Calendar size={18} />
+                  {new Date(f.eventDate).toLocaleString(language === 'en' ? 'en-IN' : 'kn-IN', {
                     year: 'numeric',
                     month: 'long',
-                    day: 'numeric'
+                    day: 'numeric',
+                    hour: 'numeric',
+                    minute: '2-digit',
+                    hour12: true
                   })}
                 </div>
               )}
