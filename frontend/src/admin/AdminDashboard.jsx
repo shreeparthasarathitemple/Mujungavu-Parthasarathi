@@ -6,39 +6,104 @@ import AdminOverview from './AdminOverview';
 import AdminSEO from './AdminSEO';
 import AdminNews from './AdminNews';
 import AdminSettings from './AdminSettings';
+import { subscribeToasts } from './adminToast';
 import './Admin.css';
-import { Calendar, Megaphone, LogOut, LayoutDashboard, Menu, X, Globe, ExternalLink, Settings, Newspaper, Image as ImageIcon } from 'lucide-react';
+import { Calendar, Megaphone, LogOut, LayoutDashboard, Menu, X, Globe, ExternalLink, Settings, Newspaper, Image as ImageIcon, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+const TABS = [
+  { id: 'overview', label: 'Overview', icon: LayoutDashboard, component: AdminOverview },
+  { id: 'announcements', label: 'Announcements', icon: Megaphone, component: AdminAnnouncement },
+  { id: 'festivals', label: 'Festivals', icon: Calendar, component: AdminFestivals },
+  { id: 'news', label: 'News Portal', icon: Newspaper, component: AdminNews },
+  { id: 'gallery', label: 'Gallery', icon: ImageIcon, component: AdminGallery },
+  { id: 'seo', label: 'SEO Settings', icon: Globe, component: AdminSEO },
+  { id: 'settings', label: 'Settings', icon: Settings, component: AdminSettings },
+];
+
+const tabFromHash = () => {
+  const id = window.location.hash.replace('#', '');
+  return TABS.some(t => t.id === id) ? id : 'overview';
+};
+
+function AdminToaster() {
+  const [toasts, setToasts] = useState([]);
+
+  useEffect(() => subscribeToasts((item) => {
+    setToasts(prev => [...prev, item]);
+    setTimeout(() => setToasts(prev => prev.filter(t => t.id !== item.id)), 3500);
+  }), []);
+
+  return (
+    <div className="admin-toasts" role="status" aria-live="polite">
+      {toasts.map(t => (
+        <div key={t.id} className={`admin-toast ${t.type}`}>
+          {t.type === 'error' ? <AlertCircle size={18} /> : <CheckCircle2 size={18} />}
+          <span>{t.message}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 function AdminDashboard({ onLogout }) {
-  const [activeTab, setActiveTab] = useState('overview');
+  // Active tab lives in the URL hash (#festivals) so a refresh keeps you on the same page
+  const [activeTab, setActiveTab] = useState(tabFromHash);
   const [checkingAuth, setCheckingAuth] = useState(true);
+  const [serverWaking, setServerWaking] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
+    // The free Render server sleeps when idle; tell the admin why the first load is slow
+    const wakeTimer = setTimeout(() => setServerWaking(true), 3000);
     const checkAuth = async () => {
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/check`, {
-          credentials: 'include'
-        });
+        const res = await fetch(`${API_URL}/api/auth/check`, { credentials: 'include' });
         const data = await res.json();
-        if (!data.isAuthenticated) {
-          onLogout();
-        }
-      } catch (err) {
+        if (!data.isAuthenticated) onLogout();
+      } catch {
         onLogout();
       } finally {
+        clearTimeout(wakeTimer);
+        setServerWaking(false);
         setCheckingAuth(false);
       }
     };
     checkAuth();
+    return () => clearTimeout(wakeTimer);
   }, [onLogout]);
 
+  useEffect(() => {
+    const onHashChange = () => setActiveTab(tabFromHash());
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+
+  useEffect(() => {
+    const tab = TABS.find(t => t.id === activeTab);
+    document.title = `${tab.label} | Admin · Mujungavu Temple`;
+  }, [activeTab]);
+
+  // Close the mobile menu with Escape
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onKey = (e) => e.key === 'Escape' && setMobileMenuOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [mobileMenuOpen]);
+
+  const selectTab = (id) => {
+    setActiveTab(id);
+    window.history.replaceState(null, '', `#${id}`);
+    setMobileMenuOpen(false);
+    document.querySelector('.admin-content')?.scrollTo({ top: 0 });
+  };
+
   const handleLogout = async () => {
+    if (!window.confirm('Log out of the admin panel?')) return;
     try {
-      await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/auth/logout`, {
-        method: 'POST',
-        credentials: 'include'
-      });
+      await fetch(`${API_URL}/api/auth/logout`, { method: 'POST', credentials: 'include' });
     } catch (err) {
       console.error('Logout error', err);
     }
@@ -46,72 +111,71 @@ function AdminDashboard({ onLogout }) {
   };
 
   if (checkingAuth) {
-    return <div className="admin-loading">Verifying session...</div>;
+    return (
+      <div className="admin-loading">
+        <Loader2 size={32} className="admin-spin" />
+        <p>{serverWaking ? 'Server is waking up — this can take up to a minute…' : 'Verifying session…'}</p>
+      </div>
+    );
   }
+
+  const active = TABS.find(t => t.id === activeTab);
+  const ActiveComponent = active.component;
 
   return (
     <div className="admin-dashboard">
       <header className="admin-header">
         <div className="admin-header-left">
-          <button className="admin-mobile-menu-btn" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <button
+            type="button"
+            className="admin-mobile-menu-btn"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileMenuOpen}
+          >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
-          <h2>Admin Dashboard</h2>
+          <img src="/logo.png" alt="" className="admin-header-logo" />
+          <div className="admin-header-titles">
+            <h2>{active.label}</h2>
+            <span className="admin-header-sub">Mujungavu Temple Admin</span>
+          </div>
         </div>
-        <div className="admin-user-info">
-          <a href="/" target="_blank" rel="noopener noreferrer" className="hero-btn admin-btn" style={{ padding: '0.6rem 1rem', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}>
-            Visit Site <ExternalLink size={16} />
-          </a>
-          <span>Admin</span>
-        </div>
+        <a href="/" target="_blank" rel="noopener noreferrer" className="admin-visit-btn" aria-label="Visit site">
+          <ExternalLink size={16} />
+          <span>Visit Site</span>
+        </a>
       </header>
       <div className="admin-body">
-        <aside className={`admin-sidebar ${mobileMenuOpen ? 'open' : ''}`}>
+        {mobileMenuOpen && <div className="admin-backdrop" onClick={() => setMobileMenuOpen(false)} />}
+        <nav className={`admin-sidebar ${mobileMenuOpen ? 'open' : ''}`} aria-label="Admin sections">
           <ul>
-            <li className={activeTab === 'overview' ? 'active' : ''} onClick={() => { setActiveTab('overview'); setMobileMenuOpen(false); }}>
-              <LayoutDashboard size={20} className="sidebar-icon" />
-              Overview
-            </li>
-            <li className={activeTab === 'announcements' ? 'active' : ''} onClick={() => { setActiveTab('announcements'); setMobileMenuOpen(false); }}>
-              <Megaphone size={20} className="sidebar-icon" />
-              Announcements
-            </li>
-            <li className={activeTab === 'festivals' ? 'active' : ''} onClick={() => { setActiveTab('festivals'); setMobileMenuOpen(false); }}>
-              <Calendar size={20} className="sidebar-icon" />
-              Manage Festivals
-            </li>
-            <li className={activeTab === 'news' ? 'active' : ''} onClick={() => { setActiveTab('news'); setMobileMenuOpen(false); }}>
-              <Newspaper size={20} className="sidebar-icon" />
-              News Portal
-            </li>
-            <li className={activeTab === 'gallery' ? 'active' : ''} onClick={() => { setActiveTab('gallery'); setMobileMenuOpen(false); }}>
-              <ImageIcon size={20} className="sidebar-icon" />
-              Manage Gallery
-            </li>
-            <li className={activeTab === 'seo' ? 'active' : ''} onClick={() => { setActiveTab('seo'); setMobileMenuOpen(false); }}>
-              <Globe size={20} className="sidebar-icon" />
-              SEO Settings
-            </li>
-            <li className={activeTab === 'settings' ? 'active' : ''} onClick={() => { setActiveTab('settings'); setMobileMenuOpen(false); }}>
-              <Settings size={20} className="sidebar-icon" />
-              Settings
-            </li>
-            <li onClick={handleLogout} className="logout-item">
-              <LogOut size={20} className="sidebar-icon" />
-              Log Out
+            {TABS.map(({ id, label, icon: Icon }) => (
+              <li key={id}>
+                <button
+                  type="button"
+                  className={`admin-nav-btn ${activeTab === id ? 'active' : ''}`}
+                  onClick={() => selectTab(id)}
+                  aria-current={activeTab === id ? 'page' : undefined}
+                >
+                  <Icon size={20} className="sidebar-icon" />
+                  {label}
+                </button>
+              </li>
+            ))}
+            <li className="logout-item">
+              <button type="button" className="admin-nav-btn" onClick={handleLogout}>
+                <LogOut size={20} className="sidebar-icon" />
+                Log Out
+              </button>
             </li>
           </ul>
-        </aside>
+        </nav>
         <main className="admin-content">
-          {activeTab === 'overview' && <AdminOverview />}
-          {activeTab === 'announcements' && <AdminAnnouncement />}
-          {activeTab === 'news' && <AdminNews />}
-          {activeTab === 'festivals' && <AdminFestivals />}
-          {activeTab === 'gallery' && <AdminGallery />}
-          {activeTab === 'seo' && <AdminSEO />}
-          {activeTab === 'settings' && <AdminSettings />}
+          <ActiveComponent />
         </main>
       </div>
+      <AdminToaster />
     </div>
   );
 }

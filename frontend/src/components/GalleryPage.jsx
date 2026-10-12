@@ -70,7 +70,8 @@ function GalleryPage({ onNavigate }) {
                 ) : (
                   <img 
                     src={item.imageUrl || item.url} 
-                    alt="Temple Gallery" 
+                    alt={item.caption || item.title || 'Sri Parthasarathi Temple Mujungavu - gallery photo'} 
+                    loading="lazy"
                     className="gallery-img" 
                     onError={(e) => {
                       e.target.onerror = null; 

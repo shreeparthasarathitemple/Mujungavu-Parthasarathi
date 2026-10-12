@@ -93,7 +93,18 @@ function NewsArticle() {
         <meta property="og:title" content={title} />
         <meta property="og:description" content={blurb} />
         {news.imageUrl && <meta property="og:image" content={news.imageUrl} />}
-        <meta property="twitter:card" content="summary_large_image" />
+        {news.imageUrl && <meta name="twitter:image" content={news.imageUrl} />}
+        <script type="application/ld+json">{JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'NewsArticle',
+          headline: title,
+          description: blurb,
+          image: news.imageUrl ? [news.imageUrl] : undefined,
+          datePublished: news.createdAt,
+          dateModified: news.updatedAt || news.createdAt,
+          author: { '@type': 'Organization', name: 'Sri Parthasarathi Temple Mujungavu' },
+          publisher: { '@type': 'Organization', name: 'Sri Parthasarathi Temple Mujungavu', logo: { '@type': 'ImageObject', url: 'https://www.mujungavuparthasarathi.in/logo.png' } },
+        })}</script>
       </Helmet>
 
       <div className="announcement-page-wrapper">

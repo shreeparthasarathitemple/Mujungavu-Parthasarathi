@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Admin.css';
 import { Megaphone, Trash2, Edit } from 'lucide-react';
+import { toast } from './adminToast';
 
 function AdminAnnouncement() {
   const [announcements, setAnnouncements] = useState([]);
@@ -113,6 +114,7 @@ function AdminAnnouncement() {
         } else {
           setAnnouncements([data, ...announcements]);
         }
+        toast(editingId ? 'Announcement updated' : 'Announcement published');
         handleCancelEdit();
       } else {
         setError(data.message || 'Failed to save announcement');
@@ -135,6 +137,7 @@ function AdminAnnouncement() {
       
       if (res.ok) {
         setAnnouncements(announcements.filter(a => a._id !== id));
+        toast('Announcement deleted');
       } else {
         const data = await res.json();
         setError(data.message || 'Failed to delete');
@@ -156,6 +159,7 @@ function AdminAnnouncement() {
       if (res.ok) {
         const updated = await res.json();
         setAnnouncements(announcements.map(a => a._id === id ? updated : a));
+        toast(updated.isActive ? 'Announcement is now visible' : 'Announcement hidden');
       }
     } catch (err) {
       setError('Failed to update status');

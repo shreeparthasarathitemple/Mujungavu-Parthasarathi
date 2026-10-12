@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit, Save, Newspaper, CheckCircle, RefreshCcw, UploadCloud, X } from 'lucide-react';
 import './Admin.css';
+import { toast } from './adminToast';
 
 function AdminNews() {
   const [newsList, setNewsList] = useState([]);
@@ -87,9 +88,11 @@ function AdminNews() {
           method: 'DELETE',
           credentials: 'include'
         });
+        toast('News article deleted');
         fetchNews();
       } catch (err) {
         console.error('Failed to delete news:', err);
+        toast('Could not delete news article', 'error');
       }
     }
   };
@@ -117,7 +120,7 @@ function AdminNews() {
 
   const generateNewsContent = async () => {
     if (!formData.adminTitle || !formData.adminDescription) {
-      alert("Please enter a basic title and description.");
+      toast("Please enter a basic title and description.", 'error');
       return;
     }
     
@@ -137,7 +140,7 @@ function AdminNews() {
       const data = await res.json();
       
       if (!res.ok) {
-        alert(data.message || 'Error generating content');
+        toast(data.message || 'Error generating content', 'error');
         return;
       }
       
@@ -150,7 +153,7 @@ function AdminNews() {
       setStep(2);
     } catch (err) {
       console.error('Generation error', err);
-      alert('Failed to connect to the server for generation.');
+      toast('Failed to connect to the server for generation.', 'error');
     } finally {
       setIsGenerating(false);
     }
@@ -174,13 +177,13 @@ function AdminNews() {
         if (uploadRes.ok) {
           finalImageUrl = uploadResult.imageUrl;
         } else {
-          alert(uploadResult.message || 'Image upload failed');
+          toast(uploadResult.message || 'Image upload failed', 'error');
           setIsSaving(false);
           return;
         }
       } catch (err) {
         console.error('Upload error', err);
-        alert('Server error during image upload');
+        toast('Server error during image upload', 'error');
         setIsSaving(false);
         return;
       }
@@ -205,14 +208,15 @@ function AdminNews() {
       });
       
       if (res.ok) {
+        toast('News article saved');
         fetchNews();
         resetForm();
       } else {
-        alert('Failed to save news article.');
+        toast('Failed to save news article.', 'error');
       }
     } catch (err) {
       console.error('Save error', err);
-      alert('Error saving news article.');
+      toast('Error saving news article.', 'error');
     } finally {
       setIsSaving(false);
     }

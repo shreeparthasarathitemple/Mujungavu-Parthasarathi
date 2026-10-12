@@ -7,10 +7,21 @@ function Gallery({ onNavigate }) {
   const { t, language } = useLanguage();
   const [playingState, setPlayingState] = useState({});
   const [isInteracting, setIsInteracting] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const videoRefs = React.useRef([]);
   const scrollContainerRef = React.useRef(null);
 
+  // Only auto-scroll while the gallery is on screen (saves battery on phones)
   React.useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(([entry]) => setIsVisible(entry.isIntersecting));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  React.useEffect(() => {
+    if (!isVisible || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     let animationFrameId;
     
     const scroll = () => {
@@ -29,7 +40,7 @@ function Gallery({ onNavigate }) {
 
     animationFrameId = requestAnimationFrame(scroll);
     return () => cancelAnimationFrame(animationFrameId);
-  }, [isInteracting]);
+  }, [isInteracting, isVisible]);
 
   const togglePlay = (index) => {
     const video = videoRefs.current[index];
@@ -52,12 +63,12 @@ function Gallery({ onNavigate }) {
   };
 
   const previewImages = [
-    '/gallery/mujungavu-temple-entrance.png',
-    '/gallery/mujungavu-temple-lord.png',
-    '/gallery/mujungavu-temple-lake.jpg',
-    '/gallery/mujungavu-temple-entrance-krishna.jpg',
-    '/gallery/mujungavu-temple-festival-view.jpg',
-    '/gallery/mujungavu-temple-pallapooja.jpg'
+    { src: '/gallery/mujungavu-temple-entrance.jpg', en: 'Entrance of Sri Parthasarathi Temple, Mujungavu', kn: 'ಮುಜುಂಗಾವು ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವಸ್ಥಾನದ ಪ್ರವೇಶದ್ವಾರ' },
+    { src: '/gallery/mujungavu-temple-lord.jpg', en: 'Lord Parthasarathi, Mujungavu', kn: 'ಮುಜುಂಗಾವು ಶ್ರೀ ಪಾರ್ಥಸಾರಥಿ ದೇವರು' },
+    { src: '/gallery/mujungavu-temple-lake.jpg', en: 'Sacred temple lake (Kaveri Teertha), Mujungavu', kn: 'ಮುಜುಂಗಾವು ದೇವಸ್ಥಾನದ ಪವಿತ್ರ ಸರೋವರ (ಕಾವೇರಿ ತೀರ್ಥ)' },
+    { src: '/gallery/mujungavu-temple-entrance-krishna.jpg', en: 'Krishna idol at the temple entrance, Mujungavu', kn: 'ದೇವಸ್ಥಾನದ ಪ್ರವೇಶದಲ್ಲಿರುವ ಶ್ರೀಕೃಷ್ಣನ ವಿಗ್ರಹ' },
+    { src: '/gallery/mujungavu-temple-festival-view.jpg', en: 'Festival at Sri Parthasarathi Temple, Mujungavu', kn: 'ಮುಜುಂಗಾವು ದೇವಸ್ಥಾನದ ಉತ್ಸವ' },
+    { src: '/gallery/mujungavu-temple-pallapooja.jpg', en: 'Pallapooja at Mujungavu temple', kn: 'ಮುಜುಂಗಾವು ದೇವಸ್ಥಾನದಲ್ಲಿ ಪಲ್ಲಪೂಜೆ' },
   ];
 
   const reelLinks = [
@@ -84,11 +95,12 @@ function Gallery({ onNavigate }) {
         onTouchEnd={() => setIsInteracting(false)}
       >
           <div className="gallery-marquee-track">
-            {previewImages.map((src, index) => (
+            {previewImages.map((img, index) => (
               <div key={`set1-${index}`} className="gallery-item flex-item">
                 <img 
-                  src={src} 
-                  alt={`Temple Gallery ${index + 1}`} 
+                  src={img.src} 
+                  alt={img[language] || img.en} 
+                  loading="lazy"
                   className="gallery-img" 
                   onError={(e) => {
                     e.target.onerror = null; 
@@ -107,15 +119,16 @@ function Gallery({ onNavigate }) {
               </div>
             </div>
 
-            {previewImages.map((src, index) => (
-              <div key={`set2-${index}`} className="gallery-item flex-item">
+            {previewImages.map((img, index) => (
+              <div key={`set2-${index}`} className="gallery-item flex-item" aria-hidden="true">
                 <img 
-                  src={src} 
-                  alt={`Temple Gallery ${index + 1}`} 
+                  src={img.src} 
+                  alt="" 
+                  loading="lazy"
                   className="gallery-img" 
                   onError={(e) => {
                     e.target.onerror = null; 
-                    e.target.src = `https://placehold.co/600x400/1f1105/d4af37?text=Image+${index + 1}`;
+                    e.target.src = "/logo.png";
                   }}
                 />
               </div>

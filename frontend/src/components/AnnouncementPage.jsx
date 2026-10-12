@@ -134,12 +134,15 @@ function AnnouncementPage({ announcement: propAnnouncement, onBack }) {
       <Helmet>
         <title>{announcement.title} | Sri Parthasarathi Temple</title>
         <meta property="og:title" content={announcement.title} />
-        <meta property="twitter:title" content={announcement.title} />
+        <meta name="twitter:title" content={announcement.title} />
         {announcement.content && (
-          <meta property="og:description" content={announcement.content.substring(0, 150) + '...'} />
+          <meta name="description" content={announcement.content.substring(0, 155)} />
         )}
         {announcement.content && (
-          <meta property="twitter:description" content={announcement.content.substring(0, 150) + '...'} />
+          <meta property="og:description" content={announcement.content.substring(0, 155)} />
+        )}
+        {announcement.content && (
+          <meta name="twitter:description" content={announcement.content.substring(0, 155)} />
         )}
         {announcement.imageUrl && (
           <meta property="og:image" content={announcement.imageUrl} />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Globe, Save, Edit, Trash2 } from 'lucide-react';
 import './Admin.css';
+import { toast } from './adminToast';
 
 function AdminSEO() {
   const [seoList, setSeoList] = useState([]);
@@ -52,9 +53,11 @@ function AdminSEO() {
       });
       if (res.ok) {
         setSeoList(seoList.filter(s => s._id !== id));
+        toast('SEO settings deleted');
       }
     } catch (err) {
       console.error('Failed to delete SEO', err);
+      toast('Could not delete SEO settings', 'error');
     }
   };
 

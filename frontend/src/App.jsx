@@ -23,6 +23,7 @@ import PrivacyPolicy from './components/PrivacyPolicy'
 import DataDeletion from './components/DataDeletion'
 import { useLanguage } from './context/LanguageContext'
 import { Helmet } from 'react-helmet-async'
+import { getPageSeo, canonicalUrl, DEFAULT_IMAGE } from './seo/pages'
 
 const AdminLogin = lazy(() => import('./admin/AdminLogin'))
 const AdminDashboard = lazy(() => import('./admin/AdminDashboard'))
@@ -41,16 +42,30 @@ function HomePage({ handleHeroReady, setCurrentPage }) {
   );
 }
 
+// Own component so the per-second tick re-renders only the clock, not the whole site
+function LiveClock() {
+  const [now, setNow] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  return (
+    <span style={{ fontWeight: '600' }}>
+      {now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+    </span>
+  );
+}
+
 function App() {
   const [scrolled, setScrolled] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [loading, setLoading] = useState(true)
   const [fadeOut, setFadeOut] = useState(false)
-  const [activeAnnouncement, setActiveAnnouncement] = useState(null)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const [showLoginPopup, setShowLoginPopup] = useState(false)
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false)
-  const [currentTime, setCurrentTime] = useState(new Date())
   const [seoData, setSeoData] = useState(null)
   
   const { language, toggleLanguage, t } = useLanguage()
@@ -75,16 +90,6 @@ function App() {
         if (data.isAuthenticated) setIsAdminLoggedIn(true);
       }).catch(() => {});
   }, []);
-
-  useEffect(() => {
-    // Live Clock
-    const timer = setInterval(() => setCurrentTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatTime = (date) => {
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  };
 
   // Analytics Tracking & Dynamic SEO
   useEffect(() => {
@@ -120,7 +125,7 @@ function App() {
     const fallbackTimer = setTimeout(() => {
       setFadeOut(true);
       setTimeout(() => setLoading(false), 800);
-    }, 8000);
+    }, 3000);
 
     return () => clearTimeout(fallbackTimer);
   }, [isHome]);
@@ -176,42 +181,18 @@ function App() {
   }, [location.pathname, location.hash])
 
   const getSEOMetadata = () => {
-    const baseTitle = language === 'en' ? "Mujungavu Parthasarathi | Official Website" : "ಮುಜುಂಗಾವು ಪಾರ್ಥಸಾರಥಿ | ಅಧಿಕೃತ ವೆಬ್‌ಸೈಟ್";
-    let defaultDesc = language === 'en' 
-      ? "Official website of Sri Parthasarathi Temple, Mujungavu, Kumbla, Kasaragod. Find temple timings, poojas, festivals, history, announcements, gallery and location information."
-      : "ಮುಜುಂಗಾವು ಪಾರ್ಥಸಾರಥಿಯ ಅಧಿಕೃತ ವೆಬ್‌ಸೈಟ್.";
-    let defaultTitle = `Sri Parthasarathi Temple Mujungavu | Mujungavu Temple, Kumbla`;
-    
-    // Use dynamic SEO data if available, otherwise fallback to defaults
-    let title = seoData?.title || defaultTitle;
-    let description = seoData?.description || defaultDesc;
-    let keywords = seoData?.keywords || "";
-    let imageUrl = seoData?.imageUrl || "";
-
-    // Specific static fallbacks if no dynamic SEO is configured
-    if (!seoData) {
-      if (location.pathname === '/history') title = `${language === 'en' ? 'History' : 'ಇತಿಹಾಸ'} | ${baseTitle}`;
-      if (location.pathname === '/about') title = `About | ${baseTitle}`;
-      if (location.pathname === '/temple-timings') title = `Temple Timings | ${baseTitle}`;
-      if (location.pathname === '/poojas') title = `Poojas | ${baseTitle}`;
-      if (location.pathname === '/festivals') title = `Festivals | ${baseTitle}`;
-      if (location.pathname === '/contact' || location.pathname === '/location') title = `Contact & Location | ${baseTitle}`;
-      if (location.pathname === '/gallery') title = `${language === 'en' ? 'Gallery' : 'ಗ್ಯಾಲರಿ'} | ${baseTitle}`;
-      if (location.pathname.startsWith('/announcement') && activeAnnouncement) {
-        title = `${activeAnnouncement.title} | ${baseTitle}`;
-        if (activeAnnouncement.description) {
-          const tempDiv = document.createElement("div");
-          tempDiv.innerHTML = activeAnnouncement.description;
-          description = tempDiv.textContent || tempDiv.innerText || "";
-          description = description.substring(0, 150) + '...';
-        }
-      }
-    }
-    
-    const currentUrl = typeof window !== 'undefined' ? window.location.href : '';
+    // Per-page defaults; an admin SEO entry for this route overrides them field by field
+    const pageSeo = getPageSeo(location.pathname, language);
+    const title = seoData?.title || pageSeo.title;
+    const description = seoData?.description || pageSeo.description;
+    const keywords = seoData?.keywords || "";
+    const imageUrl = seoData?.imageUrl || DEFAULT_IMAGE;
+    // Clean canonical URL: no #hash or ?query, so Google doesn't index duplicates
+    const currentUrl = canonicalUrl(location.pathname);
 
     return (
       <Helmet>
+        <html lang={language === 'kn' ? 'kn' : 'en'} />
         <title>{title}</title>
         <meta name="description" content={description} />
         {keywords && <meta name="keywords" content={keywords} />}
@@ -219,11 +200,12 @@ function App() {
         <meta property="og:url" content={currentUrl} />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
-        {imageUrl && <meta property="og:image" content={imageUrl} />}
-        <meta property="twitter:url" content={currentUrl} />
-        <meta property="twitter:title" content={title} />
-        <meta property="twitter:description" content={description} />
-        {imageUrl && <meta name="twitter:image" content={imageUrl} />}
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:locale" content={language === 'kn' ? 'kn_IN' : 'en_IN'} />
+        <meta name="twitter:url" content={currentUrl} />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={imageUrl} />
       </Helmet>
     );
   };
@@ -299,7 +281,7 @@ function App() {
                     <span>{language === 'en' ? 'KN' : 'EN'}</span>
                   </button>
                   <div className="nav-time-star" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: '10px', color: 'var(--gold)', fontSize: '0.9rem' }}>
-                    <span style={{ fontWeight: '600' }}>{formatTime(currentTime)}</span>
+                    <LiveClock />
                   </div>
                 </>
               )}

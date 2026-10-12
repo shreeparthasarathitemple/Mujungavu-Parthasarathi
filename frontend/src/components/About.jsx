@@ -59,8 +59,9 @@ function About({ onNavigate }) {
             <div className="about-image-placeholder">
               {/* This could be a picture of the deity or the temple interior */}
               <img
-                src="/lord.png"
-                alt="Lord Parthasarathi"
+                src="/lord.jpg"
+                alt="Lord Parthasarathi, Sri Parthasarathi Temple Mujungavu"
+                loading="lazy"
                 className="about-img"
               />
               <div className="image-border"></div>

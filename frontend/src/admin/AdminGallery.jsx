@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './Admin.css';
 import { Upload, Trash2, Image as ImageIcon } from 'lucide-react';
+import { toast } from './adminToast';
 
 function AdminGallery() {
   const [images, setImages] = useState([]);
@@ -59,6 +60,7 @@ function AdminGallery() {
       
       if (res.ok) {
         setImages([data, ...images]);
+        toast('Image uploaded');
         setFile(null);
         setPreview(null);
       } else {
@@ -82,6 +84,7 @@ function AdminGallery() {
       
       if (res.ok) {
         setImages(images.filter(img => img._id !== id));
+        toast('Image deleted');
       } else {
         const data = await res.json();
         setError(data.message || 'Failed to delete');
