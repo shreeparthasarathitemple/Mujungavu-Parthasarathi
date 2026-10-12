@@ -4,27 +4,27 @@
   "rewrites": [
     {
       "source": "/(about|history|lake|services|poojas|temple-timings|festivals|gallery|announcements|news|contact|location|privacy-policy|data-deletion)",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/a/:id",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/announcement/:id",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/news/:id",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/admin",
-      "destination": "/index.html"
+      "destination": "/"
     },
     {
       "source": "/admin/:path*",
-      "destination": "/index.html"
+      "destination": "/"
     }
   ],
   "headers": [
