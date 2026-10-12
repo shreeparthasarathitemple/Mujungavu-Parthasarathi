@@ -104,7 +104,7 @@ function AdminGallery() {
       {error && <div className="admin-alert error">{error}</div>}
 
       <div className="admin-upload-section glass-panel">
-        <h4>Upload New Photo</h4>
+        <h4>Upload Photo or Video</h4>
         <form onSubmit={handleUpload} className="upload-form">
           <div className="file-input-wrapper">
             <input 
@@ -135,14 +135,14 @@ function AdminGallery() {
             className="premium-btn primary upload-btn" 
             disabled={!file || uploading}
           >
-            {uploading ? 'Uploading...' : 'Upload Image'}
+            {uploading ? 'Uploading…' : 'Upload'}
           </button>
         </form>
       </div>
 
       <div className="admin-gallery-grid mt-4">
         {loading ? (
-          <p>Loading images...</p>
+          <><div className="af-skeleton gallery-skel" /><div className="af-skeleton gallery-skel" /><div className="af-skeleton gallery-skel" /></>
         ) : images.length > 0 ? (
           images.map((img) => (
             <div key={img._id} className="admin-gallery-card">

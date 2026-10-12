@@ -157,11 +157,11 @@ function AdminSEO() {
             </div>
           </div>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <button type="submit" className="hero-btn admin-btn" disabled={saving} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', width: 'auto', padding: '1rem 2rem' }}>
+            <button type="submit" className="premium-btn primary" disabled={saving}>
               {saving ? 'Saving...' : <><Save size={18} /> Save Settings</>}
             </button>
             {editingId && (
-              <button type="button" onClick={handleCancelEdit} className="hero-btn admin-btn" style={{ background: '#666', width: 'auto', padding: '1rem 2rem' }}>
+              <button type="button" onClick={handleCancelEdit} className="premium-btn secondary">
                 Cancel Edit
               </button>
             )}
@@ -187,16 +187,16 @@ function AdminSEO() {
               <tbody>
                 {seoList.map((seo) => (
                   <tr key={seo._id} style={{ borderBottom: '1px solid #eee' }}>
-                    <td style={{ padding: '1rem', fontWeight: '500', color: 'var(--admin-primary)' }}>{seo.pageRoute}</td>
+                    <td style={{ padding: '1rem', fontWeight: '600' }}><code className="seo-route">{seo.pageRoute}</code></td>
                     <td style={{ padding: '1rem', maxWidth: '200px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{seo.title}</td>
                     <td style={{ padding: '1rem', maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: '#64748b' }}>
                       {seo.description}
                     </td>
                     <td style={{ padding: '1rem', textAlign: 'right' }}>
-                      <button onClick={() => handleEdit(seo)} className="icon-btn text-primary" style={{ display: 'inline-flex', marginRight: '0.5rem', color: '#4facfe' }} title="Edit">
+                      <button onClick={() => handleEdit(seo)} className="icon-btn text-primary" style={{ marginRight: '0.5rem' }} title="Edit">
                         <Edit size={20} />
                       </button>
-                      <button onClick={() => handleDelete(seo._id)} className="icon-btn text-danger" style={{ display: 'inline-flex' }} title="Delete">
+                      <button onClick={() => handleDelete(seo._id)} className="icon-btn text-danger" title="Delete">
                         <Trash2 size={20} />
                       </button>
                     </td>

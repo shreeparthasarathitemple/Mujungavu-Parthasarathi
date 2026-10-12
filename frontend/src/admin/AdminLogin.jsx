@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Lock, User, ArrowRight } from 'lucide-react';
 import './Admin.css';
+import './AdminTheme.css';
 
 function AdminLogin({ onLoginSuccess }) {
   const [username, setUsername] = useState('');

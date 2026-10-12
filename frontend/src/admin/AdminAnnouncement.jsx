@@ -208,11 +208,11 @@ function AdminAnnouncement() {
             />
           </div>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-            <button type="submit" className="hero-btn admin-btn" disabled={uploadingImage}>
+            <button type="submit" className="premium-btn primary" disabled={uploadingImage}>
               {uploadingImage ? 'Saving...' : editingId ? 'Update Announcement' : 'Post Announcement'}
             </button>
             {editingId && (
-              <button type="button" onClick={handleCancelEdit} className="hero-btn admin-btn" style={{ background: '#666' }}>
+              <button type="button" onClick={handleCancelEdit} className="premium-btn secondary">
                 Cancel Edit
               </button>
             )}
@@ -223,7 +223,7 @@ function AdminAnnouncement() {
       <div className="announcements-list mt-5">
         <h4>Current Announcements</h4>
         {loading ? (
-          <p>Loading...</p>
+          <div className="af-list"><div className="af-skeleton" /><div className="af-skeleton" /></div>
         ) : announcements.length > 0 ? (
           <div className="admin-list vertical">
             {announcements.map((item) => (

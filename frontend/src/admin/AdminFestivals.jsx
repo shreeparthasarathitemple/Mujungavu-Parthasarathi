@@ -128,6 +128,11 @@ function AdminFestivals() {
   const upcomingCount = festivals.filter(f => statusOf(f) === 'upcoming').length;
 
   return (
+    <div className="admin-tab-content">
+      <div className="admin-header-inline">
+        <h3>Festivals</h3>
+        <p>Festivals appear on the website with a live countdown. Upcoming ones are listed first.</p>
+      </div>
     <div className="af-layout">
       <section className="af-card af-form-card">
         <h3>{editingId ? 'Edit Festival' : 'Add New Festival'}</h3>
@@ -215,6 +220,7 @@ function AdminFestivals() {
           </ul>
         )}
       </section>
+    </div>
     </div>
   );
 }

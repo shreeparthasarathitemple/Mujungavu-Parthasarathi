@@ -224,7 +224,7 @@ function AdminNews() {
 
   return (
     <div className="admin-tab-content">
-      <div className="admin-header-inline" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
+      <div className="admin-header-inline news-header">
         <div>
           <h3>News & Portal</h3>
           <p>Create and manage AI-generated bilingual temple news articles.</p>
@@ -238,7 +238,7 @@ function AdminNews() {
 
       {isFormOpen ? (
         <div className="premium-card">
-          <h4 style={{ margin: '0 0 2rem 0', fontSize: '1.4rem', color: 'var(--admin-sidebar)' }}>
+          <h4>
             {formData._id ? 'Edit News Article' : 'Draft New Article'}
           </h4>
           
@@ -256,7 +256,7 @@ function AdminNews() {
           {step === 1 && (
             <div className="step-1-content" style={{ animation: 'fadeIn 0.3s ease' }}>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '2rem' }}>
+              <div className="news-grid-main">
                 <div>
                   <div className="premium-input-group">
                     <label>Article Topic / Main Subject</label>
@@ -315,7 +315,7 @@ function AdminNews() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '15px', marginTop: '3rem', borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem' }}>
+              <div className="news-actions">
                 <button 
                   className="premium-btn primary" 
                   onClick={generateNewsContent}
@@ -336,7 +336,7 @@ function AdminNews() {
                 <span style={{ fontWeight: 500 }}>AI Draft Generated successfully. Please review and edit both languages below before publishing.</span>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+              <div className="news-grid-2">
                 {/* English Column */}
                 <div>
                   <h5 style={{ color: 'var(--admin-sidebar)', marginBottom: '1.5rem', fontSize: '1.1rem', borderBottom: '2px solid #e2e8f0', paddingBottom: '0.5rem' }}>🇬🇧 English Version</h5>
@@ -406,13 +406,12 @@ function AdminNews() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '15px', marginTop: '3rem', borderTop: '1px solid #e2e8f0', paddingTop: '1.5rem', justifyContent: 'flex-end' }}>
+              <div className="news-actions end">
                 <button className="premium-btn secondary" onClick={resetForm}>Cancel</button>
                 <button 
-                  className="premium-btn" 
                   onClick={() => saveNews('draft')}
                   disabled={isSaving}
-                  style={{ background: '#f1f5f9', color: '#475569', border: '2px solid #cbd5e1' }}
+                  className="premium-btn secondary"
                 >
                   <Save size={20} />
                   {isSaving ? 'Saving...' : 'Save as Draft'}
@@ -421,7 +420,7 @@ function AdminNews() {
                   className="premium-btn primary" 
                   onClick={() => saveNews('published')}
                   disabled={isSaving}
-                  style={{ background: '#10b981' }}
+                  style={{ background: 'linear-gradient(135deg, #34c17a, #15803d)', boxShadow: '0 6px 16px rgba(21,128,61,0.28)' }}
                 >
                   <CheckCircle size={20} />
                   {isSaving ? 'Publishing...' : 'Publish Article'}
@@ -431,7 +430,7 @@ function AdminNews() {
           )}
         </div>
       ) : (
-        <div className="premium-card" style={{ padding: '0', overflow: 'hidden' }}>
+        <div className="premium-card news-table-card">
           <table className="admin-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
             <thead style={{ background: '#f8fafc', borderBottom: '2px solid #e2e8f0' }}>
               <tr>
@@ -480,10 +479,10 @@ function AdminNews() {
                       </td>
                       <td style={{ padding: '1.2rem 1.5rem', textAlign: 'right' }}>
                         <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
-                          <button className="icon-btn" onClick={() => handleEdit(news)} style={{ color: '#3b82f6', background: '#eff6ff', padding: '8px', borderRadius: '8px' }}>
+                          <button className="icon-btn" title="Edit" onClick={() => handleEdit(news)}>
                             <Edit size={18} />
                           </button>
-                          <button className="icon-btn" onClick={() => handleDelete(news._id)} style={{ color: '#ef4444', background: '#fef2f2', padding: '8px', borderRadius: '8px' }}>
+                          <button className="icon-btn text-danger" title="Delete" onClick={() => handleDelete(news._id)}>
                             <Trash2 size={18} />
                           </button>
                         </div>
